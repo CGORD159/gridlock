@@ -3,13 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="description" content="GRIDLOCK — Free browser arcade game. Chain tiles, clear the board, beat your friends. No download needed.">
 <title>GRIDLOCK — Chain · Clear · Conquer</title>
+<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<!-- AdSense — replace data-ad-slot values with your real ad unit IDs once approved -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7002095382253130" crossorigin="anonymous"></script>
 <style>
-:root {
-  --bg:#0a0a0f; --panel:#111118; --border:#1e1e2e;
-  --c1:#ff2d55; --c2:#00e5ff; --c3:#ffe600; --c4:#39ff14; --c5:#ff6b00; --c6:#bf5af2;
-  --text:#f0f0ff; --muted:#4a4a6a; --gold:#ffd700; --tile:54px;
+:root{
+  --bg:#0a0a0f;--panel:#111118;--border:#1e1e2e;
+  --c1:#ff2d55;--c2:#00e5ff;--c3:#ffe600;--c4:#39ff14;--c5:#ff6b00;--c6:#bf5af2;
+  --text:#f0f0ff;--muted:#4a4a6a;--gold:#ffd700;--tile:54px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;min-height:100vh;
@@ -18,53 +23,71 @@ body::before{content:'';position:fixed;inset:0;
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);
   pointer-events:none;z-index:999;}
 
-header{width:100%;max-width:480px;padding:12px 16px 6px;display:flex;justify-content:space-between;align-items:center;}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:4px;
+/* ── HEADER ──────────────────────────────────────────────────────── */
+header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-content:space-between;align-items:center;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;
   background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 16px rgba(255,45,85,0.5));}
-.header-right{display:flex;align-items:center;gap:8px;}
+  -webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 14px rgba(255,45,85,0.5));}
+.logo-crown{font-size:14px;vertical-align:super;margin-left:2px;display:none;}
+.logo-crown.show{display:inline;}
+.header-right{display:flex;align-items:center;gap:6px;}
 .coins-display{display:flex;align-items:center;gap:5px;background:var(--panel);
   border:1px solid var(--border);border-radius:20px;padding:5px 12px;cursor:pointer;transition:border-color 0.2s;}
 .coins-display:hover{border-color:var(--gold);}
 .coin-count{font-size:13px;color:var(--gold);font-weight:700;}
 .icon-btn{background:var(--panel);border:1px solid var(--border);border-radius:20px;
-  padding:5px 10px;cursor:pointer;font-size:16px;transition:border-color 0.2s;color:var(--text);}
+  padding:5px 9px;cursor:pointer;font-size:15px;transition:border-color 0.2s;color:var(--text);}
 .icon-btn:hover{border-color:var(--c2);}
 
-.stats{width:100%;max-width:480px;padding:4px 16px 8px;display:flex;gap:8px;}
+/* ── STATS ───────────────────────────────────────────────────────── */
+.stats{width:100%;max-width:480px;padding:4px 16px 6px;display:flex;gap:6px;}
 .stat-box{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:10px;
-  padding:6px 8px;text-align:center;position:relative;overflow:hidden;}
+  padding:5px 6px;text-align:center;position:relative;overflow:hidden;}
 .stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ac,var(--c2));}
-.stat-label{font-size:8px;color:var(--muted);letter-spacing:2px;margin-bottom:1px;}
-.stat-value{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1;}
+.stat-label{font-size:7px;color:var(--muted);letter-spacing:2px;margin-bottom:1px;}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;line-height:1;}
 
-.timer-wrap{width:100%;max-width:480px;padding:0 16px 6px;}
+/* ── TIMER ───────────────────────────────────────────────────────── */
+.timer-wrap{width:100%;max-width:480px;padding:0 16px 4px;}
 .timer-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
 .timer-fill{height:100%;border-radius:3px;transition:width 0.1s linear,background 0.3s;
   background:linear-gradient(90deg,var(--c4),var(--c2));}
 .timer-fill.urgent{background:linear-gradient(90deg,var(--c1),var(--c5));}
 .timer-fill.critical{animation:timerPulse 0.3s ease-in-out infinite;}
-@keyframes timerPulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+@keyframes timerPulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
 
-.hud-row{width:100%;max-width:480px;padding:0 16px 4px;display:flex;align-items:center;justify-content:space-between;}
-.lives{display:flex;gap:4px;align-items:center;}
-.life{font-size:18px;transition:all 0.3s;}
-.life.lost{filter:grayscale(1);opacity:0.25;transform:scale(0.75);}
-.target-text{font-size:11px;color:var(--muted);letter-spacing:1px;}
-.target-num{color:var(--c3);font-weight:700;font-size:13px;}
+/* ── HUD ROW ─────────────────────────────────────────────────────── */
+.hud-row{width:100%;max-width:480px;padding:0 16px 3px;display:flex;align-items:center;justify-content:space-between;}
+.lives{display:flex;gap:3px;align-items:center;}
+.life{font-size:17px;transition:all 0.3s;}
+.life.lost{filter:grayscale(1);opacity:0.2;transform:scale(0.7);}
+.target-text{font-size:10px;color:var(--muted);letter-spacing:1px;}
+.target-num{color:var(--c3);font-weight:700;font-size:12px;}
 
-.combo-bar{width:100%;max-width:480px;padding:4px 16px;display:flex;align-items:center;
-  justify-content:space-between;min-height:40px;}
-.combo-text{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--muted);transition:all 0.2s;}
+/* ── MISSION TICKER ──────────────────────────────────────────────── */
+.mission-ticker{width:100%;max-width:480px;padding:0 16px 3px;}
+.mission-bar{background:rgba(255,230,0,0.06);border:1px solid rgba(255,230,0,0.2);border-radius:8px;
+  padding:5px 10px;display:flex;align-items:center;gap:6px;cursor:pointer;}
+.mission-bar:hover{border-color:rgba(255,230,0,0.4);}
+.mission-icon{font-size:12px;}
+.mission-label{font-size:9px;color:var(--c3);letter-spacing:1px;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.mission-prog{font-size:9px;color:var(--muted);letter-spacing:1px;white-space:nowrap;}
+
+/* ── COMBO BAR ───────────────────────────────────────────────────── */
+.combo-bar{width:100%;max-width:480px;padding:3px 16px;display:flex;align-items:center;
+  justify-content:space-between;min-height:38px;}
+.combo-text{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:3px;color:var(--muted);transition:all 0.2s;}
 .combo-text.active{color:var(--c3);filter:drop-shadow(0 0 8px var(--c3));}
-.combo-right{display:flex;align-items:center;gap:8px;}
-.sel-count{font-size:11px;color:var(--muted);letter-spacing:1px;}
+.combo-right{display:flex;align-items:center;gap:6px;}
+.sel-count{font-size:10px;color:var(--muted);}
+.streak-badge{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c5);letter-spacing:1px;display:none;}
 .commit-btn{background:linear-gradient(135deg,var(--c1),var(--c5));border:none;border-radius:8px;
-  padding:6px 14px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;
-  color:white;cursor:pointer;transition:all 0.15s;opacity:0.35;pointer-events:none;}
+  padding:5px 12px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;
+  color:white;cursor:pointer;opacity:0.35;pointer-events:none;}
 .commit-btn.ready{opacity:1;pointer-events:auto;animation:btnPulse 0.9s ease-in-out infinite;}
 @keyframes btnPulse{0%,100%{box-shadow:0 0 0 rgba(255,45,85,0);}50%{box-shadow:0 0 14px rgba(255,45,85,0.7);}}
 
+/* ── GRID ────────────────────────────────────────────────────────── */
 .grid-wrap{width:100%;max-width:480px;padding:0 16px;display:flex;justify-content:center;}
 #grid{display:grid;gap:5px;user-select:none;touch-action:none;}
 
@@ -78,129 +101,204 @@ header{width:100%;max-width:480px;padding:12px 16px 6px;display:flex;justify-con
 .tile.clearing{animation:tileBlast 0.38s forwards;pointer-events:none;}
 .tile.hint-glow{animation:hintPulse 0.55s ease-in-out 3;}
 .tile.appearing{animation:tileAppear 0.28s cubic-bezier(0.34,1.56,0.64,1) forwards;opacity:0;}
-
-.tile.selected::after{content:attr(data-num);position:absolute;top:-7px;right:-5px;
-  background:rgba(255,255,255,0.95);color:#000;border-radius:50%;width:15px;height:15px;
-  font-size:8px;font-weight:900;display:flex;align-items:center;justify-content:center;
-  font-family:'Space Mono',monospace;z-index:4;}
-.tile.chain-head::after{content:attr(data-num);position:absolute;top:-7px;right:-5px;
-  background:white;color:#000;border-radius:50%;width:16px;height:16px;
-  font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;
-  font-family:'Space Mono',monospace;z-index:4;}
+.tile.selected::after,.tile.chain-head::after{content:attr(data-num);position:absolute;top:-7px;right:-5px;
+  background:white;color:#000;border-radius:50%;width:15px;height:15px;font-size:8px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;z-index:4;}
 
 @keyframes tileBlast{0%{transform:scale(1.1);opacity:1;}45%{transform:scale(1.5);opacity:0.5;}100%{transform:scale(0);opacity:0;}}
 @keyframes hintPulse{0%,100%{box-shadow:none;}50%{box-shadow:0 0 24px white,0 0 8px white;}}
 @keyframes tileAppear{0%{transform:scale(0) rotate(-15deg);opacity:0;}70%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
 
+/* ── CHAIN BADGE ─────────────────────────────────────────────────── */
 .chain-badge{position:fixed;pointer-events:none;font-family:'Bebas Neue',sans-serif;font-size:68px;
   opacity:0;z-index:1000;transform:translateX(-50%);text-shadow:0 0 30px currentColor;
   animation:chainPop 0.75s forwards;}
-@keyframes chainPop{0%{opacity:0;transform:translateX(-50%) scale(0.4) translateY(0);}
+@keyframes chainPop{
+  0%{opacity:0;transform:translateX(-50%) scale(0.4) translateY(0);}
   35%{opacity:1;transform:translateX(-50%) scale(1.2) translateY(-10px);}
   70%{opacity:1;transform:translateX(-50%) scale(1) translateY(-35px);}
   100%{opacity:0;transform:translateX(-50%) scale(0.8) translateY(-70px);}}
 
-.powerups{width:100%;max-width:480px;padding:6px 16px 10px;display:flex;gap:8px;}
+/* ── POWER-UPS ───────────────────────────────────────────────────── */
+.powerups{width:100%;max-width:480px;padding:5px 16px 8px;display:flex;gap:6px;}
 .pu-btn{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:10px;
-  padding:7px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:6px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;
   transition:all 0.15s;position:relative;overflow:hidden;}
 .pu-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--pc);}
 .pu-btn:hover{border-color:var(--pc);transform:translateY(-2px);}
-.pu-icon{font-size:18px;}
-.pu-name{font-size:8px;letter-spacing:1px;color:var(--muted);}
-.pu-cost{font-size:10px;color:var(--gold);font-weight:700;}
+.pu-icon{font-size:17px;}
+.pu-name{font-size:7px;letter-spacing:1px;color:var(--muted);}
+.pu-cost{font-size:9px;color:var(--gold);font-weight:700;}
 
-.ad-slot{width:100%;max-width:480px;padding:0 16px 12px;}
-.ad-inner{background:var(--panel);border:1px dashed var(--border);border-radius:8px;height:56px;
-  display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:10px;letter-spacing:1px;}
+/* ── AD SLOT ─────────────────────────────────────────────────────── */
+.ad-slot{width:100%;max-width:480px;padding:0 16px 10px;}
 
-/* ── SCREENS ── */
+/* ── SCREENS ─────────────────────────────────────────────────────── */
 .screen{position:fixed;inset:0;background:rgba(10,10,15,0.97);display:flex;flex-direction:column;
-  align-items:center;justify-content:flex-start;z-index:200;padding:24px 20px 30px;
+  align-items:center;justify-content:flex-start;z-index:200;padding:20px 20px 30px;
   backdrop-filter:blur(8px);overflow-y:auto;}
 .screen.hidden{display:none;}
-.screen-title{font-family:'Bebas Neue',sans-serif;font-size:60px;letter-spacing:6px;margin-bottom:4px;
+.screen-title{font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:6px;margin-bottom:4px;
   text-align:center;flex-shrink:0;}
-.screen-sub{font-size:11px;color:var(--muted);letter-spacing:3px;text-align:center;margin-bottom:18px;flex-shrink:0;}
+.screen-sub{font-size:10px;color:var(--muted);letter-spacing:3px;text-align:center;margin-bottom:14px;flex-shrink:0;}
 
 .big-btn{background:linear-gradient(135deg,var(--c1),var(--c2));border:none;border-radius:12px;
-  padding:14px 44px;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;
-  color:white;cursor:pointer;transition:all 0.15s;margin-bottom:10px;
+  padding:13px 44px;font-family:'Bebas Neue',sans-serif;font-size:25px;letter-spacing:4px;
+  color:white;cursor:pointer;transition:all 0.15s;margin-bottom:8px;
   box-shadow:0 0 28px rgba(255,45,85,0.3);width:100%;max-width:320px;flex-shrink:0;}
 .big-btn:hover{transform:scale(1.03);}
 .ghost-btn{background:transparent;border:1px solid var(--border);border-radius:10px;
-  padding:10px 28px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;
-  color:var(--muted);cursor:pointer;transition:all 0.15s;margin-bottom:8px;
+  padding:9px 24px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;
+  color:var(--muted);cursor:pointer;transition:all 0.15s;margin-bottom:7px;
   width:100%;max-width:320px;flex-shrink:0;}
 .ghost-btn:hover{border-color:var(--c2);color:var(--c2);}
 
-/* Start screen */
-.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:340px;margin-bottom:18px;flex-shrink:0;}
-.how-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
-.how-icon{font-size:22px;margin-bottom:5px;}
-.how-text{font-size:10px;color:var(--muted);line-height:1.5;letter-spacing:0.5px;}
-
+/* ── START SCREEN ────────────────────────────────────────────────── */
+.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%;max-width:340px;margin-bottom:14px;flex-shrink:0;}
+.how-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;}
+.how-icon{font-size:20px;margin-bottom:4px;}
+.how-text{font-size:9px;color:var(--muted);line-height:1.5;}
 .daily-badge{background:linear-gradient(135deg,rgba(99,78,234,0.15),rgba(0,229,255,0.08));
-  border:1px solid rgba(0,229,255,0.25);border-radius:10px;padding:10px 14px;
-  width:100%;max-width:340px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.daily-icon{font-size:22px;}
-.daily-info{flex:1;}
-.daily-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--c2);}
-.daily-sub{font-size:9px;color:var(--muted);letter-spacing:1px;}
+  border:1px solid rgba(0,229,255,0.25);border-radius:10px;padding:9px 12px;
+  width:100%;max-width:340px;margin-bottom:10px;display:flex;align-items:center;gap:9px;flex-shrink:0;}
 .daily-play-btn{background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.3);border-radius:8px;
-  padding:6px 12px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;
-  color:var(--c2);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+  padding:5px 11px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;
+  color:var(--c2);cursor:pointer;white-space:nowrap;}
 .daily-play-btn:hover{background:rgba(0,229,255,0.2);}
 
-/* Instructions screen */
+/* ── INSTRUCTIONS ────────────────────────────────────────────────── */
 .instr-section{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--border);
-  border-radius:12px;padding:14px;margin-bottom:10px;text-align:left;flex-shrink:0;}
-.instr-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;margin-bottom:8px;}
-.instr-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px;}
-.instr-icon{font-size:16px;min-width:24px;text-align:center;margin-top:2px;}
-.instr-text{font-size:11px;color:var(--muted);line-height:1.6;}
+  border-radius:12px;padding:13px;margin-bottom:8px;text-align:left;flex-shrink:0;}
+.instr-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;margin-bottom:7px;}
+.instr-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:6px;}
+.instr-icon{font-size:15px;min-width:22px;text-align:center;margin-top:2px;}
+.instr-text{font-size:10px;color:var(--muted);line-height:1.6;}
 .instr-text strong{color:var(--text);}
-.mult-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
-.mult-chip{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;}
+.mult-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;}
+.mult-chip{padding:2px 9px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1px;}
 
-/* Game over */
-.go-score{font-family:'Bebas Neue',sans-serif;font-size:86px;letter-spacing:4px;
+/* ── GAME OVER ───────────────────────────────────────────────────── */
+.go-score{font-family:'Bebas Neue',sans-serif;font-size:80px;letter-spacing:4px;
   background:linear-gradient(135deg,var(--c3),var(--c1));-webkit-background-clip:text;
   -webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:4px;flex-shrink:0;}
-.go-stats{display:flex;gap:14px;margin-bottom:18px;flex-wrap:wrap;justify-content:center;flex-shrink:0;}
+.go-stats{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;justify-content:center;flex-shrink:0;}
 .go-stat{text-align:center;}
-.go-stat-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--c2);}
-.go-stat-lbl{font-size:8px;color:var(--muted);letter-spacing:2px;}
+.go-stat-val{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--c2);}
+.go-stat-lbl{font-size:7px;color:var(--muted);letter-spacing:2px;}
 .level-badge{display:inline-block;background:rgba(255,230,0,0.1);border:1px solid var(--c3);
-  border-radius:20px;padding:3px 14px;font-size:10px;color:var(--c3);letter-spacing:2px;margin-bottom:12px;flex-shrink:0;}
-.new-best{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--c4);
-  animation:glow 1s ease-in-out infinite alternate;margin-bottom:6px;flex-shrink:0;}
+  border-radius:20px;padding:2px 12px;font-size:9px;color:var(--c3);letter-spacing:2px;margin-bottom:10px;flex-shrink:0;}
+.new-best{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:3px;color:var(--c4);
+  animation:glow 1s ease-in-out infinite alternate;margin-bottom:5px;flex-shrink:0;}
 @keyframes glow{from{filter:drop-shadow(0 0 4px var(--c4));}to{filter:drop-shadow(0 0 16px var(--c4));}}
 
-/* Store */
-.store-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:340px;margin-bottom:14px;flex-shrink:0;}
+/* coin doubler timer on game over */
+.doubler-banner{width:100%;max-width:320px;background:rgba(255,107,0,0.1);border:1px solid var(--c5);
+  border-radius:10px;padding:8px 14px;margin-bottom:8px;text-align:center;flex-shrink:0;}
+.doubler-title{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--c5);letter-spacing:2px;}
+.doubler-timer{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--c3);}
+.doubler-sub{font-size:9px;color:var(--muted);}
+
+/* streak protect prompt */
+.streak-protect{position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;background:rgba(17,17,24,0.98);border-top:2px solid var(--c5);
+  padding:12px 20px;z-index:300;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.streak-protect.hidden{display:none;}
+.sp-text{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--c5);letter-spacing:1px;}
+.sp-sub{font-size:9px;color:var(--muted);}
+.sp-countdown{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--c3);}
+.sp-btn{background:var(--c5);border:none;border-radius:8px;padding:6px 14px;
+  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:white;cursor:pointer;white-space:nowrap;}
+.sp-skip{background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 10px;
+  font-size:9px;color:var(--muted);cursor:pointer;}
+
+/* ── MISSIONS SCREEN ─────────────────────────────────────────────── */
+.mission-card{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--border);
+  border-radius:12px;padding:12px 14px;margin-bottom:8px;flex-shrink:0;display:flex;align-items:center;gap:12px;}
+.mission-card.done{border-color:var(--c4);background:rgba(57,255,20,0.05);}
+.mc-icon{font-size:22px;min-width:30px;text-align:center;}
+.mc-body{flex:1;}
+.mc-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.mc-desc{font-size:10px;color:var(--muted);}
+.mc-progress{height:4px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden;}
+.mc-fill{height:100%;background:var(--c4);border-radius:2px;transition:width 0.5s;}
+.mc-reward{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);white-space:nowrap;}
+
+/* ── ACHIEVEMENTS SCREEN ─────────────────────────────────────────── */
+.ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:380px;margin-bottom:10px;flex-shrink:0;}
+.ach-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;}
+.ach-card.unlocked{border-color:var(--gold);}
+.ach-card.locked{opacity:0.4;}
+.ach-icon{font-size:24px;margin-bottom:4px;}
+.ach-name{font-size:9px;font-weight:700;color:var(--text);letter-spacing:1px;margin-bottom:2px;}
+.ach-desc{font-size:8px;color:var(--muted);}
+.ach-date{font-size:8px;color:var(--gold);margin-top:3px;}
+.ach-new{position:fixed;inset:0;background:rgba(10,10,15,0.9);z-index:400;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:10px;animation:fadeAch 3s forwards;}
+@keyframes fadeAch{0%,10%{opacity:0;}20%,75%{opacity:1;}100%{opacity:0;}}
+
+/* ── STATS SCREEN ────────────────────────────────────────────────── */
+.stats-screen-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:380px;margin-bottom:10px;flex-shrink:0;}
+.stat-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;}
+.sc-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--c2);}
+.sc-lbl{font-size:8px;color:var(--muted);letter-spacing:1px;}
+.score-chart{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--border);
+  border-radius:10px;padding:12px;margin-bottom:10px;flex-shrink:0;}
+.chart-title{font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;}
+
+/* ── STORE ───────────────────────────────────────────────────────── */
+.store-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:340px;margin-bottom:10px;flex-shrink:0;}
 .store-item{background:var(--panel);border:1px solid var(--border);border-radius:12px;
-  padding:14px 10px;text-align:center;cursor:pointer;transition:all 0.15s;}
+  padding:12px 10px;text-align:center;cursor:pointer;transition:all 0.15s;position:relative;}
 .store-item:hover{border-color:var(--gold);transform:translateY(-2px);}
 .store-item.featured{border-color:var(--c1);background:rgba(255,45,85,0.06);}
-.store-coins{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--gold);}
-.store-price{font-size:14px;font-weight:700;color:var(--text);margin:3px 0;}
+.store-item .doubler-tag{position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+  background:var(--c5);color:white;font-size:8px;font-weight:700;padding:2px 8px;border-radius:10px;
+  letter-spacing:1px;white-space:nowrap;display:none;}
+.store-item .doubler-tag.show{display:block;}
+.store-coins{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);}
+.store-price{font-size:13px;font-weight:700;color:var(--text);margin:2px 0;}
 .store-note{font-size:9px;color:var(--muted);letter-spacing:1px;}
-.store-badge{font-size:9px;color:var(--c1);font-weight:700;letter-spacing:1px;margin-bottom:3px;}
+.store-badge{font-size:8px;color:var(--c1);font-weight:700;letter-spacing:1px;margin-bottom:2px;}
+.free-coins-section{width:100%;max-width:340px;background:rgba(57,255,20,0.05);
+  border:1px solid rgba(57,255,20,0.25);border-radius:12px;padding:12px;margin-bottom:10px;flex-shrink:0;}
+.free-coin-row{display:flex;gap:6px;}
+.free-coin-btn{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:10px;
+  padding:8px 4px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.free-coin-btn:hover{border-color:var(--c4);}
+.fcb-icon{font-size:18px;margin-bottom:3px;}
+.fcb-coins{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--c4);}
+.fcb-label{font-size:8px;color:var(--muted);}
+.fcb-cd{font-size:8px;color:var(--muted);margin-top:1px;}
+.theme-row{display:flex;gap:6px;flex-wrap:wrap;width:100%;max-width:340px;margin-bottom:10px;flex-shrink:0;}
+.theme-btn{flex:1;min-width:60px;background:var(--panel);border:2px solid var(--border);border-radius:10px;
+  padding:8px 4px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.theme-btn:hover{transform:translateY(-2px);}
+.theme-btn.active{border-color:var(--gold);}
+.theme-swatch{width:28px;height:28px;border-radius:6px;margin:0 auto 4px;}
+.theme-name{font-size:8px;color:var(--muted);letter-spacing:1px;}
+.theme-price{font-size:9px;color:var(--gold);font-weight:700;}
 
-/* Levelup flash */
+/* ── CHALLENGE BANNER ────────────────────────────────────────────── */
+.challenge-banner{width:100%;max-width:340px;background:rgba(0,229,255,0.06);
+  border:1px solid rgba(0,229,255,0.3);border-radius:10px;padding:10px 12px;
+  margin-bottom:10px;text-align:center;flex-shrink:0;}
+.cb-title{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--c2);letter-spacing:2px;}
+.cb-score{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--c3);}
+.cb-name{font-size:10px;color:var(--muted);}
+
+/* ── LEVEL UP FLASH ──────────────────────────────────────────────── */
 @keyframes levelUp{0%{opacity:0;transform:translateX(-50%) scale(0.4);}
   40%{opacity:1;transform:translateX(-50%) scale(1.3);}
   70%{opacity:1;transform:translateX(-50%) scale(1);}
   100%{opacity:0;transform:translateX(-50%) scale(0.9) translateY(-50px);}}
-.levelup-flash{position:fixed;top:38%;left:50%;transform:translateX(-50%);
-  font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:6px;color:var(--c3);
+.levelup-flash{position:fixed;top:36%;left:50%;transform:translateX(-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:50px;letter-spacing:6px;color:var(--c3);
   text-shadow:0 0 40px var(--c3);pointer-events:none;z-index:300;animation:levelUp 1s forwards;}
 
-/* Toast */
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+/* ── TOAST ───────────────────────────────────────────────────────── */
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);
   background:var(--panel);border:1px solid var(--border);border-radius:10px;
-  padding:10px 18px;font-size:12px;color:var(--text);z-index:500;
+  padding:9px 16px;font-size:11px;color:var(--text);z-index:500;
   animation:toastAnim 2.2s forwards;pointer-events:none;white-space:nowrap;
   box-shadow:0 4px 20px rgba(0,0,0,0.4);}
 @keyframes toastAnim{0%{opacity:0;transform:translateX(-50%) translateY(8px);}
@@ -213,144 +311,239 @@ header{width:100%;max-width:480px;padding:12px 16px 6px;display:flex;justify-con
 </head>
 <body>
 
-<!-- ═══════════════════════════════ START SCREEN ═══════════════════════════════ -->
+<!-- ═══════════ START SCREEN ═══════════ -->
 <div class="screen" id="startScreen">
-  <div style="margin-top:10px;"></div>
+  <div style="margin-top:8px;"></div>
   <div class="screen-title" style="background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">GRIDLOCK</div>
   <div class="screen-sub">CHAIN · CLEAR · CONQUER</div>
-
+  <div id="challengeBannerStart" class="challenge-banner hidden"></div>
   <div class="daily-badge">
-    <div class="daily-icon">📅</div>
-    <div class="daily-info">
-      <div class="daily-title">DAILY CHALLENGE</div>
-      <div class="daily-sub" id="dailySubText">TODAY'S UNIQUE GRID — SAME FOR EVERYONE</div>
+    <div style="font-size:20px;">📅</div>
+    <div style="flex:1;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;color:var(--c2);">DAILY CHALLENGE</div>
+      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;" id="dailySubText">TODAY'S UNIQUE GRID</div>
     </div>
     <button class="daily-play-btn" onclick="startGame(true)">PLAY</button>
   </div>
-
   <div class="how-grid">
-    <div class="how-item"><div class="how-icon">👆</div><div class="how-text">TAP or DRAG across same-colour tiles to build a chain</div></div>
-    <div class="how-item"><div class="how-icon">🔙</div><div class="how-text">Tap a tile already in your chain to UNDO back to it</div></div>
-    <div class="how-item"><div class="how-icon">⚡</div><div class="how-text">Tap ⚡ CHAIN to clear your selection and score points</div></div>
-    <div class="how-item"><div class="how-icon">🔥</div><div class="how-text">7+ tile chains score 5x points. Go for MEGA chains!</div></div>
+    <div class="how-item"><div class="how-icon">👆</div><div class="how-text">TAP or DRAG same-colour tiles to chain them</div></div>
+    <div class="how-item"><div class="how-icon">🔙</div><div class="how-text">Tap a tile in your chain to UNDO back to it</div></div>
+    <div class="how-item"><div class="how-icon">⚡</div><div class="how-text">Tap ⚡ CHAIN to clear and score points</div></div>
+    <div class="how-item"><div class="how-icon">🔥</div><div class="how-text">7+ tile chains = 5× multiplier MEGA score!</div></div>
   </div>
-
   <button class="big-btn" onclick="startGame(false)">▶ PLAY NOW</button>
-  <button class="ghost-btn" onclick="showScreen('instrScreen')">📖 FULL INSTRUCTIONS</button>
+  <button class="ghost-btn" onclick="showScreen('instrScreen')">📖 HOW TO PLAY</button>
   <button class="ghost-btn" onclick="showScreen('storeScreen')">🪙 COIN STORE</button>
-
-  <div id="startHiScore" style="margin-top:10px;font-size:11px;color:var(--muted);letter-spacing:2px;"></div>
+  <button class="ghost-btn" onclick="showScreen('achScreen')">🏅 ACHIEVEMENTS</button>
+  <button class="ghost-btn" onclick="showScreen('statsScreen')">📊 MY STATS</button>
+  <div id="startHiScore" style="margin-top:8px;font-size:10px;color:var(--muted);letter-spacing:2px;text-align:center;"></div>
 </div>
 
-<!-- ═══════════════════════════════ INSTRUCTIONS ═══════════════════════════════ -->
+<!-- ═══════════ INSTRUCTIONS ═══════════ -->
 <div class="screen hidden" id="instrScreen">
-  <div style="margin-top:8px;"></div>
-  <div class="screen-title" style="color:var(--c2);font-size:42px;">HOW TO PLAY</div>
-
+  <div style="margin-top:6px;"></div>
+  <div class="screen-title" style="color:var(--c2);font-size:40px;">HOW TO PLAY</div>
   <div class="instr-section">
     <div class="instr-title" style="color:var(--c2);">⛓️ BUILDING A CHAIN</div>
-    <div class="instr-row"><div class="instr-icon">1️⃣</div><div class="instr-text"><strong>Tap any tile</strong> to start your chain. The tile glows and shows the number 1.</div></div>
-    <div class="instr-row"><div class="instr-icon">2️⃣</div><div class="instr-text"><strong>Tap or drag</strong> to any touching tile of the <strong>same colour</strong>. Up, down, left, right — no diagonals. Each new tile gets a number.</div></div>
-    <div class="instr-row"><div class="instr-icon">🔙</div><div class="instr-text"><strong>Made a mistake?</strong> Tap any tile already in your chain to undo back to that point. You keep everything up to that tile.</div></div>
-    <div class="instr-row"><div class="instr-icon">⚡</div><div class="instr-text"><strong>Tap ⚡ CHAIN</strong> (or press Space/Enter) to clear your selected tiles and score points.</div></div>
-    <div class="instr-row"><div class="instr-icon">❌</div><div class="instr-text"><strong>Wrong colour or non-adjacent tile?</strong> The chain resets and starts fresh from that tile automatically.</div></div>
+    <div class="instr-row"><div class="instr-icon">1️⃣</div><div class="instr-text"><strong>Tap any tile</strong> to start. It glows and shows the number 1.</div></div>
+    <div class="instr-row"><div class="instr-icon">2️⃣</div><div class="instr-text"><strong>Tap or drag</strong> to touching tiles of the <strong>same colour</strong>. Up, down, left, right only.</div></div>
+    <div class="instr-row"><div class="instr-icon">🔙</div><div class="instr-text"><strong>Tap a tile already in your chain</strong> to undo back to that point.</div></div>
+    <div class="instr-row"><div class="instr-icon">⚡</div><div class="instr-text"><strong>Tap ⚡ CHAIN</strong> (or Space) to clear and score points.</div></div>
+    <div class="instr-row"><div class="instr-icon">❌</div><div class="instr-text"><strong>Wrong colour?</strong> Chain resets and starts from the new tile.</div></div>
   </div>
-
   <div class="instr-section">
-    <div class="instr-title" style="color:var(--c3);">⚡ SCORE MULTIPLIERS</div>
-    <div class="instr-text" style="margin-bottom:8px;">The longer your chain, the higher your multiplier:</div>
+    <div class="instr-title" style="color:var(--c3);">⚡ MULTIPLIERS</div>
     <div class="mult-row">
-      <div class="mult-chip" style="background:rgba(0,229,255,0.15);color:var(--c2);">2 tiles = 1×</div>
+      <div class="mult-chip" style="background:rgba(0,229,255,0.15);color:var(--c2);">2 = 1×</div>
       <div class="mult-chip" style="background:rgba(255,230,0,0.15);color:var(--c3);">3–4 = 2×</div>
       <div class="mult-chip" style="background:rgba(255,107,0,0.15);color:var(--c5);">5–6 = 3×</div>
-      <div class="mult-chip" style="background:rgba(255,45,85,0.2);color:var(--c1);">7+ = 5× 🔥 MEGA</div>
+      <div class="mult-chip" style="background:rgba(255,45,85,0.2);color:var(--c1);">7+ = 5× 🔥</div>
     </div>
-    <div class="instr-text" style="margin-top:8px;">A 7-tile chain scores <strong>350 points</strong>. A 2-tile chain scores just 20. Always go longer!</div>
   </div>
-
   <div class="instr-section">
-    <div class="instr-title" style="color:var(--c4);">💡 POWER-UPS (SPEND COINS)</div>
-    <div class="instr-row"><div class="instr-icon">💡</div><div class="instr-text"><strong>HINT — 20🪙:</strong> Pulses the largest connected group of same-colour tiles on the board.</div></div>
-    <div class="instr-row"><div class="instr-icon">🔀</div><div class="instr-text"><strong>SHUFFLE — 30🪙:</strong> Randomises all tiles. Great escape if you're truly stuck.</div></div>
-    <div class="instr-row"><div class="instr-icon">💣</div><div class="instr-text"><strong>BOMB — 50🪙:</strong> Blasts every tile of one random colour off the grid instantly.</div></div>
-    <div class="instr-row"><div class="instr-icon">⏱️</div><div class="instr-text"><strong>+TIME — 40🪙:</strong> Adds 8 seconds to the current round timer.</div></div>
-    <div class="instr-text" style="margin-top:6px;">Earn coins by playing, or buy them in the Coin Store.</div>
+    <div class="instr-title" style="color:var(--c4);">💡 POWER-UPS</div>
+    <div class="instr-row"><div class="instr-icon">💡</div><div class="instr-text"><strong>HINT 20🪙</strong> — Highlights the biggest group of matching tiles.</div></div>
+    <div class="instr-row"><div class="instr-icon">🔀</div><div class="instr-text"><strong>SHUFFLE 30🪙</strong> — Randomises all tiles when you're stuck.</div></div>
+    <div class="instr-row"><div class="instr-icon">💣</div><div class="instr-text"><strong>BOMB 50🪙</strong> — Blasts all tiles of one random colour.</div></div>
+    <div class="instr-row"><div class="instr-icon">⏱️</div><div class="instr-text"><strong>+TIME 40🪙</strong> — Adds 8 seconds to the timer.</div></div>
   </div>
-
   <div class="instr-section">
-    <div class="instr-title" style="color:var(--c1);">❤️ LIVES, ROUNDS & LEVELLING UP</div>
-    <div class="instr-row"><div class="instr-icon">🎯</div><div class="instr-text"><strong>Each round</strong> you need to complete a target number of chains before the timer expires. The target is shown in the top right.</div></div>
-    <div class="instr-row"><div class="instr-icon">⏰</div><div class="instr-text"><strong>Timer runs out?</strong> You lose a life and the timer resets. Lose all 3 lives and it's game over.</div></div>
-    <div class="instr-row"><div class="instr-icon">📈</div><div class="instr-text"><strong>Complete the round target</strong> and you level up! Each level adds more colours to the grid and reduces the timer. How far can you go?</div></div>
-    <div class="instr-row"><div class="instr-icon">📅</div><div class="instr-text"><strong>Daily Challenge:</strong> Every day a unique grid is generated — the same for all players. Compare your score with friends!</div></div>
+    <div class="instr-title" style="color:var(--c1);">❤️ LIVES & ROUNDS</div>
+    <div class="instr-row"><div class="instr-icon">🎯</div><div class="instr-text">Complete the target number of chains before the timer runs out.</div></div>
+    <div class="instr-row"><div class="instr-icon">⏰</div><div class="instr-text">Timer runs out = lose a life. Lose 3 lives = game over.</div></div>
+    <div class="instr-row"><div class="instr-icon">📈</div><div class="instr-text">Complete the round → level up. More colours, faster timer.</div></div>
+    <div class="instr-row"><div class="instr-icon">🔥</div><div class="instr-text">Build a <strong>streak</strong> by chaining without losing a life. Every 5-chain streak = bonus coins!</div></div>
   </div>
-
   <button class="big-btn" onclick="hideScreen('instrScreen')">← BACK</button>
 </div>
 
-<!-- ═══════════════════════════════ GAME OVER ═══════════════════════════════ -->
+<!-- ═══════════ MISSIONS SCREEN ═══════════ -->
+<div class="screen hidden" id="missionsScreen">
+  <div style="margin-top:8px;"></div>
+  <div class="screen-title" style="color:var(--c3);font-size:44px;">DAILY MISSIONS</div>
+  <div class="screen-sub">COMPLETE ALL 3 FOR A BONUS REWARD</div>
+  <div id="missionsList" style="width:100%;max-width:380px;flex-shrink:0;"></div>
+  <div id="missionsAllDone" class="hidden" style="width:100%;max-width:380px;background:rgba(57,255,20,0.08);border:1px solid var(--c4);border-radius:12px;padding:14px;text-align:center;margin-bottom:10px;flex-shrink:0;">
+    <div style="font-size:28px;margin-bottom:6px;">🎉</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--c4);letter-spacing:2px;">ALL MISSIONS COMPLETE!</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:4px;">New missions tomorrow</div>
+  </div>
+  <button class="big-btn" onclick="hideScreen('missionsScreen')">← BACK</button>
+</div>
+
+<!-- ═══════════ ACHIEVEMENTS ═══════════ -->
+<div class="screen hidden" id="achScreen">
+  <div style="margin-top:8px;"></div>
+  <div class="screen-title" style="color:var(--gold);font-size:44px;">ACHIEVEMENTS</div>
+  <div id="achProgress" class="screen-sub"></div>
+  <div class="ach-grid" id="achGrid"></div>
+  <button class="big-btn" onclick="hideScreen('achScreen')">← BACK</button>
+</div>
+
+<!-- ═══════════ STATS SCREEN ═══════════ -->
+<div class="screen hidden" id="statsScreen">
+  <div style="margin-top:8px;"></div>
+  <div class="screen-title" style="color:var(--c2);font-size:44px;">MY STATS</div>
+  <div class="stats-screen-grid" id="statsGrid"></div>
+  <div class="score-chart">
+    <div class="chart-title">LAST 7 GAMES — SCORE</div>
+    <canvas id="scoreChart" height="80" style="width:100%;"></canvas>
+  </div>
+  <button class="ghost-btn" onclick="shareStats()">📤 SHARE STATS</button>
+  <button class="big-btn" onclick="hideScreen('statsScreen')">← BACK</button>
+</div>
+
+<!-- ═══════════ GAME OVER ═══════════ -->
 <div class="screen hidden" id="gameOverScreen">
-  <div style="margin-top:10px;"></div>
-  <div class="screen-title" style="color:var(--c1);font-size:50px;line-height:1.1;">GAME<br>OVER</div>
+  <div style="margin-top:8px;"></div>
+  <div class="screen-title" style="color:var(--c1);font-size:48px;line-height:1.1;">GAME<br>OVER</div>
   <div id="newBestMsg" class="new-best hidden">🏆 NEW HIGH SCORE!</div>
   <div class="go-score" id="goScore">0</div>
   <div class="level-badge" id="goLevel">LEVEL 1</div>
   <div class="go-stats">
     <div class="go-stat"><div class="go-stat-val" id="goBestChain">0</div><div class="go-stat-lbl">BEST CHAIN</div></div>
-    <div class="go-stat"><div class="go-stat-val" id="goTilesCleared">0</div><div class="go-stat-lbl">TILES CLEARED</div></div>
+    <div class="go-stat"><div class="go-stat-val" id="goTilesCleared">0</div><div class="go-stat-lbl">TILES</div></div>
     <div class="go-stat"><div class="go-stat-val" id="goHighScore">0</div><div class="go-stat-lbl">HIGH SCORE</div></div>
-    <div class="go-stat"><div class="go-stat-val" id="goChainsTotal">0</div><div class="go-stat-lbl">CHAINS MADE</div></div>
+    <div class="go-stat"><div class="go-stat-val" id="goChainsTotal">0</div><div class="go-stat-lbl">CHAINS</div></div>
+  </div>
+  <div id="doublerBanner" class="doubler-banner hidden">
+    <div class="doubler-title">🔥 COIN DOUBLER ACTIVE!</div>
+    <div class="doubler-timer" id="doublerTimer">10:00</div>
+    <div class="doubler-sub">Next purchase gives 2× coins</div>
   </div>
   <button class="big-btn" onclick="startGame(false)">↺ PLAY AGAIN</button>
+  <button class="ghost-btn" style="border-color:var(--c4);color:var(--c4);" onclick="tryRevive()">💚 REVIVE (50🪙) — KEEP SCORE</button>
   <button class="ghost-btn" onclick="startGame(true)">📅 DAILY CHALLENGE</button>
-  <button class="ghost-btn" onclick="shareScore()">📤 SHARE SCORE</button>
+  <button class="ghost-btn" onclick="shareScore()">📤 SHARE & CHALLENGE</button>
   <button class="ghost-btn" onclick="showScreen('storeScreen')">🪙 GET COINS</button>
+  <button class="ghost-btn" onclick="showScreen('missionsScreen')">🎯 MISSIONS</button>
 </div>
 
-<!-- ═══════════════════════════════ STORE ═══════════════════════════════ -->
+<!-- ═══════════ STORE ═══════════ -->
 <div class="screen hidden" id="storeScreen">
-  <div style="margin-top:10px;"></div>
-  <div class="screen-title" style="color:var(--gold);font-size:46px;">COIN STORE</div>
+  <div style="margin-top:8px;"></div>
+  <div class="screen-title" style="color:var(--gold);font-size:44px;">COIN STORE</div>
   <div class="screen-sub">POWER UP YOUR GAME</div>
-  <div class="store-grid">
-    <div class="store-item" onclick="buyCoins(100,0.99,'starter')">
-      <div class="store-coins">100 🪙</div><div class="store-price">£0.99</div><div class="store-note">STARTER</div>
-    </div>
-    <div class="store-item featured" onclick="buyCoins(600,4.99,'popular')">
-      <div class="store-badge">⭐ BEST VALUE</div>
-      <div class="store-coins">600 🪙</div><div class="store-price">£4.99</div><div class="store-note">+20% BONUS</div>
-    </div>
-    <div class="store-item" onclick="buyCoins(1400,9.99,'gamer')">
-      <div class="store-coins">1400 🪙</div><div class="store-price">£9.99</div><div class="store-note">+40% BONUS</div>
-    </div>
-    <div class="store-item" onclick="buyCoins(3500,19.99,'whale')">
-      <div class="store-coins">3500 🪙</div><div class="store-price">£19.99</div><div class="store-note">+75% BONUS</div>
+
+  <div class="free-coins-section">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--c4);letter-spacing:2px;margin-bottom:3px;">🎬 EARN FREE COINS</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:10px;">Watch ads or claim daily bonus — no purchase needed</div>
+    <div class="free-coin-row">
+      <div class="free-coin-btn" id="watchAd1Btn" onclick="watchAdForCoins(1)">
+        <div class="fcb-icon">📺</div>
+        <div class="fcb-coins">+10 🪙</div>
+        <div class="fcb-label">WATCH AD</div>
+        <div class="fcb-cd" id="watchAd1Cd"></div>
+      </div>
+      <div class="free-coin-btn" id="watchAd2Btn" onclick="watchAdForCoins(2)">
+        <div class="fcb-icon">🎬</div>
+        <div class="fcb-coins">+25 🪙</div>
+        <div class="fcb-label">3 ADS</div>
+        <div class="fcb-cd" id="watchAd2Cd"></div>
+      </div>
+      <div class="free-coin-btn" id="dailyBonusBtn" onclick="claimDailyBonus()">
+        <div class="fcb-icon">🎁</div>
+        <div class="fcb-coins">+30 🪙</div>
+        <div class="fcb-label">DAILY</div>
+        <div class="fcb-cd" id="dailyBonusCd"></div>
+      </div>
     </div>
   </div>
-  <div style="width:100%;max-width:340px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;flex-shrink:0;">
-    <div style="font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">WHAT CAN I BUY WITH COINS?</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;">
-      <span style="font-size:11px;background:rgba(255,255,255,0.05);padding:4px 10px;border-radius:20px;">💡 Hint 20🪙</span>
-      <span style="font-size:11px;background:rgba(255,255,255,0.05);padding:4px 10px;border-radius:20px;">🔀 Shuffle 30🪙</span>
-      <span style="font-size:11px;background:rgba(255,255,255,0.05);padding:4px 10px;border-radius:20px;">💣 Bomb 50🪙</span>
-      <span style="font-size:11px;background:rgba(255,255,255,0.05);padding:4px 10px;border-radius:20px;">⏱️ +Time 40🪙</span>
+
+  <!-- Themes -->
+  <div style="width:100%;max-width:340px;margin-bottom:6px;flex-shrink:0;">
+    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">🎨 TILE THEMES</div>
+  </div>
+  <div class="theme-row" id="themeRow"></div>
+
+  <!-- Coin packs -->
+  <div class="store-grid">
+    <div class="store-item" id="storeItem_starter" onclick="buyCoins(100,0.99,'starter')">
+      <div class="doubler-tag" id="doublerTag_starter">2× TODAY!</div>
+      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:2px;">STARTER PACK</div>
+      <div class="store-coins" id="storeCoins_starter">100 🪙</div>
+      <div class="store-price">£0.99</div>
+    </div>
+    <div class="store-item featured" id="storeItem_popular" onclick="buyCoins(600,4.99,'popular')">
+      <div class="doubler-tag" id="doublerTag_popular">2× TODAY!</div>
+      <div class="store-badge">⭐ BEST VALUE</div>
+      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:2px;">POPULAR PACK</div>
+      <div class="store-coins" id="storeCoins_popular">600 🪙</div>
+      <div class="store-price">£4.99</div>
+      <div class="store-note">+20% BONUS</div>
+    </div>
+    <div class="store-item" id="storeItem_gamer" onclick="buyCoins(1400,9.99,'gamer')">
+      <div class="doubler-tag" id="doublerTag_gamer">2× TODAY!</div>
+      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:2px;">GAMER PACK</div>
+      <div class="store-coins" id="storeCoins_gamer">1400 🪙</div>
+      <div class="store-price">£9.99</div>
+      <div class="store-note">+40% BONUS</div>
+    </div>
+    <div class="store-item" id="storeItem_whale" onclick="buyCoins(3500,19.99,'whale')">
+      <div class="doubler-tag" id="doublerTag_whale">2× TODAY!</div>
+      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:2px;">WHALE PACK</div>
+      <div class="store-coins" id="storeCoins_whale">3500 🪙</div>
+      <div class="store-price">£19.99</div>
+      <div class="store-note">+75% BONUS</div>
+    </div>
+  </div>
+  <div style="width:100%;max-width:340px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px;flex-shrink:0;">
+    <div style="font-size:9px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;">SPEND COINS ON:</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;">
+      <span style="font-size:10px;background:rgba(255,255,255,0.05);padding:3px 9px;border-radius:20px;">💡 Hint 20🪙</span>
+      <span style="font-size:10px;background:rgba(255,255,255,0.05);padding:3px 9px;border-radius:20px;">🔀 Shuffle 30🪙</span>
+      <span style="font-size:10px;background:rgba(255,255,255,0.05);padding:3px 9px;border-radius:20px;">💣 Bomb 50🪙</span>
+      <span style="font-size:10px;background:rgba(255,255,255,0.05);padding:3px 9px;border-radius:20px;">⏱️ +Time 40🪙</span>
+      <span style="font-size:10px;background:rgba(255,255,255,0.05);padding:3px 9px;border-radius:20px;">💚 Revive 50🪙</span>
     </div>
   </div>
   <button class="ghost-btn" onclick="hideScreen('storeScreen')">← BACK</button>
-  <div style="font-size:9px;color:var(--muted);margin-top:8px;text-align:center;max-width:280px;line-height:1.7;flex-shrink:0;">
-    Coins purchase in-game power-ups only. No gambling element. No random rewards. UK compliant. 18+ recommended.
+  <div style="font-size:8px;color:var(--muted);margin-top:6px;text-align:center;max-width:280px;line-height:1.7;flex-shrink:0;">
+    Coins = in-game power-ups only. No gambling. No random prizes. UK compliant. 18+ recommended.
   </div>
 </div>
 
-<!-- ═══════════════════════════════ GAME HUD ═══════════════════════════════ -->
+<!-- ═══════════ STREAK PROTECT PROMPT ═══════════ -->
+<div class="streak-protect hidden" id="streakProtect">
+  <div>
+    <div class="sp-text">🔥 PROTECT YOUR <span id="spStreakNum">5</span>-CHAIN STREAK!</div>
+    <div class="sp-sub">Spend 15🪙 to keep your streak going</div>
+  </div>
+  <div class="sp-countdown" id="spCountdown">3</div>
+  <button class="sp-btn" onclick="protectStreak()">SAVE (15🪙)</button>
+  <button class="sp-skip" onclick="dismissStreakProtect()">SKIP</button>
+</div>
+
+<!-- ═══════════ GAME HUD ═══════════ -->
 <header>
-  <div class="logo">GRIDLOCK</div>
+  <div class="logo">GRIDLOCK<span class="logo-crown" id="logoCrown">👑</span></div>
   <div class="header-right">
+    <button class="icon-btn" onclick="showScreen('missionsScreen')">🎯</button>
     <button class="icon-btn" onclick="showScreen('instrScreen')">❓</button>
     <div class="coins-display" onclick="showScreen('storeScreen')">
-      <span style="font-size:15px;">🪙</span>
+      <span style="font-size:14px;">🪙</span>
       <span class="coin-count" id="coinDisplay">50</span>
-      <span style="font-size:13px;color:var(--muted);">+</span>
+      <span style="font-size:12px;color:var(--muted);">+</span>
     </div>
   </div>
 </header>
@@ -368,18 +561,27 @@ header{width:100%;max-width:480px;padding:12px 16px 6px;display:flex;justify-con
 
 <div class="hud-row">
   <div class="lives">
-    <span style="font-size:10px;color:var(--muted);letter-spacing:2px;margin-right:2px;">LIVES</span>
+    <span style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-right:2px;">LIVES</span>
     <span class="life" id="life1">❤️</span>
     <span class="life" id="life2">❤️</span>
     <span class="life" id="life3">❤️</span>
   </div>
-  <div class="target-text">NEED <span class="target-num" id="targetDisplay">3</span> MORE CHAINS</div>
+  <div class="target-text">NEED <span class="target-num" id="targetDisplay">3</span> CHAINS</div>
+</div>
+
+<div class="mission-ticker" id="missionTicker" onclick="showScreen('missionsScreen')" style="display:none;">
+  <div class="mission-bar">
+    <span class="mission-icon">🎯</span>
+    <span class="mission-label" id="tickerLabel">Mission loading…</span>
+    <span class="mission-prog" id="tickerProg"></span>
+  </div>
 </div>
 
 <div class="combo-bar">
   <div class="combo-text" id="comboText">TAP A TILE TO START</div>
   <div class="combo-right">
     <span class="sel-count" id="selCount"></span>
+    <span class="streak-badge" id="streakBadge"></span>
     <button class="commit-btn" id="commitBtn" onclick="commitChain()">⚡ CHAIN</button>
   </div>
 </div>
@@ -393,647 +595,927 @@ header{width:100%;max-width:480px;padding:12px 16px 6px;display:flex;justify-con
   <button class="pu-btn" style="--pc:var(--c3)" onclick="useTime()"><span class="pu-icon">⏱️</span><span class="pu-name">+TIME</span><span class="pu-cost">40🪙</span></button>
 </div>
 
+<!-- AdSense banner — replace data-ad-slot with your real ad unit ID -->
 <div class="ad-slot">
-  <div class="ad-inner"><span>📢</span><span>ADVERTISEMENT — REPLACE WITH GOOGLE ADSENSE CODE</span></div>
+  <ins class="adsbygoogle"
+    style="display:block;width:100%;max-width:480px;margin:0 auto;"
+    data-ad-client="ca-pub-7002095382253130"
+    data-ad-slot="auto"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 
 <script>
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // CONSTANTS
-// ─────────────────────────────────────────────────────────────────────────────
-const COLORS   = ['c1','c2','c3','c4','c5','c6'];
+// ═════════════════════════════════════════════════════
+const COLORS    = ['c1','c2','c3','c4','c5','c6'];
 const COLOR_HEX = {c1:'#ff2d55',c2:'#00e5ff',c3:'#ffe600',c4:'#39ff14',c5:'#ff6b00',c6:'#bf5af2'};
-const SYMBOLS   = {c1:'▲', c2:'◆', c3:'●', c4:'★', c5:'■', c6:'✦'};
+const SYMBOLS   = {c1:'▲',c2:'◆',c3:'●',c4:'★',c5:'■',c6:'✦'};
+const STRIPE    = {
+  starter:'https://buy.stripe.com/cNi8wQ9cZbWrfDZ7tVfrW00',
+  popular:'https://buy.stripe.com/dRm8wQdtfe4zdvR8xZfrW01',
+  gamer:  'https://buy.stripe.com/7sYbJ2gFr5y38bx3dFfrW02',
+  whale:  'https://buy.stripe.com/9B6cN688VaSn2Rd4hJfrW03',
+};
+const BASE_COINS = {starter:100, popular:600, gamer:1400, whale:3500};
 
-// ─────────────────────────────────────────────────────────────────────────────
-// GAME STATE
-// ─────────────────────────────────────────────────────────────────────────────
-const S = {
-  grid: [], cols: 5, rows: 6,
-  selected: [],          // indices in selection order
-  animating: false,      // input lock during tile-clear animation
-  score: 0, level: 1, lives: 3,
-  coins: 50,
-  timeLeft: 22, roundTime: 22, timerInterval: null,
-  chainsMadeThisRound: 0, chainsNeeded: 3,
-  bestChain: 0, tilesCleared: 0, totalChains: 0,
-  highScore: parseInt(localStorage.getItem('gl_hs') || '0'),
-  running: false,
-  colorsInPlay: 4,
-  isDailyChallenge: false,
+// ═════════════════════════════════════════════════════
+// THEMES
+// ═════════════════════════════════════════════════════
+const THEMES = {
+  neon:      {name:'NEON',    price:0,   swatch:'linear-gradient(135deg,#ff2d55,#00e5ff)', vars:{}},
+  pastel:    {name:'PASTEL',  price:30,  swatch:'linear-gradient(135deg,#ffb3c1,#b3e0ff)',
+    vars:{c1:'#ff9eb5',c2:'#a0d8ef',c3:'#fff0a0',c4:'#b5ead7',c5:'#ffcba4',c6:'#d8b4fe'}},
+  mono:      {name:'MONO',    price:40,  swatch:'linear-gradient(135deg,#888,#fff)',
+    vars:{c1:'#cccccc',c2:'#aaaaaa',c3:'#eeeeee',c4:'#ffffff',c5:'#999999',c6:'#bbbbbb'}},
+  fire:      {name:'FIRE',    price:60,  swatch:'linear-gradient(135deg,#ff4500,#ffe600)',
+    vars:{c1:'#ff4500',c2:'#ff8c00',c3:'#ffd700',c4:'#ff6347',c5:'#dc143c',c6:'#ff1493'}},
+  gold:      {name:'GOLD',    price:100, swatch:'linear-gradient(135deg,#ffd700,#b8860b)',
+    vars:{c1:'#ffd700',c2:'#daa520',c3:'#f0e68c',c4:'#ffec8b',c5:'#b8860b',c6:'#eec900'}},
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SEEDED RNG  (for daily challenge — same grid for all players on a given day)
-// ─────────────────────────────────────────────────────────────────────────────
-function seededRNG(seed) {
-  let s = seed >>> 0;
-  return function() {
-    s = Math.imul(1664525, s) + 1013904223 >>> 0;
-    return s / 4294967296;
+// ═════════════════════════════════════════════════════
+// ACHIEVEMENTS
+// ═════════════════════════════════════════════════════
+const ACH_DEF = [
+  {id:'first_chain',  icon:'⛓️',  name:'FIRST CHAIN',    desc:'Make your first chain'},
+  {id:'chain5',       icon:'🔥',  name:'ON FIRE',         desc:'Make a 5-tile chain'},
+  {id:'chain10',      icon:'💥',  name:'MEGA CHAINER',    desc:'Make a 10+ tile chain'},
+  {id:'level5',       icon:'⭐',  name:'LEVEL 5 HERO',    desc:'Reach Level 5'},
+  {id:'level10',      icon:'🌟',  name:'LEVEL 10 LEGEND', desc:'Reach Level 10'},
+  {id:'streak10',     icon:'🌊',  name:'UNSTOPPABLE',     desc:'10-chain streak'},
+  {id:'tiles500',     icon:'💎',  name:'DEMOLISHER',      desc:'Clear 500 tiles total'},
+  {id:'tiles2000',    icon:'🏆',  name:'DESTROYER',       desc:'Clear 2000 tiles total'},
+  {id:'daily7',       icon:'📅',  name:'DAILY DEVOTEE',   desc:'7-day login streak'},
+  {id:'score5000',    icon:'💫',  name:'HIGH FLYER',      desc:'Score 5,000 in one game'},
+  {id:'score20000',   icon:'🚀',  name:'ROCKET',          desc:'Score 20,000 in one game'},
+  {id:'missions10',   icon:'🎯',  name:'MISSION MASTER',  desc:'Complete 10 daily missions'},
+];
+
+// ═════════════════════════════════════════════════════
+// GAME STATE
+// ═════════════════════════════════════════════════════
+const S = {
+  grid:[], cols:5, rows:6,
+  selected:[], animating:false,
+  score:0, level:1, lives:3,
+  coins:50, streak:0,
+  timeLeft:22, roundTime:22, timerInterval:null,
+  chainsMadeThisRound:0, chainsNeeded:3,
+  bestChain:0, tilesCleared:0, totalChains:0,
+  highScore: parseInt(localStorage.getItem('gl_hs')||'0'),
+  running:false, colorsInPlay:4,
+  isDailyChallenge:false,
+  // Persistent stats
+  stats: JSON.parse(localStorage.getItem('gl_stats')||'{"gamesPlayed":0,"totalTiles":0,"totalChains":0,"totalScore":0,"maxStreak":0,"loginStreak":0,"lastLogin":"","missionsCompleted":0,"scoreHistory":[]}'),
+  // Achievements
+  achs: JSON.parse(localStorage.getItem('gl_achs')||'{}'),
+  // Theme
+  theme: localStorage.getItem('gl_theme') || 'neon',
+  // Owned themes
+  ownedThemes: JSON.parse(localStorage.getItem('gl_owned_themes')||'["neon"]'),
+  // Coin doubler expiry (timestamp)
+  doublerExpiry: parseInt(localStorage.getItem('gl_doubler')||'0'),
+  // Streak protect state
+  streakProtectTimer: null,
+  streakProtectCountdown: 0,
+  // Mission progress
+  missionProgress: JSON.parse(localStorage.getItem('gl_mission_prog')||'{}'),
+  missionDay: localStorage.getItem('gl_mission_day')||'',
+};
+
+// ═════════════════════════════════════════════════════
+// SEEDED RNG
+// ═════════════════════════════════════════════════════
+function seededRNG(seed){
+  let s=seed>>>0;
+  return ()=>{s=Math.imul(1664525,s)+1013904223>>>0;return s/4294967296;};
+}
+function todaySeed(){
+  const d=new Date();
+  return (d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate())*7919;
+}
+
+// ═════════════════════════════════════════════════════
+// THEME SYSTEM
+// ═════════════════════════════════════════════════════
+function applyTheme(id){
+  S.theme=id;
+  localStorage.setItem('gl_theme',id);
+  const t=THEMES[id];
+  const root=document.documentElement;
+  // Reset to neon defaults first
+  Object.keys(THEMES.neon.vars||{}).forEach(k=>root.style.removeProperty('--'+k));
+  Object.entries(t.vars||{}).forEach(([k,v])=>root.style.setProperty('--'+k,v));
+}
+
+function renderThemes(){
+  const row=document.getElementById('themeRow');
+  if(!row)return;
+  row.innerHTML='';
+  Object.entries(THEMES).forEach(([id,t])=>{
+    const owned=S.ownedThemes.includes(id);
+    const btn=document.createElement('div');
+    btn.className='theme-btn'+(S.theme===id?' active':'');
+    btn.innerHTML=`<div class="theme-swatch" style="background:${t.swatch};"></div>
+      <div class="theme-name">${t.name}</div>
+      <div class="theme-price">${owned?(S.theme===id?'✓ ON':'FREE'):t.price+'🪙'}</div>`;
+    btn.onclick=()=>{
+      if(owned){applyTheme(id);renderThemes();showToast(`🎨 Theme: ${t.name}`);}
+      else if(spendCoins(t.price)){
+        S.ownedThemes.push(id);localStorage.setItem('gl_owned_themes',JSON.stringify(S.ownedThemes));
+        applyTheme(id);renderThemes();showToast(`🎨 ${t.name} theme unlocked!`);
+      }
+    };
+    row.appendChild(btn);
+  });
+}
+
+// ═════════════════════════════════════════════════════
+// DAILY MISSIONS
+// ═════════════════════════════════════════════════════
+const MISSION_TEMPLATES = [
+  {id:'chains',    label:'Make {n} chains',          targets:[5,10,15],     key:'totalChains'},
+  {id:'tiles',     label:'Clear {n} tiles',           targets:[20,40,60],    key:'tilesCleared'},
+  {id:'chain5',    label:'Make a chain of {n}+ tiles',targets:[5,6,7],       key:'bestChain'},
+  {id:'level',     label:'Reach Level {n}',           targets:[3,5,7],       key:'level'},
+  {id:'score',     label:'Score {n} points',          targets:[500,1000,2000],key:'score'},
+];
+
+function getTodayMissions(){
+  const today=new Date().toDateString();
+  if(S.missionDay!==today){
+    S.missionDay=today;
+    S.missionProgress={};
+    localStorage.setItem('gl_mission_day',today);
+    localStorage.setItem('gl_mission_prog','{}');
+  }
+  const rng=seededRNG(todaySeed()+12345);
+  const picked=[];
+  const used=new Set();
+  while(picked.length<3){
+    const t=MISSION_TEMPLATES[Math.floor(rng()*MISSION_TEMPLATES.length)];
+    if(used.has(t.id))continue;
+    used.add(t.id);
+    const ti=Math.floor(rng()*t.targets.length);
+    picked.push({...t, target:t.targets[ti], label:t.label.replace('{n}',t.targets[ti])});
+  }
+  return picked;
+}
+
+function getMissionProgress(m){
+  if(m.id==='chains')    return Math.min(S.stats.totalChains,m.target);
+  if(m.id==='tiles')     return Math.min(S.stats.totalTiles,m.target);
+  if(m.id==='chain5')    return S.stats.maxChainToday>=m.target?m.target:0;
+  if(m.id==='level')     return S.stats.maxLevelToday>=m.target?m.target:0;
+  if(m.id==='score')     return S.stats.maxScoreToday>=m.target?m.target:0;
+  return 0;
+}
+
+function updateMissions(){
+  const missions=getTodayMissions();
+  const list=document.getElementById('missionsList');
+  if(!list)return;
+  list.innerHTML='';
+  let allDone=true;
+  const today=new Date().toDateString();
+  missions.forEach((m,i)=>{
+    const prog=S.missionProgress['m'+i]||0;
+    const done=prog>=m.target;
+    if(!done)allDone=false;
+    const card=document.createElement('div');
+    card.className='mission-card'+(done?' done':'');
+    const reward=10+i*5;
+    card.innerHTML=`
+      <div class="mc-icon">${done?'✅':'🎯'}</div>
+      <div class="mc-body">
+        <div class="mc-title">${m.label}</div>
+        <div class="mc-desc">${done?'COMPLETE!':'Progress tracked this session'}</div>
+        <div class="mc-progress"><div class="mc-fill" style="width:${Math.min(100,prog/m.target*100)}%"></div></div>
+      </div>
+      <div class="mc-reward">${done?'✓':'+'+reward}🪙</div>`;
+    list.appendChild(card);
+  });
+  document.getElementById('missionsAllDone')?.classList.toggle('hidden',!allDone);
+  // Update ticker
+  const ticker=document.getElementById('missionTicker');
+  const notDone=missions.find((m,i)=>(S.missionProgress['m'+i]||0)<m.target);
+  if(notDone&&S.running){
+    const idx=missions.indexOf(notDone);
+    const prog=S.missionProgress['m'+idx]||0;
+    document.getElementById('tickerLabel').textContent=notDone.label;
+    document.getElementById('tickerProg').textContent=prog+'/'+notDone.target;
+    ticker.style.display='block';
+  }else{
+    ticker.style.display='none';
+  }
+}
+
+function checkMissionProgress(){
+  const missions=getTodayMissions();
+  let coinsEarned=0;
+  missions.forEach((m,i)=>{
+    if(S.missionProgress['m'+i]>=m.target)return;
+    let prog=0;
+    if(m.id==='chains') prog=S.sessionChains||0;
+    else if(m.id==='tiles') prog=S.sessionTiles||0;
+    else if(m.id==='chain5') prog=S.bestChain>=m.target?m.target:0;
+    else if(m.id==='level') prog=S.level>=m.target?m.target:0;
+    else if(m.id==='score') prog=S.score>=m.target?m.target:0;
+    S.missionProgress['m'+i]=Math.max(S.missionProgress['m'+i]||0,prog);
+    if(S.missionProgress['m'+i]>=m.target){
+      const reward=10+i*5;
+      coinsEarned+=reward;
+      S.stats.missionsCompleted=(S.stats.missionsCompleted||0)+1;
+    }
+  });
+  localStorage.setItem('gl_mission_prog',JSON.stringify(S.missionProgress));
+  if(coinsEarned>0){S.coins+=coinsEarned;showToast(`🎯 Mission complete! +${coinsEarned}🪙`);}
+  updateMissions();
+}
+
+// ═════════════════════════════════════════════════════
+// ACHIEVEMENTS
+// ═════════════════════════════════════════════════════
+function checkAchievements(){
+  const checks={
+    first_chain: S.totalChains>=1,
+    chain5:      S.bestChain>=5,
+    chain10:     S.bestChain>=10,
+    level5:      S.level>=5,
+    level10:     S.level>=10,
+    streak10:    (S.stats.maxStreak||0)>=10,
+    tiles500:    (S.stats.totalTiles||0)>=500,
+    tiles2000:   (S.stats.totalTiles||0)>=2000,
+    daily7:      (S.stats.loginStreak||0)>=7,
+    score5000:   S.score>=5000,
+    score20000:  S.score>=20000,
+    missions10:  (S.stats.missionsCompleted||0)>=10,
   };
+  Object.entries(checks).forEach(([id,met])=>{
+    if(met&&!S.achs[id]){
+      S.achs[id]={date:new Date().toLocaleDateString()};
+      localStorage.setItem('gl_achs',JSON.stringify(S.achs));
+      const def=ACH_DEF.find(a=>a.id===id);
+      if(def) showAchievementUnlock(def);
+    }
+  });
 }
 
-function todaySeed() {
-  const d = new Date();
-  return (d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate()) * 7919;
+function showAchievementUnlock(def){
+  const el=document.createElement('div');
+  el.className='ach-new';
+  el.innerHTML=`<div style="font-size:56px;">${def.icon}</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--muted);letter-spacing:3px;">ACHIEVEMENT UNLOCKED</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);letter-spacing:2px;">${def.name}</div>
+    <div style="font-size:11px;color:var(--muted);">${def.desc}</div>`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),3000);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+function renderAchievements(){
+  const grid=document.getElementById('achGrid');
+  if(!grid)return;
+  grid.innerHTML='';
+  let unlocked=0;
+  ACH_DEF.forEach(def=>{
+    const earned=S.achs[def.id];
+    if(earned)unlocked++;
+    const card=document.createElement('div');
+    card.className='ach-card'+(earned?' unlocked':' locked');
+    card.innerHTML=`<div class="ach-icon">${def.icon}</div>
+      <div class="ach-name">${def.name}</div>
+      <div class="ach-desc">${def.desc}</div>
+      ${earned?`<div class="ach-date">${earned.date}</div>`:'<div class="ach-date">🔒 Locked</div>'}`;
+    grid.appendChild(card);
+  });
+  const prog=document.getElementById('achProgress');
+  if(prog)prog.textContent=`${unlocked} / ${ACH_DEF.length} UNLOCKED`;
+}
+
+// ═════════════════════════════════════════════════════
+// STATS & SCORE HISTORY CHART
+// ═════════════════════════════════════════════════════
+function saveStats(){
+  S.stats.totalTiles=(S.stats.totalTiles||0)+S.tilesCleared;
+  S.stats.totalChains=(S.stats.totalChains||0)+S.totalChains;
+  S.stats.totalScore=(S.stats.totalScore||0)+S.score;
+  S.stats.gamesPlayed=(S.stats.gamesPlayed||0)+1;
+  S.stats.maxStreak=Math.max(S.stats.maxStreak||0,S.streak);
+  const h=S.stats.scoreHistory||[];
+  h.push(S.score);
+  if(h.length>7)h.shift();
+  S.stats.scoreHistory=h;
+  localStorage.setItem('gl_stats',JSON.stringify(S.stats));
+}
+
+function updateLoginStreak(){
+  const today=new Date().toDateString();
+  const last=S.stats.lastLogin||'';
+  const yesterday=new Date(Date.now()-86400000).toDateString();
+  if(last===today)return;
+  if(last===yesterday){S.stats.loginStreak=(S.stats.loginStreak||0)+1;}
+  else{S.stats.loginStreak=1;}
+  S.stats.lastLogin=today;
+  S.stats.maxChainToday=0;
+  S.stats.maxLevelToday=0;
+  S.stats.maxScoreToday=0;
+  localStorage.setItem('gl_stats',JSON.stringify(S.stats));
+}
+
+function renderStatsScreen(){
+  const grid=document.getElementById('statsGrid');
+  if(!grid)return;
+  grid.innerHTML='';
+  [
+    ['🏆',S.highScore.toLocaleString(),'HIGH SCORE'],
+    ['🎮',(S.stats.gamesPlayed||0),'GAMES PLAYED'],
+    ['💎',(S.stats.totalTiles||0).toLocaleString(),'TILES CLEARED'],
+    ['⛓️',(S.stats.totalChains||0).toLocaleString(),'TOTAL CHAINS'],
+    ['🔥',(S.stats.maxStreak||0),'BEST STREAK'],
+    ['📅',(S.stats.loginStreak||0),'LOGIN STREAK'],
+  ].forEach(([icon,val,lbl])=>{
+    const c=document.createElement('div');
+    c.className='stat-card';
+    c.innerHTML=`<div style="font-size:20px;margin-bottom:4px;">${icon}</div><div class="sc-val">${val}</div><div class="sc-lbl">${lbl}</div>`;
+    grid.appendChild(c);
+  });
+  // Draw chart
+  const canvas=document.getElementById('scoreChart');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const h=S.stats.scoreHistory||[];
+  const W=canvas.offsetWidth||300;
+  canvas.width=W;
+  ctx.clearRect(0,0,W,80);
+  if(h.length<2){ctx.fillStyle='#4a4a6a';ctx.font='12px monospace';ctx.fillText('Play more games to see your chart!',10,45);return;}
+  const max=Math.max(...h,1);
+  const bw=W/h.length;
+  h.forEach((s,i)=>{
+    const bh=Math.max(4,(s/max)*70);
+    const g=ctx.createLinearGradient(0,80-bh,0,80);
+    g.addColorStop(0,'#00e5ff');g.addColorStop(1,'#0a0a0f');
+    ctx.fillStyle=g;
+    ctx.roundRect(i*bw+2,80-bh,bw-4,bh,3);
+    ctx.fill();
+  });
+}
+
+function shareStats(){
+  const text=`📊 My GRIDLOCK Stats!\n🏆 Best: ${S.highScore.toLocaleString()} pts\n💎 ${(S.stats.totalTiles||0).toLocaleString()} tiles cleared\n🔥 Best streak: ${S.stats.maxStreak||0}\n\nPlay free: ${window.location.href}`;
+  if(navigator.share){navigator.share({title:'GRIDLOCK Stats',text}).catch(()=>{});}
+  else{navigator.clipboard?.writeText(text).then(()=>showToast('Stats copied! 🚀')).catch(()=>{});}
+}
+
+// ═════════════════════════════════════════════════════
+// COIN DOUBLER
+// ═════════════════════════════════════════════════════
+let doublerInterval=null;
+function activateDoubler(){
+  S.doublerExpiry=Date.now()+10*60*1000; // 10 minutes
+  localStorage.setItem('gl_doubler',S.doublerExpiry);
+  updateDoublerUI();
+}
+function updateDoublerUI(){
+  const remaining=S.doublerExpiry-Date.now();
+  const banner=document.getElementById('doublerBanner');
+  const timer=document.getElementById('doublerTimer');
+  const tags=document.querySelectorAll('.doubler-tag');
+  const coins=document.querySelectorAll('[id^=storeCoins_]');
+  if(remaining>0){
+    if(banner)banner.classList.remove('hidden');
+    const m=Math.floor(remaining/60000),s=Math.floor((remaining%60000)/1000);
+    if(timer)timer.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+    tags.forEach(t=>t.classList.add('show'));
+    // Update coin display to show 2x
+    Object.entries(BASE_COINS).forEach(([pack,base])=>{
+      const el=document.getElementById('storeCoins_'+pack);
+      if(el)el.textContent=`${base*2} 🪙`;
+    });
+  }else{
+    if(banner)banner.classList.add('hidden');
+    tags.forEach(t=>t.classList.remove('show'));
+    Object.entries(BASE_COINS).forEach(([pack,base])=>{
+      const el=document.getElementById('storeCoins_'+pack);
+      if(el)el.textContent=`${base} 🪙`;
+    });
+  }
+}
+
+// ═════════════════════════════════════════════════════
+// STREAK PROTECTION
+// ═════════════════════════════════════════════════════
+let spInterval=null;
+function showStreakProtect(){
+  if(S.streak<3)return;
+  document.getElementById('spStreakNum').textContent=S.streak;
+  S.streakProtectCountdown=3;
+  document.getElementById('spCountdown').textContent='3';
+  document.getElementById('streakProtect').classList.remove('hidden');
+  clearInterval(spInterval);
+  spInterval=setInterval(()=>{
+    S.streakProtectCountdown--;
+    document.getElementById('spCountdown').textContent=S.streakProtectCountdown;
+    if(S.streakProtectCountdown<=0){clearInterval(spInterval);dismissStreakProtect();}
+  },1000);
+}
+function protectStreak(){
+  if(!spendCoins(15)){dismissStreakProtect();return;}
+  clearInterval(spInterval);
+  document.getElementById('streakProtect').classList.add('hidden');
+  showToast(`🔥 Streak protected! ${S.streak} chains saved!`);
+  // don't reset streak — just continue
+  startTimer();
+  updateUI();
+}
+function dismissStreakProtect(){
+  clearInterval(spInterval);
+  document.getElementById('streakProtect').classList.add('hidden');
+  S.streak=0;
+  updateStreakUI();
+  startTimer();
+  updateUI();
+}
+
+// ═════════════════════════════════════════════════════
+// CHALLENGE A FRIEND
+// ═════════════════════════════════════════════════════
+function shareScore(){
+  const mode=S.isDailyChallenge?'📅 Daily Challenge':'🎮 Classic';
+  const url=new URL(window.location.href);
+  url.searchParams.set('challenge',S.score);
+  url.searchParams.set('name','A friend');
+  const text=`${mode} — I just scored ${S.score.toLocaleString()} on GRIDLOCK!\nLevel ${S.level} · Best chain: ${S.bestChain} tiles\n\n🎯 Think you can beat me? ${url.toString()}`;
+  if(navigator.share){navigator.share({title:'GRIDLOCK Challenge',text}).catch(()=>{});}
+  else{navigator.clipboard?.writeText(text).then(()=>showToast('Challenge link copied! 🚀')).catch(()=>{});}
+}
+
+function checkChallengeParams(){
+  const p=new URLSearchParams(window.location.search);
+  const score=parseInt(p.get('challenge')||'0');
+  const name=p.get('name')||'Someone';
+  if(score>0){
+    const b=document.getElementById('challengeBannerStart');
+    if(b){
+      b.classList.remove('hidden');
+      b.innerHTML=`<div class="cb-title">⚔️ ${name} CHALLENGED YOU!</div>
+        <div class="cb-score">${score.toLocaleString()}</div>
+        <div class="cb-name">Beat this score to win</div>`;
+    }
+  }
+}
+
+// ═════════════════════════════════════════════════════
 // GRID
-// ─────────────────────────────────────────────────────────────────────────────
-function generateGrid(rngFn) {
-  const colors = COLORS.slice(0, S.colorsInPlay);
-  const rand   = rngFn || Math.random.bind(Math);
-  S.grid       = Array.from({length: S.cols * S.rows}, () =>
-    colors[Math.floor(rand() * colors.length)]);
-  S.selected   = [];
+// ═════════════════════════════════════════════════════
+function generateGrid(rngFn){
+  const colors=COLORS.slice(0,S.colorsInPlay);
+  const rand=rngFn||Math.random.bind(Math);
+  S.grid=Array.from({length:S.cols*S.rows},()=>colors[Math.floor(rand()*colors.length)]);
+  S.selected=[];
   renderGrid();
 }
-
-function renderGrid() {
-  const g = document.getElementById('grid');
-  g.style.gridTemplateColumns = `repeat(${S.cols}, var(--tile))`;
-  g.innerHTML = '';
-  S.grid.forEach((color, i) => {
-    const el = document.createElement('div');
-    el.className  = 'tile appearing';
-    el.style.animationDelay = `${(i % S.cols) * 0.025 + Math.floor(i / S.cols) * 0.032}s`;
-    el.style.background  = COLOR_HEX[color] + '22';
-    el.style.borderColor = COLOR_HEX[color] + '55';
-    el.style.color       = COLOR_HEX[color];
-    el.dataset.color = color;
-    el.dataset.idx   = i;
-    el.textContent   = SYMBOLS[color];
+function renderGrid(){
+  const g=document.getElementById('grid');
+  g.style.gridTemplateColumns=`repeat(${S.cols},var(--tile))`;
+  g.innerHTML='';
+  S.grid.forEach((color,i)=>{
+    const el=document.createElement('div');
+    el.className='tile appearing';
+    el.style.animationDelay=`${(i%S.cols)*0.022+Math.floor(i/S.cols)*0.030}s`;
+    el.style.background=COLOR_HEX[color]+'22';
+    el.style.borderColor=COLOR_HEX[color]+'55';
+    el.style.color=COLOR_HEX[color];
+    el.dataset.color=color;
+    el.dataset.idx=i;
+    el.textContent=SYMBOLS[color];
     g.appendChild(el);
   });
   attachGridEvents();
 }
+function getTile(i){return document.getElementById('grid').children[i]||null;}
 
-function getTile(i) {
-  return document.getElementById('grid').children[i] || null;
+// ═════════════════════════════════════════════════════
+// INPUT
+// ═════════════════════════════════════════════════════
+let _drag=false;
+function attachGridEvents(){
+  const g=document.getElementById('grid');
+  const ng=g.cloneNode(true);
+  g.parentNode.replaceChild(ng,g);
+  const grid=document.getElementById('grid');
+  grid.addEventListener('mousedown',e=>{const t=e.target.closest('.tile');if(!t)return;_drag=true;onTileDown(+t.dataset.idx);});
+  grid.addEventListener('mouseover',e=>{if(!_drag)return;const t=e.target.closest('.tile');if(t)onTileDrag(+t.dataset.idx);});
+  window.addEventListener('mouseup',()=>{_drag=false;});
+  grid.addEventListener('touchstart',e=>{e.preventDefault();_drag=true;const t=tileFromPt(e.touches[0]);if(t!==null)onTileDown(t);},{passive:false});
+  grid.addEventListener('touchmove',e=>{e.preventDefault();if(!_drag)return;const t=tileFromPt(e.touches[0]);if(t!==null)onTileDrag(t);},{passive:false});
+  grid.addEventListener('touchend',e=>{e.preventDefault();_drag=false;},{passive:false});
 }
+function tileFromPt(touch){const el=document.elementFromPoint(touch.clientX,touch.clientY);const t=el&&el.closest('.tile');return t?+t.dataset.idx:null;}
 
-// ─────────────────────────────────────────────────────────────────────────────
-// INPUT  — click AND drag, with backtracking fix
-// ─────────────────────────────────────────────────────────────────────────────
-let _dragging = false;
-
-function attachGridEvents() {
-  const g = document.getElementById('grid');
-  // Remove old listeners by replacing the node clone
-  const newG = g.cloneNode(true);
-  g.parentNode.replaceChild(newG, g);
-  const grid = document.getElementById('grid');
-
-  // Re-attach text/symbol content (cloneNode keeps children)
-  // Mouse
-  grid.addEventListener('mousedown', e => {
-    const tile = e.target.closest('.tile');
-    if (!tile) return;
-    _dragging = true;
-    onTileDown(parseInt(tile.dataset.idx));
-  });
-  grid.addEventListener('mouseover', e => {
-    if (!_dragging) return;
-    const tile = e.target.closest('.tile');
-    if (tile) onTileDrag(parseInt(tile.dataset.idx));
-  });
-  window.addEventListener('mouseup', () => { _dragging = false; }, {once:false});
-
-  // Touch
-  grid.addEventListener('touchstart', e => {
-    e.preventDefault();
-    _dragging = true;
-    const t = tileFromPoint(e.touches[0].clientX, e.touches[0].clientY);
-    if (t !== null) onTileDown(t);
-  }, {passive: false});
-
-  grid.addEventListener('touchmove', e => {
-    e.preventDefault();
-    if (!_dragging) return;
-    const t = tileFromPoint(e.touches[0].clientX, e.touches[0].clientY);
-    if (t !== null) onTileDrag(t);
-  }, {passive: false});
-
-  grid.addEventListener('touchend', e => {
-    e.preventDefault();
-    _dragging = false;
-  }, {passive: false});
+function onTileDown(idx){
+  if(!S.running||S.animating||!S.grid[idx])return;
+  const pos=S.selected.indexOf(idx);
+  if(S.selected.length===0){S.selected.push(idx);refreshVisuals();updateComboUI();return;}
+  if(pos>=0){S.selected.splice(pos+1);refreshVisuals();updateComboUI();return;}
+  const last=S.selected[S.selected.length-1];
+  if(S.grid[idx]===S.grid[S.selected[0]]&&isAdj(last,idx)){S.selected.push(idx);refreshVisuals();updateComboUI();playTick();}
+  else{clearSelection();S.selected.push(idx);refreshVisuals();updateComboUI();}
 }
-
-function tileFromPoint(x, y) {
-  const el = document.elementFromPoint(x, y);
-  const tile = el && el.closest('.tile');
-  return tile ? parseInt(tile.dataset.idx) : null;
+function onTileDrag(idx){
+  if(!S.running||S.animating||!S.grid[idx])return;
+  if(S.selected.length===0){onTileDown(idx);return;}
+  const pos=S.selected.indexOf(idx);
+  if(pos===S.selected.length-1)return;
+  if(pos>=0){S.selected.splice(pos+1);refreshVisuals();updateComboUI();return;}
+  const last=S.selected[S.selected.length-1];
+  if(S.grid[idx]===S.grid[S.selected[0]]&&isAdj(last,idx)){S.selected.push(idx);refreshVisuals();updateComboUI();playTick();}
 }
-
-// Called on first touch/click of a tile
-function onTileDown(idx) {
-  if (!S.running || S.animating || S.grid[idx] == null) return;
-
-  const posInChain = S.selected.indexOf(idx);
-
-  if (S.selected.length === 0) {
-    // Start fresh chain
-    S.selected.push(idx);
-    refreshVisuals();
-    updateComboUI();
-    return;
-  }
-
-  if (posInChain >= 0) {
-    // ── FIX: BACKTRACK ──
-    // Tapping a tile already in the chain trims back to that tile (inclusive)
-    S.selected.splice(posInChain + 1);
-    refreshVisuals();
-    updateComboUI();
-    return;
-  }
-
-  // Try to extend chain
-  const last = S.selected[S.selected.length - 1];
-  const sameColor = S.grid[idx] === S.grid[S.selected[0]];
-  const adjacent  = isAdj(last, idx);
-
-  if (sameColor && adjacent) {
-    S.selected.push(idx);
-    refreshVisuals();
-    updateComboUI();
-    playTick();
-  } else {
-    // Wrong colour or not adjacent — reset and start fresh from this tile
-    clearSelection();
-    S.selected.push(idx);
-    refreshVisuals();
-    updateComboUI();
-  }
+function isAdj(a,b){const ac=a%S.cols,ar=Math.floor(a/S.cols),bc=b%S.cols,br=Math.floor(b/S.cols);return Math.abs(ac-bc)+Math.abs(ar-br)===1;}
+function refreshVisuals(){
+  const g=document.getElementById('grid');
+  for(const el of g.children){el.classList.remove('selected','chain-head');el.removeAttribute('data-num');}
+  S.selected.forEach((idx,pos)=>{const el=getTile(idx);if(!el)return;el.classList.add(pos===S.selected.length-1?'chain-head':'selected');el.dataset.num=pos+1;});
+  document.getElementById('commitBtn').classList.toggle('ready',S.selected.length>=2);
 }
-
-// Called when dragging over a tile (never resets chain — only extends or backtracks)
-function onTileDrag(idx) {
-  if (!S.running || S.animating || S.grid[idx] == null) return;
-  if (S.selected.length === 0) { onTileDown(idx); return; }
-
-  const posInChain = S.selected.indexOf(idx);
-
-  if (posInChain === S.selected.length - 1) return; // already the last tile
-
-  if (posInChain >= 0) {
-    // Dragged back over earlier tile → backtrack
-    S.selected.splice(posInChain + 1);
-    refreshVisuals();
-    updateComboUI();
-    return;
-  }
-
-  // Try to extend
-  const last = S.selected[S.selected.length - 1];
-  if (S.grid[idx] === S.grid[S.selected[0]] && isAdj(last, idx)) {
-    S.selected.push(idx);
-    refreshVisuals();
-    updateComboUI();
-    playTick();
-  }
-  // Silently ignore non-adjacent drag-overs — do NOT reset chain
-}
-
-function isAdj(a, b) {
-  const ac = a % S.cols, ar = Math.floor(a / S.cols);
-  const bc = b % S.cols, br = Math.floor(b / S.cols);
-  return Math.abs(ac - bc) + Math.abs(ar - br) === 1;
-}
-
-// Update tile CSS classes and number badges to match S.selected
-function refreshVisuals() {
-  const g = document.getElementById('grid');
-  for (const el of g.children) {
-    el.classList.remove('selected', 'chain-head');
-    el.removeAttribute('data-num');
-  }
-  S.selected.forEach((idx, pos) => {
-    const el = getTile(idx);
-    if (!el) return;
-    const isHead = (pos === S.selected.length - 1);
-    el.classList.add(isHead ? 'chain-head' : 'selected');
-    el.dataset.num = pos + 1;
-  });
-  const btn = document.getElementById('commitBtn');
-  btn.classList.toggle('ready', S.selected.length >= 2);
-}
-
-function clearSelection() {
-  S.selected.forEach(i => {
-    const el = getTile(i);
-    if (el) { el.classList.remove('selected', 'chain-head'); el.removeAttribute('data-num'); }
-  });
-  S.selected = [];
+function clearSelection(){
+  S.selected.forEach(i=>{const el=getTile(i);if(el){el.classList.remove('selected','chain-head');el.removeAttribute('data-num');}});
+  S.selected=[];
   document.getElementById('commitBtn').classList.remove('ready');
   updateComboUI();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // COMMIT CHAIN
-// ─────────────────────────────────────────────────────────────────────────────
-function commitChain() {
-  if (!S.running || S.animating) return;
-
-  if (S.selected.length < 2) {
-    showToast('Select 2 or more connected tiles of the same colour first!');
-    return;
-  }
-
-  S.animating = true;  // ── LOCK INPUT ──
-
-  const len      = S.selected.length;
-  const mult     = getMultiplier(len);
-  const pts      = len * 10 * mult;
-  const toRemove = [...S.selected];
-
-  // Trigger blast animation
-  toRemove.forEach(i => {
-    const el = getTile(i);
-    if (el) { el.classList.remove('selected','chain-head'); el.removeAttribute('data-num'); el.classList.add('clearing'); }
-  });
-
-  showChainBadge(len, mult);
-  playChainSound(len);
-
-  S.score                += pts;
-  S.tilesCleared         += len;
-  S.chainsMadeThisRound  += 1;
-  S.totalChains          += 1;
-  if (len > S.bestChain) S.bestChain = len;
-  S.selected = [];
+// ═════════════════════════════════════════════════════
+function commitChain(){
+  if(!S.running||S.animating)return;
+  if(S.selected.length<2){showToast('Select 2+ connected same-colour tiles!');return;}
+  S.animating=true;
+  const len=S.selected.length,mult=getMultiplier(len),pts=len*10*mult;
+  const toRemove=[...S.selected];
+  toRemove.forEach(i=>{const el=getTile(i);if(el){el.classList.remove('selected','chain-head');el.removeAttribute('data-num');el.classList.add('clearing');}});
+  showChainBadge(len);playChainSound(len);
+  S.score+=pts;S.tilesCleared+=len;S.chainsMadeThisRound++;S.totalChains++;S.streak++;
+  S.sessionChains=(S.sessionChains||0)+1;S.sessionTiles=(S.sessionTiles||0)+len;
+  if(len>S.bestChain)S.bestChain=len;
+  S.stats.maxChainToday=Math.max(S.stats.maxChainToday||0,S.bestChain);
+  S.stats.maxScoreToday=Math.max(S.stats.maxScoreToday||0,S.score);
+  S.stats.maxLevelToday=Math.max(S.stats.maxLevelToday||0,S.level);
+  // Streak milestone bonus
+  if(S.streak>0&&S.streak%5===0){S.coins+=5;showToast(`🔥 ${S.streak} streak! +5🪙`);}
+  // Coin doubler check
+  if(S.score>0&&S.highScore>0&&S.score>(S.highScore*1.2)&&S.doublerExpiry<Date.now()){activateDoubler();showToast('🔥 NEW PB! Coin Doubler activated for 10 mins!');}
+  S.selected=[];
   document.getElementById('commitBtn').classList.remove('ready');
-  updateComboUI();
-
-  setTimeout(() => {
-    toRemove.forEach(i => { S.grid[i] = null; });
+  updateComboUI();updateStreakUI();checkAchievements();checkMissionProgress();
+  setTimeout(()=>{
+    toRemove.forEach(i=>{S.grid[i]=null;});
     applyGravity();
-    setTimeout(() => {
-      refillGrid();
-      S.animating = false;  // ── UNLOCK INPUT ──
-      updateUI();
-      updateComboUI();
-      if (S.chainsMadeThisRound >= S.chainsNeeded) setTimeout(doLevelUp, 380);
-    }, 210);
-  }, 380);
+    setTimeout(()=>{
+      refillGrid();S.animating=false;updateUI();updateComboUI();
+      if(S.chainsMadeThisRound>=S.chainsNeeded)setTimeout(doLevelUp,380);
+    },210);
+  },380);
 }
+function getMultiplier(len){return len>=7?5:len>=5?3:len>=3?2:1;}
 
-function getMultiplier(len) {
-  if (len >= 7) return 5;
-  if (len >= 5) return 3;
-  if (len >= 3) return 2;
-  return 1;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// GRAVITY + REFILL
-// ─────────────────────────────────────────────────────────────────────────────
-function applyGravity() {
-  for (let c = 0; c < S.cols; c++) {
-    let writeRow = S.rows - 1;
-    for (let r = S.rows - 1; r >= 0; r--) {
-      const i = r * S.cols + c;
-      if (S.grid[i] !== null) {
-        const wi = writeRow * S.cols + c;
-        S.grid[wi] = S.grid[i];
-        if (wi !== i) S.grid[i] = null;
-        writeRow--;
-      }
-    }
+// ═════════════════════════════════════════════════════
+// GRAVITY & REFILL
+// ═════════════════════════════════════════════════════
+function applyGravity(){
+  for(let c=0;c<S.cols;c++){
+    let w=S.rows-1;
+    for(let r=S.rows-1;r>=0;r--){const i=r*S.cols+c;if(S.grid[i]!==null){const wi=w*S.cols+c;S.grid[wi]=S.grid[i];if(wi!==i)S.grid[i]=null;w--;}}
   }
 }
-
-function refillGrid() {
-  const colors = COLORS.slice(0, S.colorsInPlay);
-  const rng = S.isDailyChallenge
-    ? seededRNG(todaySeed() + S.level * 31 + S.totalChains * 7)
-    : Math.random.bind(Math);
-  S.grid = S.grid.map(c => c === null ? colors[Math.floor(rng() * colors.length)] : c);
+function refillGrid(){
+  const colors=COLORS.slice(0,S.colorsInPlay);
+  const rng=S.isDailyChallenge?seededRNG(todaySeed()+S.level*31+S.totalChains*7):Math.random.bind(Math);
+  S.grid=S.grid.map(c=>c===null?colors[Math.floor(rng()*colors.length)]:c);
   renderGrid();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // TIMER
-// ─────────────────────────────────────────────────────────────────────────────
-function startTimer() {
-  S.timeLeft = S.roundTime;
-  clearInterval(S.timerInterval);
-  S.timerInterval = setInterval(() => {
-    if (!S.running) return;
-    S.timeLeft = Math.max(0, S.timeLeft - 0.1);
+// ═════════════════════════════════════════════════════
+function startTimer(){
+  S.timeLeft=S.roundTime;clearInterval(S.timerInterval);
+  S.timerInterval=setInterval(()=>{
+    if(!S.running)return;
+    S.timeLeft=Math.max(0,S.timeLeft-0.1);
     updateTimerBar();
-    if (S.timeLeft <= 0) { clearInterval(S.timerInterval); onTimerEnd(); }
-  }, 100);
+    if(S.timeLeft<=0){clearInterval(S.timerInterval);onTimerEnd();}
+  },100);
 }
-
-function updateTimerBar() {
-  const pct = (S.timeLeft / S.roundTime) * 100;
-  const bar = document.getElementById('timerBar');
-  bar.style.width = pct + '%';
-  bar.classList.toggle('urgent',   pct < 25);
-  bar.classList.toggle('critical', pct < 10);
+function updateTimerBar(){
+  const pct=(S.timeLeft/S.roundTime)*100;
+  const bar=document.getElementById('timerBar');
+  bar.style.width=pct+'%';
+  bar.classList.toggle('urgent',pct<25);
+  bar.classList.toggle('critical',pct<10);
 }
-
-function onTimerEnd() {
+function onTimerEnd(){
+  clearInterval(S.timerInterval);
+  // Show streak protect before resetting
+  if(S.streak>=3){showStreakProtect();}
+  else{loseLife();}
+}
+function loseLife(){
   S.lives--;
-  updateLivesUI();
-  playLifeLostSound();
-  if (S.lives <= 0) { endGame(); return; }
-  S.score = Math.max(0, S.score - 100);
-  clearSelection();
-  startTimer();
-  updateUI();
-  showToast(`⚠️ Life lost! ${S.lives} left`);
+  S.streak=0;updateStreakUI();updateLivesUI();playLifeLostSound();
+  if(S.lives<=0){endGame();return;}
+  S.score=Math.max(0,S.score-100);clearSelection();startTimer();updateUI();
+  showToast(`⚠️ Life lost! ${S.lives} remaining`);
 }
+function updateLivesUI(){for(let i=1;i<=3;i++)document.getElementById(`life${i}`).classList.toggle('lost',i>S.lives);}
 
-function updateLivesUI() {
-  for (let i = 1; i <= 3; i++)
-    document.getElementById(`life${i}`).classList.toggle('lost', i > S.lives);
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // LEVEL UP
-// ─────────────────────────────────────────────────────────────────────────────
-function doLevelUp() {
-  S.level++;
-  S.chainsMadeThisRound = 0;
-  S.chainsNeeded   = Math.min(3 + Math.floor(S.level / 2), 8);
-  S.roundTime      = Math.max(9, 22 - S.level * 0.7);
-  S.colorsInPlay   = Math.min(6, 3 + Math.floor(S.level / 3));
-
-  const el = document.createElement('div');
-  el.className  = 'levelup-flash';
-  el.textContent = `LEVEL ${S.level}`;
-  document.body.appendChild(el);
-  playLevelUpSound();
-  setTimeout(() => el.remove(), 1000);
-
-  const rng = S.isDailyChallenge ? seededRNG(todaySeed() + S.level * 1999) : null;
-  generateGrid(rng);
-  startTimer();
-  updateUI();
+// ═════════════════════════════════════════════════════
+function doLevelUp(){
+  S.level++;S.chainsMadeThisRound=0;
+  S.chainsNeeded=Math.min(3+Math.floor(S.level/2),8);
+  S.roundTime=Math.max(9,22-S.level*0.7);
+  S.colorsInPlay=Math.min(6,3+Math.floor(S.level/3));
+  S.stats.maxLevelToday=Math.max(S.stats.maxLevelToday||0,S.level);
+  const bonus=S.level>=10?15:S.level>=5?10:5;
+  S.coins+=bonus;updateUI();
+  const el=document.createElement('div');el.className='levelup-flash';el.textContent=`LEVEL ${S.level}`;
+  document.body.appendChild(el);playLevelUpSound();setTimeout(()=>el.remove(),1000);
+  showToast(`🎉 Level ${S.level}! +${bonus}🪙`);
+  checkAchievements();checkMissionProgress();
+  const rng=S.isDailyChallenge?seededRNG(todaySeed()+S.level*1999):null;
+  generateGrid(rng);startTimer();updateUI();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // GAME FLOW
-// ─────────────────────────────────────────────────────────────────────────────
-function startGame(isDaily) {
-  S.isDailyChallenge = isDaily;
-  hideAllScreens();
-  clearInterval(S.timerInterval);
-
-  Object.assign(S, {
-    score:0, level:1, lives:3, chainsMadeThisRound:0, chainsNeeded:3,
-    bestChain:0, tilesCleared:0, totalChains:0,
-    cols:5, rows:6, colorsInPlay:4, roundTime:22, timeLeft:22,
-    selected:[], animating:false, running:true,
+// ═════════════════════════════════════════════════════
+function startGame(isDaily){
+  S.isDailyChallenge=isDaily;
+  hideAllScreens();clearInterval(S.timerInterval);
+  document.getElementById('streakProtect').classList.add('hidden');
+  Object.assign(S,{
+    score:0,level:1,lives:3,chainsMadeThisRound:0,chainsNeeded:3,
+    bestChain:0,tilesCleared:0,totalChains:0,streak:0,
+    cols:5,rows:6,colorsInPlay:4,roundTime:22,timeLeft:22,
+    selected:[],animating:false,running:true,
+    sessionChains:0,sessionTiles:0,
   });
-
-  updateLivesUI();
-  updateUI();
-
-  const rng = isDaily ? seededRNG(todaySeed()) : null;
-  generateGrid(rng);
-  startTimer();
+  updateLivesUI();updateUI();updateStreakUI();
+  const rng=isDaily?seededRNG(todaySeed()):null;
+  generateGrid(rng);startTimer();updateMissions();
 }
 
-function endGame() {
-  S.running = false;
-  clearInterval(S.timerInterval);
-
-  const isNew = S.score > S.highScore;
-  if (isNew) { S.highScore = S.score; localStorage.setItem('gl_hs', S.highScore); }
-
-  document.getElementById('goScore').textContent      = S.score.toLocaleString();
-  document.getElementById('goLevel').textContent      = `LEVEL ${S.level}`;
-  document.getElementById('goBestChain').textContent  = S.bestChain;
-  document.getElementById('goTilesCleared').textContent = S.tilesCleared;
-  document.getElementById('goHighScore').textContent  = S.highScore.toLocaleString();
-  document.getElementById('goChainsTotal').textContent = S.totalChains;
-  document.getElementById('newBestMsg').classList.toggle('hidden', !isNew);
+function endGame(){
+  S.running=false;clearInterval(S.timerInterval);
+  saveStats();checkAchievements();checkMissionProgress();
+  const isNew=S.score>S.highScore;
+  if(isNew){S.highScore=S.score;localStorage.setItem('gl_hs',S.highScore);}
+  document.getElementById('goScore').textContent=S.score.toLocaleString();
+  document.getElementById('goLevel').textContent=`LEVEL ${S.level}`;
+  document.getElementById('goBestChain').textContent=S.bestChain;
+  document.getElementById('goTilesCleared').textContent=S.tilesCleared;
+  document.getElementById('goHighScore').textContent=S.highScore.toLocaleString();
+  document.getElementById('goChainsTotal').textContent=S.totalChains;
+  document.getElementById('newBestMsg').classList.toggle('hidden',!isNew);
+  updateDoublerUI();
   showScreen('gameOverScreen');
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // UI
-// ─────────────────────────────────────────────────────────────────────────────
-function updateUI() {
-  document.getElementById('scoreDisplay').textContent    = S.score.toLocaleString();
-  document.getElementById('levelDisplay').textContent    = S.level;
-  document.getElementById('chainsDisplay').textContent   = S.totalChains;
-  document.getElementById('bestChainDisplay').textContent = S.bestChain;
-  document.getElementById('coinDisplay').textContent     = S.coins;
-  document.getElementById('targetDisplay').textContent   = Math.max(0, S.chainsNeeded - S.chainsMadeThisRound);
+// ═════════════════════════════════════════════════════
+function updateUI(){
+  document.getElementById('scoreDisplay').textContent=S.score.toLocaleString();
+  document.getElementById('levelDisplay').textContent=S.level;
+  document.getElementById('chainsDisplay').textContent=S.totalChains;
+  document.getElementById('bestChainDisplay').textContent=S.bestChain;
+  document.getElementById('coinDisplay').textContent=S.coins;
+  document.getElementById('targetDisplay').textContent=Math.max(0,S.chainsNeeded-S.chainsMadeThisRound);
+}
+function updateComboUI(){
+  const n=S.selected.length,txt=document.getElementById('comboText'),cnt=document.getElementById('selCount');
+  if(n===0){txt.textContent='TAP A TILE TO START';txt.classList.remove('active');cnt.textContent='';return;}
+  if(n===1){txt.textContent='EXTEND THE CHAIN';txt.classList.remove('active');cnt.textContent='1 tile';return;}
+  const m=getMultiplier(n);
+  txt.textContent=n>=7?`🔥 MEGA  ×${m}!`:n>=5?`⚡ CHAIN  ×${m}`:`CHAIN  ×${m}`;
+  txt.classList.add('active');cnt.textContent=`${n} tiles`;
+}
+function updateStreakUI(){
+  const b=document.getElementById('streakBadge');
+  if(!b)return;
+  if(S.streak>=3){b.style.display='inline';b.textContent=`🔥${S.streak}`;}
+  else{b.style.display='none';}
+}
+function showChainBadge(len){
+  const el=document.createElement('div');el.className='chain-badge';
+  const cols=[COLOR_HEX.c2,COLOR_HEX.c3,COLOR_HEX.c1,COLOR_HEX.c4,COLOR_HEX.c5,COLOR_HEX.c6];
+  el.style.color=cols[Math.min(len-2,cols.length-1)];el.style.left='50%';el.style.top='42%';
+  el.textContent=len>=7?`🔥 ${len}× MEGA!`:len>=5?`⚡ ${len} CHAIN`:`${len}×`;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),760);
+}
+function showToast(msg){
+  document.querySelectorAll('.toast').forEach(t=>t.remove());
+  const el=document.createElement('div');el.className='toast';el.textContent=msg;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),2200);
 }
 
-function updateComboUI() {
-  const n   = S.selected.length;
-  const txt = document.getElementById('comboText');
-  const cnt = document.getElementById('selCount');
-
-  if (n === 0) {
-    txt.textContent = 'TAP A TILE TO START';
-    txt.classList.remove('active');
-    cnt.textContent = '';
-    return;
-  }
-  if (n === 1) {
-    txt.textContent = 'TAP ADJACENT SAME COLOUR';
-    txt.classList.remove('active');
-    cnt.textContent = '1 tile';
-    return;
-  }
-  const m = getMultiplier(n);
-  txt.textContent = n >= 7 ? `🔥 MEGA CHAIN  ×${m}!` : n >= 5 ? `⚡ CHAIN  ×${m}` : `CHAIN  ×${m}`;
-  txt.classList.add('active');
-  cnt.textContent = `${n} tiles`;
-}
-
-function showChainBadge(len) {
-  const el  = document.createElement('div');
-  el.className = 'chain-badge';
-  const cols = [COLOR_HEX.c2, COLOR_HEX.c3, COLOR_HEX.c1, COLOR_HEX.c4, COLOR_HEX.c5, COLOR_HEX.c6];
-  el.style.color = cols[Math.min(len - 2, cols.length - 1)];
-  el.style.left  = '50%';
-  el.style.top   = '42%';
-  el.textContent = len >= 7 ? `🔥 ${len}× MEGA!` : len >= 5 ? `⚡ ${len} CHAIN` : `${len}×`;
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 760);
-}
-
-function showToast(msg) {
-  // Remove existing toast if any
-  document.querySelectorAll('.toast').forEach(t => t.remove());
-  const el = document.createElement('div');
-  el.className   = 'toast';
-  el.textContent = msg;
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 2200);
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // POWER-UPS
-// ─────────────────────────────────────────────────────────────────────────────
-function spendCoins(n) {
-  if (S.coins < n) { showToast(`Need ${n} coins — tap 🪙 to buy more!`); return false; }
-  S.coins -= n;
-  updateUI();
-  return true;
+// ═════════════════════════════════════════════════════
+function spendCoins(n){
+  if(S.coins<n){showToast(`Need ${n}🪙 — tap to buy more!`);return false;}
+  S.coins-=n;updateUI();return true;
 }
-
-function useHint() {
-  if (!S.running || S.animating || !spendCoins(20)) return;
-  const best = largestGroup();
-  best.forEach(i => {
-    const t = getTile(i);
-    if (t) { t.classList.remove('hint-glow'); void t.offsetWidth; t.classList.add('hint-glow'); }
-  });
-  setTimeout(() => best.forEach(i => getTile(i)?.classList.remove('hint-glow')), 2000);
-  showToast(`💡 Best group has ${best.length} tiles`);
+function useHint(){
+  if(!S.running||S.animating||!spendCoins(20))return;
+  const best=largestGroup();
+  best.forEach(i=>{const t=getTile(i);if(t){t.classList.remove('hint-glow');void t.offsetWidth;t.classList.add('hint-glow');}});
+  setTimeout(()=>best.forEach(i=>getTile(i)?.classList.remove('hint-glow')),2000);
+  showToast(`💡 Best group: ${best.length} tiles`);
 }
-
-function useShuffle() {
-  if (!S.running || S.animating || !spendCoins(30)) return;
+function useShuffle(){
+  if(!S.running||S.animating||!spendCoins(30))return;
   clearSelection();
-  const colors = COLORS.slice(0, S.colorsInPlay);
-  S.grid = S.grid.map(() => colors[Math.floor(Math.random() * colors.length)]);
-  renderGrid();
-  showToast('🔀 Grid shuffled!');
+  const colors=COLORS.slice(0,S.colorsInPlay);
+  S.grid=S.grid.map(()=>colors[Math.floor(Math.random()*colors.length)]);
+  renderGrid();showToast('🔀 Shuffled!');
 }
-
-function useBomb() {
-  if (!S.running || S.animating || !spendCoins(50)) return;
+function useBomb(){
+  if(!S.running||S.animating||!spendCoins(50))return;
   clearSelection();
-  const color   = S.grid[Math.floor(Math.random() * S.grid.length)];
-  let   removed = 0;
-  S.grid.forEach((c, i) => { if (c === color) { S.grid[i] = null; removed++; } });
-  S.score       += removed * 20;
-  S.tilesCleared += removed;
-  showChainBadge(removed);
-  applyGravity();
-  setTimeout(() => { refillGrid(); updateUI(); }, 250);
-  showToast(`💣 Blasted all ${SYMBOLS[color]} tiles! (+${removed * 20}pts)`);
+  const color=S.grid[Math.floor(Math.random()*S.grid.length)];let removed=0;
+  S.grid.forEach((c,i)=>{if(c===color){S.grid[i]=null;removed++;}});
+  S.score+=removed*20;S.tilesCleared+=removed;showChainBadge(removed);
+  applyGravity();setTimeout(()=>{refillGrid();updateUI();},250);
+  showToast(`💣 +${removed*20}pts!`);
 }
-
-function useTime() {
-  if (!S.running || !spendCoins(40)) return;
-  S.timeLeft = Math.min(S.roundTime, S.timeLeft + 8);
-  showToast('⏱️ +8 seconds added!');
+function useTime(){
+  if(!S.running||!spendCoins(40))return;
+  S.timeLeft=Math.min(S.roundTime,S.timeLeft+8);showToast('⏱️ +8 seconds!');
 }
-
-function largestGroup() {
-  const vis = new Array(S.grid.length).fill(false);
-  let best  = [];
-  for (let s = 0; s < S.grid.length; s++) {
-    if (vis[s] || !S.grid[s]) continue;
-    const color = S.grid[s], group = [], q = [s];
-    while (q.length) {
-      const cur = q.shift();
-      if (vis[cur] || S.grid[cur] !== color) continue;
-      vis[cur] = true; group.push(cur);
-      const c = cur % S.cols, r = Math.floor(cur / S.cols);
-      if (c > 0)             q.push(cur - 1);
-      if (c < S.cols - 1)    q.push(cur + 1);
-      if (r > 0)             q.push(cur - S.cols);
-      if (r < S.rows - 1)    q.push(cur + S.cols);
-    }
-    if (group.length > best.length) best = group;
+function largestGroup(){
+  const vis=new Array(S.grid.length).fill(false);let best=[];
+  for(let s=0;s<S.grid.length;s++){
+    if(vis[s]||!S.grid[s])continue;
+    const color=S.grid[s],group=[],q=[s];
+    while(q.length){const cur=q.shift();if(vis[cur]||S.grid[cur]!==color)continue;vis[cur]=true;group.push(cur);
+      const c=cur%S.cols,r=Math.floor(cur/S.cols);
+      if(c>0)q.push(cur-1);if(c<S.cols-1)q.push(cur+1);if(r>0)q.push(cur-S.cols);if(r<S.rows-1)q.push(cur+S.cols);}
+    if(group.length>best.length)best=group;
   }
   return best;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SOUND  (Web Audio API — zero external files)
-// ─────────────────────────────────────────────────────────────────────────────
-let _ctx = null;
-function getCtx() {
-  if (!_ctx) try { _ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
-  return _ctx;
-}
-function beep(freq, dur, type='sine', vol=0.1) {
-  const ctx = getCtx(); if (!ctx) return;
-  try {
-    const osc = ctx.createOscillator(), gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = type; osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(vol, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
-    osc.start(); osc.stop(ctx.currentTime + dur);
-  } catch(e){}
-}
-function playTick()         { beep(900, 0.04, 'square', 0.05); }
-function playLifeLostSound(){ beep(180, 0.5,  'sawtooth', 0.1); }
-function playLevelUpSound() { [523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,0.18,'sine',0.1),i*75)); }
-function playChainSound(len){
-  const base = [330,392,494,587,698,880,1047,1175];
-  for (let i = 0; i < Math.min(len, base.length); i++)
-    setTimeout(()=>beep(base[i], 0.13, 'sine', 0.09), i * 38);
+// ═════════════════════════════════════════════════════
+// REVIVE
+// ═════════════════════════════════════════════════════
+function tryRevive(){
+  if(S.coins<50){showToast('Need 50🪙 to revive!');showScreen('storeScreen');return;}
+  spendCoins(50);S.lives=1;S.running=true;
+  hideScreen('gameOverScreen');updateLivesUI();updateUI();startTimer();
+  showToast('💚 Revived! Keep going!');
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// STORE
-// ─────────────────────────────────────────────────────────────────────────────
-function buyCoins(amount, price, pack) {
-  // ── PRODUCTION: replace with your Stripe Payment Link ──
-  // const links = { starter:'https://buy.stripe.com/XXX', popular:'https://buy.stripe.com/YYY', ... };
-  // window.open(links[pack], '_blank');
+// ═════════════════════════════════════════════════════
+// STORE — STRIPE + FREE COINS
+// ═════════════════════════════════════════════════════
+function buyCoins(amount,price,pack){
+  const doubleActive=S.doublerExpiry>Date.now();
+  const finalAmount=doubleActive?amount*2:amount;
+  window.open(STRIPE[pack],'_blank');
+  showToast(`Opening Stripe checkout… ${doubleActive?'2× ACTIVE! 🔥':'🔒 Secure'}`);
+}
 
-  // ── DEMO / PROTOTYPE ──
-  if (confirm(`Buy ${amount} coins for £${price.toFixed(2)}?\n\nIn the live version this opens a secure Stripe checkout.`)) {
-    S.coins += amount;
-    updateUI();
-    hideScreen('storeScreen');
-    showToast(`+${amount} 🪙 coins added!`);
+function watchAdForCoins(slot){
+  const cdKey=`gl_adcd_${slot}`;
+  const lastWatch=parseInt(localStorage.getItem(cdKey)||'0');
+  const cooldown=30*60*1000;
+  if(Date.now()-lastWatch<cooldown){
+    const mins=Math.ceil((cooldown-(Date.now()-lastWatch))/60000);
+    showToast(`⏳ Come back in ${mins}m`);return;
+  }
+  const reward=slot===1?10:25;
+  const adCount=slot===1?1:3;
+  hideScreen('storeScreen');
+  const overlay=document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(10,10,15,0.97);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;';
+  let cd=5+(adCount-1)*5;
+  overlay.innerHTML=`<div style="font-size:44px;">📺</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--c4);letter-spacing:3px;">WATCHING AD${adCount>1?` (×${adCount})`:''}</div>
+    <div style="font-size:12px;color:var(--muted);">Your coins are loading…</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:68px;color:var(--c3);" id="adCd">${cd}</div>
+    <div style="width:260px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
+      <div id="adProg" style="height:100%;background:var(--c4);width:0%;transition:width 0.9s linear;border-radius:2px;"></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);">+${reward}🪙 earned on completion</div>`;
+  document.body.appendChild(overlay);
+  setTimeout(()=>{const p=document.getElementById('adProg');if(p)p.style.width='100%';},100);
+  const tick=setInterval(()=>{
+    cd--;const cdEl=document.getElementById('adCd');if(cdEl)cdEl.textContent=cd;
+    if(cd<=0){clearInterval(tick);overlay.remove();S.coins+=reward;updateUI();
+      localStorage.setItem(cdKey,Date.now());showScreen('storeScreen');
+      updateFreeCoinUI();showToast(`+${reward}🪙 earned! Thanks for watching 🎉`);playLevelUpSound();}
+  },1000);
+}
+
+function claimDailyBonus(){
+  const key='gl_daily_bonus';
+  const last=parseInt(localStorage.getItem(key)||'0');
+  if(new Date(last).toDateString()===new Date().toDateString()){showToast('🎁 Come back tomorrow!');return;}
+  S.coins+=30;updateUI();localStorage.setItem(key,Date.now());
+  updateFreeCoinUI();showToast('+30🪙 Daily bonus! 🎉');playLevelUpSound();
+}
+
+function updateFreeCoinUI(){
+  [1,2].forEach(slot=>{
+    const cdKey=`gl_adcd_${slot}`;
+    const last=parseInt(localStorage.getItem(cdKey)||'0');
+    const rem=30*60*1000-(Date.now()-last);
+    const cdEl=document.getElementById(`watchAd${slot}Cd`);
+    const btn=document.getElementById(`watchAd${slot}Btn`);
+    if(!cdEl||!btn)return;
+    if(rem>0){cdEl.textContent=`${Math.ceil(rem/60000)}m`;btn.style.opacity='0.4';}
+    else{cdEl.textContent='READY!';btn.style.opacity='1';}
+  });
+  const bonusKey='gl_daily_bonus';
+  const last=parseInt(localStorage.getItem(bonusKey)||'0');
+  const cdEl=document.getElementById('dailyBonusCd');
+  const btn=document.getElementById('dailyBonusBtn');
+  if(cdEl&&btn){
+    if(new Date(last).toDateString()===new Date().toDateString()){cdEl.textContent='Tomorrow';btn.style.opacity='0.4';}
+    else{cdEl.textContent='CLAIM!';btn.style.opacity='1';}
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SHARE
-// ─────────────────────────────────────────────────────────────────────────────
-function shareScore() {
-  const mode = S.isDailyChallenge ? '📅 Daily Challenge' : '🎮 Classic';
-  const text = `${mode} — I just scored ${S.score.toLocaleString()} on GRIDLOCK!\nLevel ${S.level} · Best chain: ${S.bestChain} tiles · ${S.tilesCleared} tiles cleared.\n\nCan you beat me? Play free: ${window.location.href}`;
-  if (navigator.share) {
-    navigator.share({ title: 'GRIDLOCK', text }).catch(() => {});
-  } else {
-    navigator.clipboard?.writeText(text)
-      .then(() => showToast('Score copied to clipboard! 🚀'))
-      .catch(() => alert(text));
-  }
+// ═════════════════════════════════════════════════════
+// SOUND
+// ═════════════════════════════════════════════════════
+let _ctx=null;
+function getCtx(){if(!_ctx)try{_ctx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}return _ctx;}
+function beep(freq,dur,type='sine',vol=0.1){
+  const ctx=getCtx();if(!ctx)return;
+  try{const osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type=type;osc.frequency.setValueAtTime(freq,ctx.currentTime);
+    gain.gain.setValueAtTime(vol,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+    osc.start();osc.stop(ctx.currentTime+dur);}catch(e){}
 }
+function playTick(){beep(900,0.04,'square',0.05);}
+function playLifeLostSound(){beep(180,0.5,'sawtooth',0.1);}
+function playLevelUpSound(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,0.18,'sine',0.1),i*75));}
+function playChainSound(len){const b=[330,392,494,587,698,880,1047,1175];for(let i=0;i<Math.min(len,b.length);i++)setTimeout(()=>beep(b[i],0.13,'sine',0.09),i*38);}
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // SCREEN MANAGEMENT
-// ─────────────────────────────────────────────────────────────────────────────
-const SCREENS = ['startScreen','instrScreen','gameOverScreen','storeScreen'];
-function showScreen(id)   { document.getElementById(id).classList.remove('hidden'); }
-function hideScreen(id)   { document.getElementById(id).classList.add('hidden'); }
-function hideAllScreens() { SCREENS.forEach(hideScreen); }
+// ═════════════════════════════════════════════════════
+const SCREENS=['startScreen','instrScreen','gameOverScreen','storeScreen','missionsScreen','achScreen','statsScreen'];
+function showScreen(id){
+  document.getElementById(id).classList.remove('hidden');
+  if(id==='storeScreen'){updateFreeCoinUI();renderThemes();updateDoublerUI();}
+  if(id==='achScreen')renderAchievements();
+  if(id==='statsScreen')renderStatsScreen();
+  if(id==='missionsScreen')updateMissions();
+}
+function hideScreen(id){document.getElementById(id).classList.add('hidden');}
+function hideAllScreens(){SCREENS.forEach(hideScreen);}
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // KEYBOARD
-// ─────────────────────────────────────────────────────────────────────────────
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); commitChain(); }
-  if (e.code === 'Escape') clearSelection();
+// ═════════════════════════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'||e.code==='Enter'){e.preventDefault();commitChain();}
+  if(e.code==='Escape')clearSelection();
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════
 // BOOT
-// ─────────────────────────────────────────────────────────────────────────────
-(function boot() {
-  // Show high score on start screen
-  if (S.highScore > 0) {
-    const el = document.getElementById('startHiScore');
-    if (el) el.textContent = `🏆 YOUR BEST: ${S.highScore.toLocaleString()}`;
-  }
-  // Daily challenge day label
-  const days = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
-  const el = document.getElementById('dailySubText');
-  if (el) el.textContent = `${days[new Date().getDay()]}'S CHALLENGE — SAME GRID FOR ALL PLAYERS`;
+// ═════════════════════════════════════════════════════
+(function boot(){
+  updateLoginStreak();
+  applyTheme(S.theme);
+  checkChallengeParams();
+  // High score on start screen
+  const hi=document.getElementById('startHiScore');
+  const msgs=[];
+  if(S.highScore>0)msgs.push(`🏆 BEST: ${S.highScore.toLocaleString()}`);
+  if(new Date(parseInt(localStorage.getItem('gl_daily_bonus')||'0')).toDateString()!==new Date().toDateString())msgs.push('🎁 Daily bonus ready!');
+  if(S.stats.loginStreak>=2)msgs.push(`📅 ${S.stats.loginStreak} day streak!`);
+  if(hi)hi.textContent=msgs.join('  ·  ');
+  // VIP crown if login streak ≥ 7
+  if((S.stats.loginStreak||0)>=7)document.getElementById('logoCrown')?.classList.add('show');
+  // Daily label
+  const days=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+  const el=document.getElementById('dailySubText');
+  if(el)el.textContent=`${days[new Date().getDay()]}'S CHALLENGE — SAME FOR ALL PLAYERS`;
+  // Doubler interval
+  setInterval(updateDoublerUI,1000);
+  updateFreeCoinUI();
 })();
 </script>
 </body>
