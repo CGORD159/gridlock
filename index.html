@@ -337,9 +337,25 @@ html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
 .ach-name{font-size:9px;font-weight:700;color:var(--text);letter-spacing:1px;margin-bottom:2px;}
 .ach-desc{font-size:8px;color:var(--muted);}
 .ach-date{font-size:8px;color:var(--gold);margin-top:2px;}
-.ach-new{position:fixed;inset:0;background:rgba(10,10,15,.92);z-index:400;display:flex;
-  flex-direction:column;align-items:center;justify-content:center;gap:10px;animation:fadeAch 3s forwards;pointer-events:none;}
-@keyframes fadeAch{0%,10%{opacity:0;}20%,72%{opacity:1;}100%{opacity:0;}}
+/* ── Achievement TOAST (corner slide-in — game continues underneath) ── */
+.ach-new{
+  position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(120px);
+  background:linear-gradient(135deg,rgba(15,15,25,.96),rgba(25,20,40,.96));
+  border:1px solid var(--gold);border-radius:16px;
+  padding:12px 18px;z-index:350;pointer-events:none;
+  display:flex;align-items:center;gap:12px;max-width:340px;width:90%;
+  box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 20px rgba(255,215,0,.15);
+  animation:achSlideIn 3.2s forwards;}
+@keyframes achSlideIn{
+  0%{transform:translateX(-50%) translateY(120px);opacity:0;}
+  12%{transform:translateX(-50%) translateY(0);opacity:1;}
+  75%{transform:translateX(-50%) translateY(0);opacity:1;}
+  100%{transform:translateX(-50%) translateY(120px);opacity:0;}}
+.ach-new-icon{font-size:36px;flex-shrink:0;}
+.ach-new-body{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.ach-new-label{font-size:9px;color:var(--gold);letter-spacing:2px;font-family:'Space Mono',monospace;}
+.ach-new-name{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;letter-spacing:2px;line-height:1.1;}
+.ach-new-desc{font-size:10px;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* ── Stats screen ── */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%;max-width:380px;margin-bottom:10px;flex-shrink:0;}
@@ -414,6 +430,106 @@ html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
 .vip-perks{font-size:9px;color:var(--muted);line-height:1.7;}
 .vip-btn{background:var(--c6);border:none;border-radius:8px;padding:8px 22px;
   font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#fff;cursor:pointer;margin-top:8px;}
+
+/* ══════════════════════════════════════
+   HOME SCREEN — v7 redesign
+   ══════════════════════════════════════ */
+
+/* Hero section */
+.home-hero{width:100%;max-width:480px;padding:20px 20px 6px;text-align:center;position:relative;}
+.home-logo{font-family:'Bebas Neue',sans-serif;font-size:80px;letter-spacing:8px;line-height:1;
+  background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 50%,var(--c6) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:logoPulse 4s ease-in-out infinite;}
+@keyframes logoPulse{0%,100%{filter:drop-shadow(0 0 20px rgba(0,229,255,.2));}
+  50%{filter:drop-shadow(0 0 40px rgba(255,45,85,.35));}}
+.home-tagline{font-size:10px;color:var(--muted2);letter-spacing:5px;margin-top:2px;}
+.home-hi{font-size:11px;color:var(--gold);letter-spacing:1px;margin-top:8px;min-height:16px;}
+
+/* Play button — big vibrant CTA */
+.home-play-btn{width:calc(100% - 32px);max-width:440px;margin:10px 16px 8px;
+  background:linear-gradient(135deg,var(--c1) 0%,var(--c5) 60%,var(--c3) 100%);
+  border:none;border-radius:20px;padding:20px 24px;
+  font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:5px;color:#fff;
+  cursor:pointer;position:relative;overflow:hidden;
+  box-shadow:0 6px 28px rgba(255,45,85,.4),0 2px 8px rgba(0,0,0,.3);
+  transition:transform .15s,box-shadow .15s;text-shadow:0 2px 8px rgba(0,0,0,.3);}
+.home-play-btn:hover,.home-play-btn:active{transform:scale(1.03);box-shadow:0 10px 40px rgba(255,45,85,.55);}
+.home-play-btn::after{content:'';position:absolute;top:0;left:0;right:0;height:50%;
+  background:rgba(255,255,255,.12);pointer-events:none;border-radius:20px 20px 0 0;}
+.home-play-btn::before{content:'▶';position:absolute;right:22px;top:50%;transform:translateY(-50%);
+  font-size:20px;opacity:.6;}
+
+/* Daily challenge card */
+.home-daily{width:calc(100% - 32px);max-width:440px;margin:0 16px 8px;
+  background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(191,90,242,.07));
+  border:1px solid rgba(0,229,255,.3);border-radius:16px;
+  padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;
+  transition:border-color .2s,transform .15s,box-shadow .2s;
+  box-shadow:0 2px 12px rgba(0,229,255,.08);}
+.home-daily:hover{border-color:rgba(0,229,255,.6);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,229,255,.15);}
+.home-daily-icon{font-size:30px;flex-shrink:0;}
+.home-daily-body{flex:1;}
+.home-daily-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;color:var(--c2);}
+.home-daily-sub{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px;}
+.home-daily-btn{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#000;
+  background:var(--c2);border:none;border-radius:10px;
+  padding:8px 16px;cursor:pointer;white-space:nowrap;letter-spacing:1px;
+  box-shadow:0 2px 8px rgba(0,229,255,.3);}
+
+/* Stats strip — 4 boxes */
+.home-stats-strip{width:calc(100% - 32px);max-width:440px;margin:0 16px 8px;display:flex;gap:6px;}
+.hss-box{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:10px 6px;text-align:center;position:relative;overflow:hidden;
+  transition:transform .15s;}
+.hss-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--hc,var(--c2));}
+.hss-val{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--hc,var(--c2));line-height:1;}
+.hss-lbl{font-size:7px;color:var(--muted);letter-spacing:1px;margin-top:2px;}
+
+/* Global top score card */
+.home-world-card{width:calc(100% - 32px);max-width:440px;margin:0 16px 8px;
+  background:linear-gradient(135deg,rgba(255,215,0,.07),rgba(255,107,0,.04));
+  border:1px solid rgba(255,215,0,.25);border-radius:14px;
+  padding:10px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;
+  transition:border-color .2s;}
+.home-world-card:hover{border-color:rgba(255,215,0,.5);}
+.hwc-icon{font-size:22px;}
+.hwc-body{flex:1;}
+.hwc-label{font-size:8px;color:var(--gold);letter-spacing:2px;}
+.hwc-name{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--text);letter-spacing:1px;}
+.hwc-score{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);}
+
+/* Nav grid — 2-column coloured cards */
+.home-nav{width:calc(100% - 32px);max-width:440px;margin:0 16px;
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.home-nav-btn{background:var(--panel);border:1px solid var(--border);border-radius:16px;
+  padding:14px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;
+  transition:border-color .2s,transform .15s,background .2s;position:relative;overflow:hidden;}
+.home-nav-btn::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--nc,var(--c2));}
+.home-nav-btn:hover{border-color:var(--nc,var(--c2));transform:translateY(-2px);background:var(--panel2);}
+.hnb-icon{font-size:24px;flex-shrink:0;margin-left:4px;}
+.hnb-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;color:var(--text);}
+.hnb-sub{font-size:8px;color:var(--muted);margin-top:2px;}
+
+/* Tips pills row */
+.home-tips{width:calc(100% - 32px);max-width:440px;margin:8px 16px 6px;
+  display:flex;flex-wrap:wrap;gap:5px;}
+.tip-pill{background:var(--panel);border:1px solid var(--border);border-radius:20px;
+  padding:5px 11px;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.tip-pill span{color:var(--text2);}
+
+/* Footer */
+.home-footer{width:100%;max-width:440px;padding:4px 16px 14px;
+  display:flex;justify-content:center;gap:16px;flex-wrap:wrap;}
+.home-footer a,.home-footer button{font-size:9px;color:var(--muted);letter-spacing:1px;
+  background:none;border:none;cursor:pointer;text-decoration:none;padding:2px 0;transition:color .15s;}
+.home-footer a:hover,.home-footer button:hover{color:var(--text);}
+
+/* Light mode home overrides */
+html[data-mode="light"] .home-play-btn{box-shadow:0 6px 24px rgba(204,0,51,.35);}
+html[data-mode="light"] .home-daily{background:linear-gradient(135deg,rgba(0,102,187,.07),rgba(119,0,204,.04));}
+html[data-mode="light"] .home-nav-btn,.home-world-card,.hss-box{box-shadow:0 2px 8px var(--shadow);}
+html[data-mode="light"] .home-logo{filter:none !important;animation:none;}
 
 /* ── Share card ── */
 .share-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
@@ -496,33 +612,106 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
 </head>
 <body>
 
-<!-- ═══════════ START SCREEN ═══════════ -->
-<div class="screen" id="startScreen">
-  <div style="margin-top:6px;"></div>
-  <div class="scr-title" style="background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">GRIDLOCK</div>
-  <div class="scr-sub">CHAIN · CLEAR · CONQUER</div>
-  <div id="challengeBannerStart" class="challenge-banner hidden"></div>
-  <div class="daily-badge">
-    <div style="font-size:20px;">📅</div>
-    <div style="flex:1;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--c2);">DAILY CHALLENGE</div>
-      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;" id="dailySubText">TODAY'S UNIQUE GRID</div>
+<!-- ═══════════ HOME SCREEN ═══════════ -->
+<div class="screen" id="startScreen" style="padding:0;align-items:stretch;gap:0;">
+
+  <!-- Hero -->
+  <div class="home-hero">
+    <div class="home-logo">GRIDLOCK<span id="logoBadge" class="logo-badge" style="-webkit-text-fill-color:initial;">👑</span></div>
+    <div class="home-tagline">CHAIN · CLEAR · CONQUER</div>
+    <div class="home-hi" id="startHiScore"></div>
+  </div>
+
+  <!-- Challenge banner (shown if arriving via challenge URL) -->
+  <div id="challengeBannerStart" class="challenge-banner hidden" style="margin:0 16px 6px;"></div>
+
+  <!-- Big PLAY button -->
+  <button class="home-play-btn" onclick="startGame(false)">PLAY NOW</button>
+
+  <!-- Daily challenge card -->
+  <div class="home-daily" onclick="startGame(true)">
+    <div class="home-daily-icon">📅</div>
+    <div class="home-daily-body">
+      <div class="home-daily-title">DAILY CHALLENGE</div>
+      <div class="home-daily-sub" id="dailySubText">TODAY'S UNIQUE GRID · SAME FOR EVERYONE</div>
     </div>
-    <button class="daily-play-btn" onclick="startGame(true)">PLAY</button>
+    <button class="home-daily-btn" onclick="event.stopPropagation();startGame(true)">PLAY</button>
   </div>
-  <div class="how-grid">
-    <div class="how-item"><div class="how-icon">👆</div><div class="how-text">TAP or DRAG matching tiles to chain them</div></div>
-    <div class="how-item"><div class="how-icon">🔙</div><div class="how-text">Tap earlier tile to UNDO back to it</div></div>
-    <div class="how-item"><div class="how-icon">⚡</div><div class="how-text">Hit ⚡ CHAIN to clear and score</div></div>
-    <div class="how-item"><div class="how-icon">🔥</div><div class="how-text">7+ tile chains = 5× MEGA multiplier!</div></div>
+
+  <!-- Personal stats strip -->
+  <div class="home-stats-strip">
+    <div class="hss-box" style="--hc:var(--c1)">
+      <div class="hss-val" id="homeHiScore">—</div>
+      <div class="hss-lbl">HIGH SCORE</div>
+    </div>
+    <div class="hss-box" style="--hc:var(--c5)">
+      <div class="hss-val" id="homeStreak">—</div>
+      <div class="hss-lbl">DAY STREAK</div>
+    </div>
+    <div class="hss-box" style="--hc:var(--gold)">
+      <div class="hss-val" id="homeCoinsHome">—</div>
+      <div class="hss-lbl">COINS</div>
+    </div>
+    <div class="hss-box" style="--hc:var(--c4)">
+      <div class="hss-val" id="homeGamesPlayed">—</div>
+      <div class="hss-lbl">GAMES</div>
+    </div>
   </div>
-  <button class="big-btn" onclick="startGame(false)">▶ PLAY NOW</button>
-  <button class="ghost-btn" onclick="showScreen('instrScreen')">📖 HOW TO PLAY</button>
-  <button class="ghost-btn" onclick="showScreen('storeScreen')">🪙 COIN STORE</button>
-  <button class="ghost-btn" onclick="showScreen('leaderboardScreen')">🏆 LEADERBOARD</button>
-  <button class="ghost-btn" onclick="showScreen('achScreen')">🏅 ACHIEVEMENTS</button>
-  <button class="ghost-btn" onclick="showScreen('statsScreen')">📊 MY STATS</button>
-  <div id="startHiScore" style="margin-top:6px;font-size:10px;color:var(--muted);letter-spacing:2px;text-align:center;"></div>
+
+  <!-- Global top score -->
+  <div class="home-world-card" onclick="showScreen('leaderboardScreen')" id="homeWorldCard" style="display:none;">
+    <div class="hwc-icon">🌍</div>
+    <div class="hwc-body">
+      <div class="hwc-label">WORLD TOP SCORE</div>
+      <div class="hwc-name" id="hwcName">Loading…</div>
+    </div>
+    <div class="hwc-score" id="hwcScore">—</div>
+  </div>
+
+  <!-- Nav grid — coloured per section -->
+  <div class="home-nav">
+    <button class="home-nav-btn" style="--nc:var(--gold)" onclick="showScreen('leaderboardScreen')">
+      <div class="hnb-icon">🏆</div>
+      <div class="hnb-body"><div class="hnb-title">LEADERBOARD</div><div class="hnb-sub">Global rankings</div></div>
+    </button>
+    <button class="home-nav-btn" style="--nc:var(--c3)" onclick="showScreen('storeScreen')">
+      <div class="hnb-icon">🪙</div>
+      <div class="hnb-body"><div class="hnb-title">COIN STORE</div><div class="hnb-sub">Power-ups & VIP</div></div>
+    </button>
+    <button class="home-nav-btn" style="--nc:var(--c5)" onclick="showScreen('achScreen')">
+      <div class="hnb-icon">🏅</div>
+      <div class="hnb-body"><div class="hnb-title">ACHIEVEMENTS</div><div class="hnb-sub" id="homeAchCount">0 / 16 unlocked</div></div>
+    </button>
+    <button class="home-nav-btn" style="--nc:var(--c4)" onclick="showScreen('missionsScreen')">
+      <div class="hnb-icon">🎯</div>
+      <div class="hnb-body"><div class="hnb-title">MISSIONS</div><div class="hnb-sub" id="homeMissionCount">Daily quests</div></div>
+    </button>
+    <button class="home-nav-btn" style="--nc:var(--c2)" onclick="showScreen('statsScreen')">
+      <div class="hnb-icon">📊</div>
+      <div class="hnb-body"><div class="hnb-title">MY STATS</div><div class="hnb-sub">Progress tracker</div></div>
+    </button>
+    <button class="home-nav-btn" style="--nc:var(--c6)" onclick="showScreen('instrScreen')">
+      <div class="hnb-icon">📖</div>
+      <div class="hnb-body"><div class="hnb-title">HOW TO PLAY</div><div class="hnb-sub">Rules & tips</div></div>
+    </button>
+  </div>
+
+  <!-- Quick tips -->
+  <div class="home-tips">
+    <div class="tip-pill">👆 <span>Tap + drag matching tiles</span></div>
+    <div class="tip-pill">🔥 <span>7+ tiles = 5× multiplier</span></div>
+    <div class="tip-pill">🌡️ <span>3 chains = FEVER 2×</span></div>
+    <div class="tip-pill">💣 <span>Bomb blasts neighbours</span></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="home-footer">
+    <button onclick="toggleMode()" id="modeFooterBtn">🌙 Theme</button>
+    <button onclick="toggleColourBlind()">👁️ Accessibility</button>
+    <a href="https://policies.google.com/privacy" target="_blank">Privacy</a>
+    <button onclick="showToast('GRIDLOCK v7.0 — playgridlock.site')">v7.0</button>
+  </div>
+
 </div>
 
 <!-- ═══════════ INSTRUCTIONS ═══════════ -->
@@ -697,6 +886,13 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
     <button onclick="giftCoins()" style="background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3);border-radius:8px;padding:7px 18px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);cursor:pointer;letter-spacing:2px;">SEND A GIFT 🎁</button>
   </div>
 
+  <!-- Streak Freeze -->
+  <div style="width:100%;max-width:340px;background:rgba(0,229,255,.04);border:1px solid rgba(100,180,255,.25);border-radius:12px;padding:11px;margin-bottom:10px;flex-shrink:0;text-align:center;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);letter-spacing:2px;margin-bottom:3px;">🧊 STREAK FREEZE</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Protect your daily streak for 24 hours even if you miss a day. One-time use.</div>
+    <button onclick="buyStreakFreeze()" style="background:rgba(0,180,255,.15);border:1px solid rgba(0,180,255,.35);border-radius:8px;padding:7px 18px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);cursor:pointer;letter-spacing:2px;">🧊 FREEZE (30🪙)</button>
+  </div>
+
   <!-- Coin Chest -->
   <div class="chest-wrap">
     <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:2px;margin-bottom:3px;">🎁 COIN CHEST — 25🪙</div>
@@ -800,6 +996,7 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
     <button class="ico-btn" id="modeBtn" onclick="toggleMode()" title="Toggle light/dark">🌙</button>
     <button class="ico-btn" id="cbBtn" onclick="toggleColourBlind()" title="Colour blind mode">👁️</button>
     <button class="ico-btn" id="srBtn" onclick="toggleSpeedRun()" title="Speed Run mode">⚡</button>
+    <button class="ico-btn" id="soundBtn" onclick="toggleSound()" title="Sound on/off">🔊</button>
     <button class="ico-btn" id="pauseBtn" onclick="togglePause()" title="Pause">⏸️</button>
     <button class="ico-btn" onclick="showScreen('missionsScreen')">🎯</button>
     <button class="ico-btn" onclick="showScreen('instrScreen')">❓</button>
@@ -875,9 +1072,9 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
 <!-- ═══════════ PAUSE OVERLAY ═══════════ -->
 <div class="pause-overlay hidden" id="pauseOverlay">
   <div class="pause-title">PAUSED</div>
-  <button class="big-btn" onclick="togglePause()" style="max-width:220px;">▶ RESUME</button>
-  <button class="ghost-btn" onclick="togglePause();showScreen('storeScreen')" style="max-width:220px;">🪙 COIN STORE</button>
-  <button class="ghost-btn" onclick="endGame()" style="max-width:220px;">✕ QUIT GAME</button>
+  <button class="big-btn" onclick="pauseResume()" style="max-width:240px;">▶ RESUME</button>
+  <button class="ghost-btn" onclick="pauseOpenStore()" style="max-width:240px;">🪙 COIN STORE</button>
+  <button class="ghost-btn" onclick="pauseQuit()" style="max-width:240px;border-color:var(--c1);color:var(--c1);">✕ QUIT GAME</button>
 </div>
 
 <!-- AdSense slot -->
@@ -1326,14 +1523,23 @@ function checkAchievements(){
   });
 }
 function showAchUnlock(def){
-  const el=document.createElement('div');
-  el.className='ach-new';
-  el.innerHTML=`<div style="font-size:52px;">${def.icon}</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);letter-spacing:3px;">ACHIEVEMENT UNLOCKED</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:2px;">${def.name}</div>
-    <div style="font-size:11px;color:var(--muted);">${def.desc}</div>`;
+  // Non-blocking corner toast — game continues uninterrupted
+  const existing = document.querySelectorAll('.ach-new').length;
+  const el = document.createElement('div');
+  el.className = 'ach-new';
+  el.style.bottom = (100 + existing * 90) + 'px';
+  el.innerHTML = `<div class="ach-new-icon">${def.icon}</div>
+    <div class="ach-new-body">
+      <div class="ach-new-label">🏅 ACHIEVEMENT UNLOCKED</div>
+      <div class="ach-new-name">${def.name}</div>
+      <div class="ach-new-desc">${def.desc}</div>
+    </div>`;
   document.body.appendChild(el);
-  setTimeout(()=>el.remove(),3000);
+  setTimeout(() => el.remove(), 3200);
+  try{
+    const ctx=getCtx();if(!ctx)return;
+    [1047,1319,1568].forEach((f,i)=>setTimeout(()=>beep(f,.12,'sine',.07),i*70));
+  }catch(e){}
 }
 function renderAchievements(){
   const grid=document.getElementById('achGrid'); if(!grid)return;
@@ -1600,6 +1806,41 @@ function toggleSpeedRun(){
 }
 
 // ═══════════════════════════════════════════════
+// SOUND TOGGLE
+// ═══════════════════════════════════════════════
+let _soundOff = localStorage.getItem('gl_sound')==='off';
+function toggleSound(){
+  _soundOff=!_soundOff;
+  localStorage.setItem('gl_sound',_soundOff?'off':'on');
+  document.getElementById('soundBtn').textContent=_soundOff?'🔇':'🔊';
+  document.getElementById('soundBtn').style.borderColor=_soundOff?'var(--c1)':'var(--border)';
+  if(!_soundOff) beep(880,.1,'sine',.07); // confirmation ping
+}
+// Wrap beep to respect sound toggle
+const _origBeep = beep;
+function beep(freq,dur,type,vol){
+  if(_soundOff) return;
+  _origBeep(freq,dur,type,vol);
+}
+
+// ═══════════════════════════════════════════════
+// STREAK FREEZE — spend 30 coins to protect daily streak for 24h
+// ═══════════════════════════════════════════════
+function buyStreakFreeze(){
+  const cost=30;
+  if(S.coins<cost){showToast(`Need ${cost}🪙 for a Streak Freeze!`);return;}
+  const freezeUntil=Date.now()+(24*60*60*1000);
+  localStorage.setItem('gl_streak_freeze',freezeUntil);
+  spendCoins(cost);
+  showToast('🧊 Streak Freeze active! Your streak is safe for 24 hours.');
+  spawnParticles(6);
+}
+function isStreakFrozen(){
+  const f=parseInt(localStorage.getItem('gl_streak_freeze')||'0');
+  return Date.now()<f;
+}
+
+// ═══════════════════════════════════════════════
 // PARTICLE BURST on mega chains
 // ═══════════════════════════════════════════════
 function spawnParticles(len){
@@ -1628,24 +1869,48 @@ function spawnParticles(len){
 // ═══════════════════════════════════════════════
 let _paused=false;
 function togglePause(){
-  if(!S.running)return;
+  if(!S.running && !_paused) return;
   _paused=!_paused;
-  document.getElementById('pauseOverlay').classList.toggle('hidden',!_paused);
+  const overlay = document.getElementById('pauseOverlay');
+  overlay.classList.toggle('hidden',!_paused);
   document.getElementById('pauseBtn').textContent=_paused?'▶️':'⏸️';
   if(_paused){
     clearInterval(S.timerInterval);
-    clearTimeout(S.feverTimeout);
   } else {
-    // Resume timer from where we left off
-    S.timerInterval=setInterval(()=>{
-      if(!S.running||_paused)return;
-      S.timeLeft=Math.max(0,S.timeLeft-0.1);
-      updateTimerBar();
-      if(S.timeLeft<=0){clearInterval(S.timerInterval);onTimerEnd();}
-    },100);
+    _resumeTimer();
   }
 }
-
+function _resumeTimer(){
+  clearInterval(S.timerInterval);
+  S.timerInterval=setInterval(()=>{
+    if(!S.running||_paused)return;
+    S.timeLeft=Math.max(0,S.timeLeft-0.1);
+    updateTimerBar();
+    if(S.timeLeft<=0){clearInterval(S.timerInterval);onTimerEnd();}
+  },100);
+}
+function pauseResume(){
+  if(!_paused)return;
+  _paused=false;
+  document.getElementById('pauseOverlay').classList.add('hidden');
+  document.getElementById('pauseBtn').textContent='⏸️';
+  _resumeTimer();
+}
+function pauseOpenStore(){
+  _paused=false;
+  document.getElementById('pauseOverlay').classList.add('hidden');
+  document.getElementById('pauseBtn').textContent='⏸️';
+  clearInterval(S.timerInterval);
+  // Temporarily stop the game while in store — timer frozen
+  showScreen('storeScreen');
+}
+function pauseQuit(){
+  _paused=false;
+  document.getElementById('pauseOverlay').classList.add('hidden');
+  clearInterval(S.timerInterval);
+  S.running=false;
+  endGame();
+}
 // ═══════════════════════════════════════════════
 // COMBO METER — shows progress toward next multiplier tier
 // Tiers: 2=1×, 3=2×, 5=3×, 7=5×
@@ -1792,6 +2057,59 @@ function checkGiftParams(){
       showToast('🎁 This gift has already been claimed.');
     }
   }
+}
+
+// ═══════════════════════════════════════════════
+// HOME SCREEN STATS UPDATER
+// ═══════════════════════════════════════════════
+function updateHomeScreen(){
+  const hi = document.getElementById('homeHiScore');
+  const streak = document.getElementById('homeStreak');
+  const coins = document.getElementById('homeCoinsHome');
+  const games = document.getElementById('homeGamesPlayed');
+  const achCount = document.getElementById('homeAchCount');
+  const missionCount = document.getElementById('homeMissionCount');
+  if(hi) hi.textContent = S.highScore > 0 ? S.highScore.toLocaleString() : '—';
+  if(streak) streak.textContent = (S.stats.loginStreak||0) > 0 ? (S.stats.loginStreak)+'🔥' : '—';
+  if(coins) coins.textContent = S.coins.toLocaleString();
+  if(games) games.textContent = (S.stats.gamesPlayed||0) > 0 ? (S.stats.gamesPlayed).toLocaleString() : '—';
+  if(achCount){
+    const unlocked = Object.keys(S.achs||{}).length;
+    const total = typeof ACH_DEF!=='undefined'?ACH_DEF.length:16;
+    achCount.textContent = `${unlocked} / ${total} unlocked`;
+  }
+  if(missionCount){
+    const missions = typeof getTodayMissions==='function'?getTodayMissions():[];
+    const doneCnt = missions.filter((_,i)=>(S.missionProgress['m'+i]||0)>=missions[i].target).length;
+    missionCount.textContent = doneCnt===3 ? '✅ All done today!' : `${doneCnt}/3 complete`;
+  }
+  // Hero sub text
+  const hiBar = document.getElementById('startHiScore');
+  if(hiBar){
+    const msgs=[];
+    if(S.highScore>0) msgs.push(`🏆 Best: ${S.highScore.toLocaleString()}`);
+    const bonusLast=parseInt(localStorage.getItem('gl_daily_bonus')||'0');
+    if(new Date(bonusLast).toDateString()!==new Date().toDateString()) msgs.push('🎁 Bonus ready!');
+    if(S.vip) msgs.push('👑 VIP');
+    hiBar.textContent=msgs.join('  ·  ');
+  }
+  // Load world top score card
+  (async()=>{
+    try{
+      const r=await window.storage.get(LB_KEY,true);
+      if(r){
+        const board=JSON.parse(r.value);
+        if(board[0]){
+          const card=document.getElementById('homeWorldCard');
+          const nm=document.getElementById('hwcName');
+          const sc=document.getElementById('hwcScore');
+          if(card)card.style.display='flex';
+          if(nm)nm.textContent=board[0].name;
+          if(sc)sc.textContent=(+board[0].score).toLocaleString();
+        }
+      }
+    }catch(e){}
+  })();
 }
 function checkChallengeParams(){
   const p=new URLSearchParams(location.search);
@@ -2040,6 +2358,10 @@ function commitChain(){
   S.stats.maxScoreToday=Math.max(S.stats.maxScoreToday||0,S.score);
   S.stats.maxLevelToday=Math.max(S.stats.maxLevelToday||0,S.level);
   checkMilestone();
+  // Hot streak toast
+  if(S.streak===5) showToast('🔥 5 CHAIN STREAK!');
+  if(S.streak===10) showToast('🔥🔥 10 STREAK — ON FIRE!');
+  if(S.streak===20) showToast('💀 20 STREAK — UNSTOPPABLE!');
 
   // Fever charge for non-fever mode quick chains
   if(!S.feverActive) addFeverCharge();
@@ -2204,6 +2526,8 @@ function endGame(){
   if(isNew){spawnCoinRain(20); autoSubmitIfNamed(S.highScore);}
   // Haptic feedback on mobile
   try{if(navigator.vibrate)navigator.vibrate(isNew?[100,50,100]:80);}catch(e){}
+  // Update home screen stats for next visit
+  updateHomeScreen();
 }
 
 // ═══════════════════════════════════════════════
@@ -2408,6 +2732,7 @@ function showScreen(id){
   if(id==='statsScreen')renderStatsScreen();
   if(id==='missionsScreen')updateMissionsUI();
   if(id==='leaderboardScreen'){ renderLeaderboard(); }
+  if(id==='startScreen') updateHomeScreen();
 }
 function hideScreen(id){document.getElementById(id).classList.add('hidden');}
 function hideAllScreens(){SCREENS.forEach(hideScreen);}
@@ -2431,11 +2756,18 @@ document.addEventListener('keydown',e=>{
   checkGiftParams();
   setInterval(updateDoublerUI,1000);
   updateFreeUI();
+  updateHomeScreen();
 
   // Restore colour blind mode
   const cb=localStorage.getItem('gl_cb')||'off';
   document.getElementById('html').dataset.cb=cb;
   document.getElementById('cbBtn').textContent=cb==='on'?'👁':'👁️';
+
+  // Restore sound state
+  if(_soundOff){
+    document.getElementById('soundBtn').textContent='🔇';
+    document.getElementById('soundBtn').style.borderColor='var(--c1)';
+  }
 
   // Restore speed run mode
   S.speedRun=localStorage.getItem('gl_speedrun')==='1';
@@ -2444,21 +2776,12 @@ document.addEventListener('keydown',e=>{
     document.getElementById('speedrunBadge').classList.add('show');
   }
 
-  // Start screen info line
-  const hi=document.getElementById('startHiScore');
-  const msgs=[];
-  if(S.highScore>0) msgs.push(`🏆 ${S.highScore.toLocaleString()}`);
-  const bonusLast=parseInt(localStorage.getItem('gl_daily_bonus')||'0');
-  if(new Date(bonusLast).toDateString()!==new Date().toDateString()) msgs.push('🎁 Daily bonus ready!');
-  if((S.stats.loginStreak||0)>=2) msgs.push(`📅 ${S.stats.loginStreak} day streak!`);
-  if(S.vip) msgs.push('👑 VIP');
-  if(hi) hi.textContent=msgs.join('  ·  ');
-
-  if((S.stats.loginStreak||0)>=7) document.getElementById('logoBadge')?.classList.add('show');
+  // VIP badge
+  if((S.stats.loginStreak||0)>=7 || S.vip) document.getElementById('logoBadge')?.classList.add('show');
 
   const days=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
   const el=document.getElementById('dailySubText');
-  if(el) el.textContent=`${days[new Date().getDay()]}'S CHALLENGE — SAME FOR ALL`;
+  if(el) el.textContent=`${days[new Date().getDay()]}'S CHALLENGE · SAME FOR EVERYONE`;
 
   // Load global top score for HUD strip
   (async()=>{
@@ -2476,6 +2799,30 @@ document.addEventListener('keydown',e=>{
       }
     }catch(e){}
   })();
+
+  // Daily bonus notification badge
+  const bonusLast=parseInt(localStorage.getItem('gl_daily_bonus')||'0');
+  const bonusReady=new Date(bonusLast).toDateString()!==new Date().toDateString();
+  if(bonusReady){
+    // Add a small dot badge to the store nav button
+    const storeBtn=document.querySelector('.home-nav-btn[onclick*="storeScreen"]');
+    if(storeBtn){
+      const dot=document.createElement('div');
+      dot.style.cssText='position:absolute;top:8px;right:8px;width:8px;height:8px;background:var(--c4);border-radius:50%;';
+      storeBtn.style.position='relative';
+      storeBtn.appendChild(dot);
+    }
+  }
+
+  // Greet returning player
+  if((S.stats.gamesPlayed||0)>0){
+    setTimeout(()=>{
+      if((S.stats.loginStreak||0)>=3)
+        showToast(`🔥 ${S.stats.loginStreak} day streak! Keep it up!`);
+      else if(bonusReady)
+        showToast('🎁 Daily bonus ready — visit the store!');
+    },800);
+  }
 })();
 </script>
 </body>
