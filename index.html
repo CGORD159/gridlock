@@ -8,7 +8,7 @@
 <title>GRIDLOCK — Chain · Clear · Conquer</title>
 <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<!-- AdSense: will activate once TLS certificate confirmed + domain verified in AdSense dashboard -->
+<!-- AdSense: code placed on playgridlock.site — tick "I've placed the code" in AdSense dashboard then click Verify -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7002095382253130" crossorigin="anonymous"></script>
 <style>
 /* ═══════════════════════════════════════════════
@@ -23,12 +23,24 @@
   --gold:#ffd700; --tile:54px;
 }
 html[data-mode="light"] {
-  --bg:#f0f0f7; --bg2:#e8e8f2; --panel:#ffffff; --panel2:#f4f4fc;
-  --border:#d0d0e4; --border2:#b8b8d0;
-  --text:#0e0e1a; --text2:#2a2a40; --muted:#8888aa; --muted2:#aaaacc;
-  --shadow:rgba(0,0,0,0.10); --scan:rgba(255,255,255,0.5);
-  --c1:#d4003a; --c2:#007fa8; --c3:#b89000; --c4:#1a9800; --c5:#c04000; --c6:#7a28b8;
-  --gold:#c89000;
+  /* backgrounds — warm white, clear panel separation */
+  --bg:#f5f5fa; --bg2:#ebebf2; --panel:#ffffff; --panel2:#f0f0f8;
+  /* borders — visible but not harsh */
+  --border:#c0c0d8; --border2:#a8a8c8;
+  /* text — deep navy, not pure black */
+  --text:#0a0a20; --text2:#22224a; --muted:#5a5a80; --muted2:#7a7a9a;
+  /* shadows / scanline — very subtle in light */
+  --shadow:rgba(0,0,0,0.08); --scan:rgba(200,200,220,0.15);
+  /* tile accent colours — vivid & high-contrast on white (WCAG AA) */
+  --c1:#cc0033;   /* red — deep enough on white */
+  --c2:#0066bb;   /* blue — distinct from bg */
+  --c3:#bb6600;   /* amber/orange — replaces yellow which vanishes on white */
+  --c4:#007700;   /* forest green — readable */
+  --c5:#cc4400;   /* burnt orange */
+  --c6:#7700cc;   /* purple */
+  --gold:#996600;
+  /* tile backgrounds in light mode need stronger base fill */
+  --tile-alpha:0.18;
 }
 
 /* ═══════════════════════════════════════════════
@@ -151,6 +163,19 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
 @keyframes tBlast{0%{transform:scale(1.1);opacity:1;}45%{transform:scale(1.5);opacity:.5;}100%{transform:scale(0);opacity:0;}}
 @keyframes hPulse{0%,100%{box-shadow:none;}50%{box-shadow:0 0 24px #fff;}}
 @keyframes tAppear{0%{transform:scale(0) rotate(-15deg);opacity:0;}70%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+
+/* Light mode: tiles need solid fills and dark text for readability */
+html[data-mode="light"] .tile { color: #fff !important; font-weight:900; text-shadow:0 1px 3px rgba(0,0,0,0.5); }
+html[data-mode="light"] .tile.selected { border-color:rgba(0,0,0,0.6) !important; box-shadow:0 0 0 3px rgba(0,0,0,0.2); }
+html[data-mode="light"] .tile.chain-head { border-color:#000 !important; box-shadow:0 0 0 3px rgba(0,0,0,0.35); }
+html[data-mode="light"] .tile.selected::after, html[data-mode="light"] .tile.chain-head::after { background:#000; color:#fff; }
+html[data-mode="light"] .tile.frozen { outline:3px solid #0055cc; }
+html[data-mode="light"] body::before { display:none; }
+html[data-mode="light"] .sbox { box-shadow:0 2px 8px var(--shadow); }
+html[data-mode="light"] .screen { box-shadow:none; }
+html[data-mode="light"] .combo-txt.active { filter:none; font-weight:900; }
+html[data-mode="light"] .commit-btn { color:#fff; text-shadow:0 1px 2px rgba(0,0,0,0.4); }
+html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
 
 /* ═══════════════════════════════════════════════
    POWER-UPS
@@ -390,6 +415,81 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
 .vip-btn{background:var(--c6);border:none;border-radius:8px;padding:8px 22px;
   font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#fff;cursor:pointer;margin-top:8px;}
 
+/* ── Share card ── */
+.share-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:12px;width:100%;max-width:340px;margin-bottom:8px;flex-shrink:0;text-align:center;}
+.share-grid{display:flex;flex-direction:column;gap:2px;align-items:center;margin:8px 0;font-size:16px;letter-spacing:2px;line-height:1.5;font-family:monospace;}
+.share-title{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);letter-spacing:2px;margin-bottom:4px;}
+
+/* ── Colour blind toggle ── */
+html[data-cb="on"] .tile{font-size:14px !important;font-weight:900 !important;}
+html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-size:11px;bottom:3px;right:4px;opacity:0.9;}
+
+/* ── Speed run mode ── */
+.speedrun-badge{position:fixed;top:10px;left:50%;transform:translateX(-50%);
+  background:rgba(255,230,0,0.9);color:#000;font-family:'Bebas Neue',sans-serif;
+  font-size:13px;letter-spacing:2px;padding:4px 14px;border-radius:20px;z-index:100;
+  display:none;pointer-events:none;}
+.speedrun-badge.show{display:block;}
+
+/* ── Particle burst ── */
+.particle{position:fixed;pointer-events:none;z-index:450;border-radius:50%;
+  animation:particleFly 0.8s forwards;}
+@keyframes particleFly{0%{opacity:1;transform:translate(0,0) scale(1);}
+  100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}}
+
+/* ── Today's top score strip ── */
+.top-score-strip{width:100%;max-width:480px;padding:0 16px 3px;}
+.tss-inner{background:linear-gradient(90deg,rgba(255,215,0,.06),rgba(255,215,0,.02));
+  border:1px solid rgba(255,215,0,.2);border-radius:8px;padding:4px 10px;
+  display:flex;align-items:center;justify-content:space-between;}
+
+/* ── Combo meter bar ── */
+.combo-meter-wrap{width:100%;max-width:480px;padding:0 16px 3px;display:flex;align-items:center;gap:8px;}
+.combo-meter-track{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.combo-meter-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--c3),var(--c1));transition:width .2s;}
+.combo-meter-labels{display:flex;justify-content:space-between;width:100%;max-width:480px;padding:0 16px;margin-top:-2px;}
+.cml{font-size:7px;color:var(--muted);}
+
+/* ── Score milestone flash ── */
+.milestone-pop{position:fixed;top:38%;left:50%;transform:translateX(-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;
+  pointer-events:none;z-index:350;animation:msPop .9s forwards;white-space:nowrap;}
+@keyframes msPop{0%{opacity:0;transform:translateX(-50%) scale(.3) translateY(0);}
+  35%{opacity:1;transform:translateX(-50%) scale(1.2) translateY(-10px);}
+  65%{opacity:1;transform:translateX(-50%) scale(1) translateY(-25px);}
+  100%{opacity:0;transform:translateX(-50%) scale(.8) translateY(-55px);}}
+
+/* ── Confetti ── */
+.confetti-piece{position:fixed;pointer-events:none;z-index:500;width:8px;height:8px;
+  animation:confettiFall var(--dur) forwards ease-in;}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg) translateX(0);}
+  100%{opacity:0;transform:translateY(var(--fy)) rotate(var(--fr)) translateX(var(--fx));}}
+
+/* ── Pause overlay ── */
+.pause-overlay{position:fixed;inset:0;background:rgba(10,10,15,.88);z-index:600;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.pause-overlay.hidden{display:none;}
+.pause-title{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:8px;
+  color:var(--c2);text-shadow:0 0 40px var(--c2);}
+
+/* ── Level intro flash ── */
+.level-intro{position:fixed;inset:0;background:rgba(10,10,15,.85);z-index:550;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  animation:introFade 1.4s forwards;pointer-events:none;}
+@keyframes introFade{0%,5%{opacity:0;}20%,70%{opacity:1;}100%{opacity:0;}}
+.li-level{font-family:'Bebas Neue',sans-serif;font-size:68px;color:var(--c3);letter-spacing:6px;}
+.li-goal{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);letter-spacing:3px;}
+.li-time{font-size:11px;color:var(--muted2);}
+
+/* ── Next-colour hint dots ── */
+.next-hint{width:100%;max-width:480px;padding:0 16px 4px;display:flex;align-items:center;gap:5px;}
+.nh-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.nh-label{font-size:8px;color:var(--muted);letter-spacing:1px;}
+.tss-label{font-size:8px;color:var(--gold);letter-spacing:2px;}
+.tss-score{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);}
+.tss-name{font-size:9px;color:var(--muted);}
+
 @media(max-width:360px){:root{--tile:48px;}}
 @media(max-width:320px){:root{--tile:42px;}}
 </style>
@@ -489,21 +589,33 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
 <div class="screen hidden" id="leaderboardScreen">
   <div style="margin-top:6px;"></div>
   <div class="scr-title" style="color:var(--c3);font-size:40px;">LEADERBOARD</div>
-  <div id="lbWeekLabel" class="scr-sub">THIS WEEK'S TOP SCORES</div>
+  <div class="scr-sub" id="lbWeekLabel">🌍 GLOBAL — ALL PLAYERS</div>
+
+  <!-- Name entry (shown if player hasn't set name yet) -->
   <div id="lbEnterSection" style="width:100%;max-width:380px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;flex-shrink:0;">
-    <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:8px;">ENTER YOUR NAME TO JOIN</div>
+    <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:8px;">YOUR NAME ON THE BOARD</div>
     <div style="display:flex;gap:8px;">
-      <input id="lbNameInput" type="text" maxlength="12" placeholder="Your name…"
+      <input id="lbNameInput" type="text" maxlength="12" placeholder="Enter your name…"
         style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;
         padding:8px 10px;font-family:'Space Mono',monospace;font-size:12px;color:var(--text);outline:none;">
       <button onclick="submitLeaderboard()" style="background:var(--c2);border:none;border-radius:8px;padding:8px 14px;
         font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;color:#000;cursor:pointer;">SUBMIT</button>
     </div>
+    <div style="font-size:8px;color:var(--muted);margin-top:6px;">Your score is shared with all GRIDLOCK players worldwide.</div>
   </div>
+
+  <!-- Loading / error state -->
+  <div id="lbLoading" style="font-size:11px;color:var(--muted);text-align:center;padding:20px;width:100%;max-width:380px;flex-shrink:0;">
+    Loading global scores…
+  </div>
+
+  <!-- Leaderboard list -->
   <div id="lbList" style="width:100%;max-width:380px;flex-shrink:0;"></div>
-  <div style="font-size:9px;color:var(--muted);text-align:center;max-width:340px;line-height:1.7;margin-bottom:10px;flex-shrink:0;">
-    Scores stored locally on your device. A live server leaderboard is coming soon.
+
+  <div style="font-size:8px;color:var(--muted);text-align:center;max-width:320px;line-height:1.7;margin-bottom:10px;flex-shrink:0;">
+    🌍 Scores from all players. Updates live. Only your best score is kept.
   </div>
+  <button class="ghost-btn" onclick="refreshLeaderboard()">🔄 REFRESH</button>
   <button class="big-btn" onclick="hideScreen('leaderboardScreen')">← BACK</button>
 </div>
 
@@ -550,7 +662,15 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
   <button class="big-btn" onclick="startGame(false)">↺ PLAY AGAIN</button>
   <button class="ghost-btn" style="border-color:var(--c4);color:var(--c4);" onclick="tryRevive()">💚 REVIVE (50🪙) — KEEP SCORE</button>
   <button class="ghost-btn" onclick="startGame(true)">📅 DAILY CHALLENGE</button>
+  <!-- Share card -->
+  <div class="share-card" id="shareCard" style="display:none;">
+    <div class="share-title">🟥 MY GRIDLOCK RESULT 🟥</div>
+    <div class="share-grid" id="shareGrid"></div>
+    <div style="font-size:9px;color:var(--muted);">Score: <span id="shareScoreText">0</span> · Level <span id="shareLevelText">1</span></div>
+  </div>
+  <button class="ghost-btn" onclick="generateShareCard()">🟥 SHARE CARD</button>
   <button class="ghost-btn" onclick="shareScore()">📤 CHALLENGE A FRIEND</button>
+  <button class="ghost-btn" onclick="showScreen('leaderboardScreen')">🏆 LEADERBOARD</button>
   <button class="ghost-btn" onclick="showScreen('storeScreen')">🪙 GET COINS</button>
   <button class="ghost-btn" onclick="showScreen('missionsScreen')">🎯 MISSIONS</button>
 </div>
@@ -567,6 +687,14 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
     <div class="vip-price">£1.99 / month</div>
     <div class="vip-perks">✓ 150 coins every week &nbsp;·&nbsp; ✓ 4 lives per game<br>✓ Crown badge &nbsp;·&nbsp; ✓ VIP leaderboard tag &nbsp;·&nbsp; ✓ Early features</div>
     <button class="vip-btn" onclick="buyVIP()">SUBSCRIBE</button>
+    <div style="font-size:8px;color:var(--muted2);margin-top:6px;">Already subscribed? <span onclick="activateVIPLocally()" style="color:var(--c6);cursor:pointer;text-decoration:underline;">Tap here to activate</span></div>
+  </div>
+
+  <!-- Gift Coins -->
+  <div style="width:100%;max-width:340px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.2);border-radius:12px;padding:11px;margin-bottom:10px;flex-shrink:0;text-align:center;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);letter-spacing:2px;margin-bottom:3px;">🎁 GIFT COINS TO A FRIEND</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Send a one-time coin gift — your friend claims it when they open the link</div>
+    <button onclick="giftCoins()" style="background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3);border-radius:8px;padding:7px 18px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);cursor:pointer;letter-spacing:2px;">SEND A GIFT 🎁</button>
   </div>
 
   <!-- Coin Chest -->
@@ -656,10 +784,23 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
 </div>
 
 <!-- ═══════════ GAME HUD ═══════════ -->
+<div class="speedrun-badge" id="speedrunBadge">⚡ SPEED RUN MODE</div>
+
+<div class="top-score-strip" id="topScoreStrip" style="display:none;">
+  <div class="tss-inner">
+    <span class="tss-label">🏆 TOP SCORE</span>
+    <span class="tss-name" id="tssName">—</span>
+    <span class="tss-score" id="tssScore">0</span>
+  </div>
+</div>
+
 <header>
   <div class="logo">GRIDLOCK<span class="logo-badge" id="logoBadge">👑</span></div>
   <div class="hdr-right">
     <button class="ico-btn" id="modeBtn" onclick="toggleMode()" title="Toggle light/dark">🌙</button>
+    <button class="ico-btn" id="cbBtn" onclick="toggleColourBlind()" title="Colour blind mode">👁️</button>
+    <button class="ico-btn" id="srBtn" onclick="toggleSpeedRun()" title="Speed Run mode">⚡</button>
+    <button class="ico-btn" id="pauseBtn" onclick="togglePause()" title="Pause">⏸️</button>
     <button class="ico-btn" onclick="showScreen('missionsScreen')">🎯</button>
     <button class="ico-btn" onclick="showScreen('instrScreen')">❓</button>
     <div class="coin-pill" onclick="showScreen('storeScreen')">
@@ -694,6 +835,16 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
   <div class="target-text">NEED <span class="target-num" id="targetDisplay">3</span> CHAINS</div>
 </div>
 
+<!-- Combo meter: shows progress toward next multiplier tier -->
+<div class="combo-meter-wrap">
+  <span style="font-size:8px;color:var(--muted);">2</span>
+  <div class="combo-meter-track"><div class="combo-meter-fill" id="comboMeterFill" style="width:0%"></div></div>
+  <span style="font-size:8px;color:var(--muted);">7+🔥</span>
+</div>
+
+<!-- Next colour distribution hint -->
+<div class="next-hint" id="nextHint"></div>
+
 <div class="mission-ticker" id="missionTicker" onclick="showScreen('missionsScreen')" style="display:none;">
   <div class="mtick">
     <span style="font-size:11px;">🎯</span>
@@ -721,7 +872,15 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
   <button class="pu-btn" style="--pc:var(--c3)" onclick="useTime()"><span class="pu-ico">⏱️</span><span class="pu-nm">+TIME</span><span class="pu-cost">50🪙</span></button>
 </div>
 
-<!-- AdSense slot — will serve once TLS confirmed and AdSense domain verified -->
+<!-- ═══════════ PAUSE OVERLAY ═══════════ -->
+<div class="pause-overlay hidden" id="pauseOverlay">
+  <div class="pause-title">PAUSED</div>
+  <button class="big-btn" onclick="togglePause()" style="max-width:220px;">▶ RESUME</button>
+  <button class="ghost-btn" onclick="togglePause();showScreen('storeScreen')" style="max-width:220px;">🪙 COIN STORE</button>
+  <button class="ghost-btn" onclick="endGame()" style="max-width:220px;">✕ QUIT GAME</button>
+</div>
+
+<!-- AdSense slot -->
 <div class="ad-slot">
   <ins class="adsbygoogle"
     style="display:block;width:100%;max-width:480px;margin:0 auto;"
@@ -745,7 +904,7 @@ const STRIPE = {
   popular:'https://buy.stripe.com/dRm8wQdtfe4zdvR8xZfrW01',
   gamer:  'https://buy.stripe.com/7sYbJ2gFr5y38bx3dFfrW02',
   whale:  'https://buy.stripe.com/9B6cN688VaSn2Rd4hJfrW03',
-  vip:    'https://buy.stripe.com/9B6cN688VaSn2Rd4hJfrW03', // TODO: replace with real VIP subscription link
+  vip:    'https://buy.stripe.com/3cI28s4WJ7Gb8bx01tfrW04', // GRIDLOCK VIP Pass £1.99/month — LIVE
 };
 const BASE_COINS = {starter:100,popular:600,gamer:1400,whale:3500};
 
@@ -922,37 +1081,136 @@ function renderThemes(){
 }
 
 // ═══════════════════════════════════════════════
-// LEADERBOARD (local)
+// GLOBAL LEADERBOARD — uses window.storage shared API
 // ═══════════════════════════════════════════════
-function submitLeaderboard(){
+const LB_KEY = 'gridlock_leaderboard_v1'; // shared across all players
+
+async function submitLeaderboard(){
   const inp = document.getElementById('lbNameInput');
-  const name = (inp?.value||'').trim().substring(0,12) || 'Player';
-  const entry = {name, score:S.highScore, date:new Date().toLocaleDateString()};
-  S.leaderboard.push(entry);
-  S.leaderboard.sort((a,b)=>b.score-a.score);
-  S.leaderboard = S.leaderboard.slice(0,10);
-  localStorage.setItem('gl_lb', JSON.stringify(S.leaderboard));
+  const name = (inp?.value||'').trim().replace(/[<>]/g,'').substring(0,12);
+  if(!name){showToast('Enter your name first!');return;}
+  if(S.highScore<=0){showToast('Play a game first to get a score!');return;}
+
+  // Save name locally
+  localStorage.setItem('gl_player_name', name);
   if(inp) inp.value='';
-  renderLeaderboard();
-  showToast(`🏆 ${name} added to leaderboard!`);
+
+  const entry = {name, score: S.highScore, date: new Date().toLocaleDateString('en-GB')};
+  showToast('Submitting to global leaderboard…');
+
+  try {
+    // Read current board
+    let board = [];
+    try {
+      const res = await window.storage.get(LB_KEY, true);
+      if(res) board = JSON.parse(res.value);
+    } catch(e){ board=[]; }
+
+    // Remove any previous entry from same player name and add new one
+    board = board.filter(e=>e.name.toLowerCase()!==name.toLowerCase());
+    board.push(entry);
+    board.sort((a,b)=>b.score-a.score);
+    board = board.slice(0,50); // keep top 50
+
+    await window.storage.set(LB_KEY, JSON.stringify(board), true);
+    showToast(`🏆 ${name} added to global leaderboard!`);
+    renderLeaderboard();
+  } catch(e) {
+    // Fallback: save locally if storage unavailable
+    S.leaderboard = S.leaderboard||[];
+    S.leaderboard = S.leaderboard.filter(e=>e.name.toLowerCase()!==name.toLowerCase());
+    S.leaderboard.push(entry);
+    S.leaderboard.sort((a,b)=>b.score-a.score);
+    S.leaderboard = S.leaderboard.slice(0,50);
+    localStorage.setItem('gl_lb', JSON.stringify(S.leaderboard));
+    showToast(`Score saved! (offline mode)`);
+    renderLeaderboard();
+  }
 }
-function renderLeaderboard(){
-  const list = document.getElementById('lbList'); if(!list)return;
-  list.innerHTML='';
-  if(!S.leaderboard.length){
-    list.innerHTML='<div style="font-size:11px;color:var(--muted);text-align:center;padding:20px;">No scores yet — play a game first!</div>';
+
+async function refreshLeaderboard(){
+  document.getElementById('lbLoading').textContent='Refreshing…';
+  document.getElementById('lbLoading').style.display='block';
+  document.getElementById('lbList').innerHTML='';
+  await renderLeaderboard();
+}
+
+async function renderLeaderboard(){
+  const list = document.getElementById('lbList');
+  const loading = document.getElementById('lbLoading');
+  const myName = localStorage.getItem('gl_player_name')||'';
+  if(!list) return;
+
+  // Pre-fill name input if we have a saved name
+  const inp = document.getElementById('lbNameInput');
+  if(inp && myName) inp.placeholder = myName+' (saved)';
+
+  let board = [];
+  let isGlobal = false;
+
+  try {
+    const res = await window.storage.get(LB_KEY, true);
+    if(res){
+      board = JSON.parse(res.value);
+      isGlobal = true;
+      document.getElementById('lbWeekLabel').textContent = `🌍 GLOBAL · ${board.length} PLAYERS`;
+    }
+  } catch(e){}
+
+  if(!board.length){
+    // Fallback to local
+    board = JSON.parse(localStorage.getItem('gl_lb')||'[]');
+    if(!board.length && S.leaderboard?.length) board = S.leaderboard;
+    document.getElementById('lbWeekLabel').textContent = isGlobal ? '🌍 GLOBAL' : '📱 LOCAL SCORES';
+  }
+
+  if(loading) loading.style.display = 'none';
+  list.innerHTML = '';
+
+  if(!board.length){
+    list.innerHTML='<div style="font-size:11px;color:var(--muted);text-align:center;padding:20px;">No scores yet — be the first!</div>';
     return;
   }
+
   const medals=['🥇','🥈','🥉'];
-  S.leaderboard.forEach((e,i)=>{
-    const isYou = e.score===S.highScore;
-    const row=document.createElement('div');
+  board.slice(0,20).forEach((e,i)=>{
+    const isYou = myName && e.name.toLowerCase()===myName.toLowerCase();
+    const row = document.createElement('div');
     row.className='lb-row'+(isYou?' lb-you':'');
-    row.innerHTML=`<div class="lb-rank">${medals[i]||'#'+(i+1)}</div>
-      <div><div class="lb-name">${e.name}${isYou?' 👈':''}</div><div style="font-size:8px;color:var(--muted);">${e.date}</div></div>
-      <div class="lb-score">${e.score.toLocaleString()}</div>`;
+    row.innerHTML=`<div class="lb-rank">${medals[i]||(i+1)}</div>
+      <div><div class="lb-name">${e.name}${isYou?' 👈':''}</div>
+      <div style="font-size:8px;color:var(--muted);">${e.date||''}</div></div>
+      <div class="lb-score">${(+e.score).toLocaleString()}</div>`;
     list.appendChild(row);
   });
+
+  // Show today's top on HUD strip
+  if(board[0]){
+    const strip = document.getElementById('topScoreStrip');
+    if(strip){
+      strip.style.display='block';
+      document.getElementById('tssName').textContent = board[0].name;
+      document.getElementById('tssScore').textContent = (+board[0].score).toLocaleString();
+    }
+  }
+}
+
+// Auto-submit best score when player has a saved name
+async function autoSubmitIfNamed(score){
+  const name = localStorage.getItem('gl_player_name');
+  if(!name) return;
+  if(score<=0) return;
+  try {
+    let board=[];
+    try{const r=await window.storage.get(LB_KEY,true);if(r)board=JSON.parse(r.value);}catch(e){}
+    const existing=board.find(e=>e.name.toLowerCase()===name.toLowerCase());
+    if(existing && existing.score>=score) return; // no improvement
+    board=board.filter(e=>e.name.toLowerCase()!==name.toLowerCase());
+    board.push({name,score,date:new Date().toLocaleDateString('en-GB')});
+    board.sort((a,b)=>b.score-a.score);
+    board=board.slice(0,50);
+    await window.storage.set(LB_KEY,JSON.stringify(board),true);
+  }catch(e){}
 }
 
 // ═══════════════════════════════════════════════
@@ -1279,6 +1537,262 @@ function shareScore(){
   if(navigator.share) navigator.share({title:'GRIDLOCK Challenge',text}).catch(()=>{});
   else navigator.clipboard?.writeText(text).then(()=>showToast('Challenge link copied! 🚀'));
 }
+
+// ═══════════════════════════════════════════════
+// WORDLE-STYLE SHARE CARD
+// ═══════════════════════════════════════════════
+function generateShareCard(){
+  const card=document.getElementById('shareCard');
+  const gridEl=document.getElementById('shareGrid');
+  const scoreText=document.getElementById('shareScoreText');
+  const levelText=document.getElementById('shareLevelText');
+  if(!card||!gridEl)return;
+
+  // Build emoji grid from last game grid state (use colour sequence)
+  const emojiMap={c1:'🟥',c2:'🟦',c3:'🟨',c4:'🟩',c5:'🟧',c6:'🟪'};
+  // Show a 5×4 snippet of the grid
+  const rows=[];
+  for(let r=0;r<4;r++){
+    let row='';
+    for(let c=0;c<5;c++){
+      const idx=r*5+c;
+      const color=S.grid[idx];
+      row+=color?emojiMap[color]||'⬜':'⬜';
+    }
+    rows.push(row);
+  }
+  gridEl.innerHTML=rows.map(r=>`<div>${r}</div>`).join('');
+  scoreText.textContent=S.score.toLocaleString();
+  levelText.textContent=S.level;
+  card.style.display='block';
+
+  // Copy share text
+  const shareText=`🎮 GRIDLOCK\n${rows.join('\n')}\nScore: ${S.score.toLocaleString()} · Level ${S.level}\nPlay free: ${location.href}`;
+  navigator.clipboard?.writeText(shareText)
+    .then(()=>showToast('Share card copied! 📋 Paste anywhere'))
+    .catch(()=>showToast('Share card ready below!'));
+}
+
+// ═══════════════════════════════════════════════
+// COLOUR BLIND MODE
+// ═══════════════════════════════════════════════
+function toggleColourBlind(){
+  const html=document.getElementById('html');
+  const on=html.dataset.cb==='on';
+  html.dataset.cb=on?'off':'on';
+  localStorage.setItem('gl_cb',on?'off':'on');
+  document.getElementById('cbBtn').textContent=on?'👁️':'👁';
+  // Re-render grid with symbols more prominent
+  if(S.running) renderGrid();
+  showToast(on?'Colour blind mode off':'👁️ Colour blind mode on — symbols added');
+}
+
+// ═══════════════════════════════════════════════
+// SPEED RUN MODE — no timer penalty, tracks time to complete each level
+// ═══════════════════════════════════════════════
+let _speedRunStart=0, _speedRunTimes=[];
+function toggleSpeedRun(){
+  S.speedRun=!S.speedRun;
+  localStorage.setItem('gl_speedrun',S.speedRun?'1':'0');
+  document.getElementById('srBtn').style.borderColor=S.speedRun?'var(--c3)':'var(--border)';
+  document.getElementById('speedrunBadge').classList.toggle('show',S.speedRun);
+  showToast(S.speedRun?'⚡ Speed Run mode ON — race the clock!':'Speed Run mode off');
+}
+
+// ═══════════════════════════════════════════════
+// PARTICLE BURST on mega chains
+// ═══════════════════════════════════════════════
+function spawnParticles(len){
+  if(len<5)return;
+  const count=Math.min(len*2,20);
+  const colors=['#ff2d55','#00e5ff','#ffe600','#39ff14','#ff6b00','#bf5af2'];
+  for(let i=0;i<count;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='particle';
+      const angle=Math.random()*360, dist=60+Math.random()*80;
+      const tx=Math.cos(angle*Math.PI/180)*dist+'px';
+      const ty=Math.sin(angle*Math.PI/180)*dist+'px';
+      el.style.cssText=`left:${40+Math.random()*20}%;top:${40+Math.random()*20}%;
+        width:${4+Math.random()*6}px;height:${4+Math.random()*6}px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        --tx:${tx};--ty:${ty};`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),820);
+    },i*25);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// PAUSE
+// ═══════════════════════════════════════════════
+let _paused=false;
+function togglePause(){
+  if(!S.running)return;
+  _paused=!_paused;
+  document.getElementById('pauseOverlay').classList.toggle('hidden',!_paused);
+  document.getElementById('pauseBtn').textContent=_paused?'▶️':'⏸️';
+  if(_paused){
+    clearInterval(S.timerInterval);
+    clearTimeout(S.feverTimeout);
+  } else {
+    // Resume timer from where we left off
+    S.timerInterval=setInterval(()=>{
+      if(!S.running||_paused)return;
+      S.timeLeft=Math.max(0,S.timeLeft-0.1);
+      updateTimerBar();
+      if(S.timeLeft<=0){clearInterval(S.timerInterval);onTimerEnd();}
+    },100);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// COMBO METER — shows progress toward next multiplier tier
+// Tiers: 2=1×, 3=2×, 5=3×, 7=5×
+// ═══════════════════════════════════════════════
+function updateComboMeter(chainLen){
+  const fill=document.getElementById('comboMeterFill');
+  if(!fill)return;
+  // Map chain length 2–7 to 0–100%
+  const pct=Math.min(100,Math.max(0,((chainLen-2)/5)*100));
+  fill.style.width=pct+'%';
+  // Colour shifts with multiplier
+  if(chainLen>=7) fill.style.background='linear-gradient(90deg,#ff6b00,#ff2d55)';
+  else if(chainLen>=5) fill.style.background='linear-gradient(90deg,#ff6b00,#ffe600)';
+  else if(chainLen>=3) fill.style.background='linear-gradient(90deg,#ffe600,#00e5ff)';
+  else fill.style.background='linear-gradient(90deg,var(--c3),var(--c1))';
+}
+
+// ═══════════════════════════════════════════════
+// SCORE MILESTONE POPS
+// ═══════════════════════════════════════════════
+const _milestones=[500,1000,2500,5000,10000,25000,50000,100000];
+let _nextMilestone=0;
+function checkMilestone(){
+  if(_nextMilestone>=_milestones.length)return;
+  if(S.score>=_milestones[_nextMilestone]){
+    showMilestonePop(_milestones[_nextMilestone]);
+    _nextMilestone++;
+  }
+}
+function showMilestonePop(n){
+  const el=document.createElement('div');
+  el.className='milestone-pop';
+  el.textContent=`🎯 ${n.toLocaleString()} POINTS!`;
+  const cols=['var(--c2)','var(--c3)','var(--c5)','var(--c1)','var(--c6)','var(--c4)','#ffd700','var(--c2)'];
+  el.style.color=cols[_milestones.indexOf(n)%cols.length];
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),920);
+  spawnParticles(7);
+}
+
+// ═══════════════════════════════════════════════
+// CONFETTI on level up
+// ═══════════════════════════════════════════════
+function spawnConfetti(){
+  const colors=['#ff2d55','#00e5ff','#ffe600','#39ff14','#ff6b00','#bf5af2','#ffffff'];
+  for(let i=0;i<45;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='confetti-piece';
+      const col=colors[Math.floor(Math.random()*colors.length)];
+      const isRect=Math.random()>0.5;
+      const dur=(0.8+Math.random()*0.9).toFixed(2)+'s';
+      const fx=(Math.random()-0.5)*200+'px';
+      const fy=(180+Math.random()*120)+'px';
+      const fr=(Math.random()*720-360)+'deg';
+      el.style.cssText=`left:${10+Math.random()*80}%;top:20%;
+        background:${col};border-radius:${isRect?'2px':'50%'};
+        width:${isRect?'10px':'7px'};height:${isRect?'6px':'7px'};
+        --dur:${dur};--fx:${fx};--fy:${fy};--fr:${fr};`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),1700);
+    },i*30);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// LEVEL INTRO FLASH
+// ═══════════════════════════════════════════════
+function showLevelIntro(level, chainsNeeded, roundTime){
+  const el=document.createElement('div');
+  el.className='level-intro';
+  el.innerHTML=`<div class="li-level">LEVEL ${level}</div>
+    <div class="li-goal">MAKE ${chainsNeeded} CHAINS</div>
+    <div class="li-time">⏱ ${roundTime.toFixed(0)}s per chain</div>`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1400);
+}
+
+// ═══════════════════════════════════════════════
+// NEXT COLOUR HINT DOTS
+// Shows distribution of colours in the current grid
+// ═══════════════════════════════════════════════
+function updateNextHint(){
+  const el=document.getElementById('nextHint');
+  if(!el)return;
+  // Count colours on grid
+  const counts={};
+  S.grid.forEach(c=>{if(c)counts[c]=(counts[c]||0)+1;});
+  const total=Object.values(counts).reduce((a,b)=>a+b,0)||1;
+  const isLight=document.getElementById('html').dataset.mode==='light';
+  let html='<span class="nh-label">GRID:</span>';
+  // Sort by count descending, show top 4
+  Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,6).forEach(([color,n])=>{
+    const hex=getLightHex(color,isLight);
+    const w=Math.max(6,Math.round((n/total)*60));
+    html+=`<div class="nh-dot" style="background:${hex};width:${w}px;height:8px;border-radius:3px;" title="${color}: ${n}"></div>`;
+  });
+  el.innerHTML=html;
+}
+
+// ═══════════════════════════════════════════════
+// VIP ACTIVATION — called after VIP purchase flow
+// ═══════════════════════════════════════════════
+function activateVIPLocally(){
+  S.vip=true;
+  localStorage.setItem('gl_vip','1');
+  S.lives=Math.max(S.lives,4);
+  updateLivesUI();
+  showToast('👑 VIP activated! 4 lives, 150 coins weekly. Welcome!');
+  document.getElementById('logoBadge').classList.add('show');
+  // Award weekly coins if not awarded today
+  const vipKey='gl_vip_coins_'+new Date().toDateString();
+  if(!localStorage.getItem(vipKey)){
+    S.coins+=150; saveCoins(); updateUI();
+    localStorage.setItem(vipKey,'1');
+    showToast('+150🪙 VIP weekly coins!');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// GIFT COINS — generate a one-time gift URL
+// ═══════════════════════════════════════════════
+function giftCoins(){
+  const amounts=[25,50,100];
+  const gift=amounts[Math.floor(Math.random()*amounts.length)];
+  const code=btoa(`gl_gift_${gift}_${Date.now()}`).replace(/=/g,'');
+  const url=`${location.href.split('?')[0]}?gift=${code}&ga=${gift}`;
+  const text=`🎁 Here's a gift for GRIDLOCK!\nClick to claim ${gift} free coins:\n${url}`;
+  if(navigator.share) navigator.share({title:'GRIDLOCK Coin Gift',text}).catch(()=>{});
+  else navigator.clipboard?.writeText(text).then(()=>showToast(`🎁 Gift link for ${gift}🪙 copied!`));
+}
+function checkGiftParams(){
+  const p=new URLSearchParams(location.search);
+  const ga=parseInt(p.get('ga')||'0');
+  const code=p.get('gift')||'';
+  if(ga>0&&code){
+    const usedKey='gl_gift_used_'+code;
+    if(!localStorage.getItem(usedKey)){
+      S.coins+=ga; saveCoins(); updateUI();
+      localStorage.setItem(usedKey,'1');
+      showToast(`🎁 You received a gift of ${ga}🪙 coins!`);
+      spawnCoinRain(ga);
+    } else {
+      showToast('🎁 This gift has already been claimed.');
+    }
+  }
+}
 function checkChallengeParams(){
   const p=new URLSearchParams(location.search);
   const sc=parseInt(p.get('challenge')||'0');
@@ -1367,6 +1881,10 @@ function renderGrid(){
   const g=document.getElementById('grid');
   g.style.gridTemplateColumns=`repeat(${S.cols},var(--tile))`;
   g.innerHTML='';
+  const isLight=document.getElementById('html').dataset.mode==='light';
+  // In light mode use vivid solid fills; in dark use semi-transparent glow
+  const bgAlpha=isLight?'dd':'22';
+  const brAlpha=isLight?'ff':'66';
   S.grid.forEach((color,i)=>{
     const el=document.createElement('div');
     el.className='tile appearing';
@@ -1374,21 +1892,23 @@ function renderGrid(){
     const isWild=S.wildTiles.has(i);
     const isBomb=S.bombTiles.has(i);
     const isFrozen=S.frozenTiles.has(i);
+    // Get the CSS-variable resolved hex for this color in current mode
+    const hexCol=getLightHex(color,isLight);
     if(isWild){
-      el.style.background='rgba(255,255,255,0.15)';
-      el.style.borderColor='rgba(255,255,255,0.5)';
+      el.style.background=isLight?'#555577':'rgba(255,255,255,0.15)';
+      el.style.borderColor=isLight?'#888899':'rgba(255,255,255,0.5)';
       el.style.color='#fff';
       el.textContent='✨';
       el.classList.add('wild');
     } else if(isBomb){
-      el.style.background=HEX[color]+'22';
-      el.style.borderColor=HEX[color]+'55';
-      el.style.color=HEX[color];
+      el.style.background=hexCol+bgAlpha;
+      el.style.borderColor=hexCol+brAlpha;
+      el.style.color=isLight?'#fff':hexCol;
       el.textContent='💣';
     } else {
-      el.style.background=isFrozen?HEX[color]+'15':HEX[color]+'22';
-      el.style.borderColor=isFrozen?'#00f0ff88':HEX[color]+'55';
-      el.style.color=HEX[color];
+      el.style.background=isFrozen?hexCol+(isLight?'aa':'15'):hexCol+bgAlpha;
+      el.style.borderColor=isFrozen?(isLight?'#0055cc':'#00f0ff88'):hexCol+brAlpha;
+      el.style.color=isLight?'#fff':hexCol;
       el.textContent=SYM[color];
       if(isFrozen)el.classList.add('frozen');
     }
@@ -1397,7 +1917,11 @@ function renderGrid(){
     g.appendChild(el);
   });
   attachGridEvents();
+  updateNextHint();
 }
+// Light mode uses different hex values for contrast; dark uses the neon values
+const LIGHT_HEX={c1:'#cc0033',c2:'#0066bb',c3:'#bb6600',c4:'#007700',c5:'#cc4400',c6:'#7700cc'};
+function getLightHex(color,isLight){return isLight?(LIGHT_HEX[color]||HEX[color]):HEX[color];}
 function getTile(i){return document.getElementById('grid').children[i]||null;}
 
 // ═══════════════════════════════════════════════
@@ -1502,6 +2026,7 @@ function commitChain(){
   toRemove.forEach(i=>{const el=getTile(i);if(el){el.classList.remove('selected','chain-head');el.removeAttribute('data-num');el.classList.add('clearing');}});
   showChainBadge(len,hasWild,hasBomb);
   playChainSound(len);
+  spawnParticles(len); // particle burst for chains 5+
 
   S.score+=pts;
   S.tilesCleared+=len+bombBonus.length;
@@ -1514,6 +2039,7 @@ function commitChain(){
   S.stats.maxChainToday=Math.max(S.stats.maxChainToday||0,S.bestChain);
   S.stats.maxScoreToday=Math.max(S.stats.maxScoreToday||0,S.score);
   S.stats.maxLevelToday=Math.max(S.stats.maxLevelToday||0,S.level);
+  checkMilestone();
 
   // Fever charge for non-fever mode quick chains
   if(!S.feverActive) addFeverCharge();
@@ -1624,11 +2150,13 @@ function doLevelUp(){
   const bonus= S.level>=10?ECONOMY.levelUpHigh: S.level>=5?ECONOMY.levelUpMid: ECONOMY.levelUpLow;
   S.coins+=bonus; saveCoins(); updateUI();
   const el=document.createElement('div'); el.className='lvlup'; el.textContent=`LEVEL ${S.level}`;
-  document.body.appendChild(el); playLevelUpSound(); setTimeout(()=>el.remove(),1000);
+  document.body.appendChild(el); playLevelUpSound(); spawnConfetti(); setTimeout(()=>el.remove(),1000);
   showToast(`🎉 Level ${S.level}! +${bonus}🪙`);
   checkAchievements(); checkMissionProgress();
   const rng=S.isDailyChallenge?seededRNG(todaySeed()+S.level*1999):null;
-  generateGrid(rng); startTimer(); updateUI();
+  generateGrid(rng);
+  setTimeout(()=>showLevelIntro(S.level,S.chainsNeeded,S.roundTime),200);
+  startTimer(); updateUI();
 }
 
 // ═══════════════════════════════════════════════
@@ -1649,6 +2177,9 @@ function startGame(isDaily){
     feverCharge:0,feverActive:false,bonusRoundActive:false,
     sessionChains:0,sessionTiles:0,
   });
+  _nextMilestone=0; _paused=false;
+  document.getElementById('pauseOverlay').classList.add('hidden');
+  document.getElementById('pauseBtn').textContent='⏸️';
   updateLivesUI(); updateUI(); updateStreakUI();
   const rng=isDaily?seededRNG(todaySeed()):null;
   generateGrid(rng); startTimer(); updateMissionsUI();
@@ -1666,9 +2197,13 @@ function endGame(){
   document.getElementById('goHiScore').textContent=S.highScore.toLocaleString();
   document.getElementById('goChains').textContent=S.totalChains;
   document.getElementById('newBestMsg').classList.toggle('hidden',!isNew);
+  // Hide share card until clicked
+  const sc=document.getElementById('shareCard'); if(sc)sc.style.display='none';
   updateDoublerUI();
   showScreen('gameOverScreen');
-  if(isNew) spawnCoinRain(20);
+  if(isNew){spawnCoinRain(20); autoSubmitIfNamed(S.highScore);}
+  // Haptic feedback on mobile
+  try{if(navigator.vibrate)navigator.vibrate(isNew?[100,50,100]:80);}catch(e){}
 }
 
 // ═══════════════════════════════════════════════
@@ -1684,6 +2219,7 @@ function updateUI(){
 }
 function updateComboUI(){
   const n=S.selected.length, txt=document.getElementById('comboTxt'), cnt=document.getElementById('selCnt');
+  updateComboMeter(n);
   if(n===0){txt.textContent='TAP A TILE TO START';txt.classList.remove('active');cnt.textContent='';return;}
   if(n===1){txt.textContent='EXTEND THE CHAIN';txt.classList.remove('active');cnt.textContent='1 tile';return;}
   const hasWild=S.selected.some(i=>S.wildTiles.has(i));
@@ -1871,7 +2407,7 @@ function showScreen(id){
   if(id==='achScreen')renderAchievements();
   if(id==='statsScreen')renderStatsScreen();
   if(id==='missionsScreen')updateMissionsUI();
-  if(id==='leaderboardScreen')renderLeaderboard();
+  if(id==='leaderboardScreen'){ renderLeaderboard(); }
 }
 function hideScreen(id){document.getElementById(id).classList.add('hidden');}
 function hideAllScreens(){SCREENS.forEach(hideScreen);}
@@ -1892,8 +2428,21 @@ document.addEventListener('keydown',e=>{
   applyMode();
   applyTheme(S.theme);
   checkChallengeParams();
+  checkGiftParams();
   setInterval(updateDoublerUI,1000);
   updateFreeUI();
+
+  // Restore colour blind mode
+  const cb=localStorage.getItem('gl_cb')||'off';
+  document.getElementById('html').dataset.cb=cb;
+  document.getElementById('cbBtn').textContent=cb==='on'?'👁':'👁️';
+
+  // Restore speed run mode
+  S.speedRun=localStorage.getItem('gl_speedrun')==='1';
+  if(S.speedRun){
+    document.getElementById('srBtn').style.borderColor='var(--c3)';
+    document.getElementById('speedrunBadge').classList.add('show');
+  }
 
   // Start screen info line
   const hi=document.getElementById('startHiScore');
@@ -1910,6 +2459,23 @@ document.addEventListener('keydown',e=>{
   const days=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
   const el=document.getElementById('dailySubText');
   if(el) el.textContent=`${days[new Date().getDay()]}'S CHALLENGE — SAME FOR ALL`;
+
+  // Load global top score for HUD strip
+  (async()=>{
+    try{
+      const r=await window.storage.get(LB_KEY,true);
+      if(r){
+        const board=JSON.parse(r.value);
+        if(board[0]){
+          const strip=document.getElementById('topScoreStrip');
+          if(strip){strip.style.display='block';
+            document.getElementById('tssName').textContent=board[0].name;
+            document.getElementById('tssScore').textContent=(+board[0].score).toLocaleString();
+          }
+        }
+      }
+    }catch(e){}
+  })();
 })();
 </script>
 </body>
