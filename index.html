@@ -7,6 +7,7 @@
 <meta name="description" content="GRIDLOCK — Free arcade game. Chain tiles, clear the board, beat your friends.">
 <title>GRIDLOCK — Chain · Clear · Conquer</title>
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230a0a0f'/><rect x='8' y='8' width='20' height='20' rx='5' fill='%23ff2d55'/><rect x='36' y='8' width='20' height='20' rx='5' fill='%2300e5ff'/><rect x='8' y='36' width='20' height='20' rx='5' fill='%23ffe600'/><rect x='36' y='36' width='20' height='20' rx='5' fill='%2339ff14'/></svg>" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <!-- AdSense: code placed on playgridlock.site — tick "I've placed the code" in AdSense dashboard then click Verify -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7002095382253130" crossorigin="anonymous"></script>
@@ -431,6 +432,74 @@ html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
 .vip-btn{background:var(--c6);border:none;border-radius:8px;padding:8px 22px;
   font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#fff;cursor:pointer;margin-top:8px;}
 
+/* ── Game Over nav buttons ── */
+.go-nav-btn{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;transition:all .15s;font-family:'Bebas Neue',sans-serif;font-size:12px;
+  letter-spacing:1px;color:var(--text);}
+.go-nav-btn:hover{border-color:var(--c2);color:var(--c2);transform:translateY(-2px);}
+.go-nav-btn span:first-child{font-size:20px;}
+
+/* ── Profile screen ── */
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c6));
+  display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 8px;
+  border:2px solid var(--border);}
+.profile-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--text);text-align:center;}
+.profile-tag{font-size:9px;color:var(--muted);letter-spacing:2px;text-align:center;margin-bottom:12px;}
+.profile-stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;width:100%;max-width:380px;margin-bottom:10px;}
+.ps-box{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 6px;text-align:center;}
+.ps-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--c2);}
+.ps-lbl{font-size:7px;color:var(--muted);letter-spacing:1px;margin-top:2px;}
+.profile-edit-btn{background:var(--panel);border:1px solid var(--border);border-radius:8px;
+  padding:7px 18px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);
+  cursor:pointer;margin-bottom:10px;letter-spacing:1px;}
+.profile-edit-btn:hover{border-color:var(--c2);color:var(--c2);}
+.profile-input{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:9px 12px;font-family:'Space Mono',monospace;font-size:13px;color:var(--text);
+  width:100%;max-width:280px;outline:none;text-align:center;margin-bottom:8px;}
+.profile-input:focus{border-color:var(--c2);}
+.profile-save-btn{background:var(--c2);border:none;border-radius:8px;padding:8px 24px;
+  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#000;cursor:pointer;margin-bottom:12px;}
+
+/* ── Puzzle screen ── */
+.puzzle-tier-tab{display:flex;gap:4px;width:100%;max-width:440px;margin-bottom:10px;overflow-x:auto;padding-bottom:2px;}
+.pt-tab{flex:0 0 auto;padding:5px 12px;border-radius:20px;border:1px solid var(--border);
+  font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;color:var(--muted);
+  cursor:pointer;white-space:nowrap;transition:all .15s;}
+.pt-tab.active{color:#000;border-color:transparent;}
+.pt-tab[data-tier="bronze"].active{background:#cd7f32;}
+.pt-tab[data-tier="silver"].active{background:#c0c0c0;}
+.pt-tab[data-tier="gold"].active{background:#ffd700;}
+.pt-tab[data-tier="platinum"].active{background:#e5e4e2;color:#333;}
+.pt-tab[data-tier="vip"].active{background:linear-gradient(135deg,#bf5af2,#ffd700);color:#fff;}
+
+.puzzle-card{width:100%;max-width:440px;background:var(--panel);border:1px solid var(--border);
+  border-radius:14px;padding:14px;margin-bottom:8px;position:relative;overflow:hidden;}
+.puzzle-card.locked{opacity:.6;}
+.puzzle-tier-badge{position:absolute;top:10px;right:10px;font-size:10px;font-weight:700;
+  padding:2px 8px;border-radius:20px;letter-spacing:1px;}
+.puzzle-card-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--text);margin-bottom:4px;}
+.puzzle-preview{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin:8px 0;max-width:196px;}
+.puzzle-piece-cell{width:24px;height:24px;border-radius:3px;transition:all .2s;}
+.piece-filled{opacity:1;}
+.piece-empty{opacity:.15;background:var(--border)!important;}
+.puzzle-progress-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin:6px 0;}
+.puzzle-progress-fill{height:100%;border-radius:3px;transition:width .4s;}
+.puzzle-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.puzzle-pieces-text{font-size:9px;color:var(--muted);letter-spacing:1px;}
+.puzzle-buy-btn{padding:5px 12px;border-radius:8px;border:none;font-family:'Bebas Neue',sans-serif;
+  font-size:12px;letter-spacing:1px;cursor:pointer;transition:all .15s;}
+.puzzle-completed-seal{position:absolute;bottom:10px;right:14px;font-size:28px;opacity:.8;}
+
+/* ── Puzzle collection gallery ── */
+.puzzle-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:440px;margin-bottom:10px;}
+.pg-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;
+  padding:8px;text-align:center;cursor:pointer;transition:all .15s;}
+.pg-item:hover{transform:translateY(-2px);border-color:var(--gold);}
+.pg-item.completed{border-color:var(--gold);}
+.pg-item img,.pg-item .pg-canvas{width:100%;aspect-ratio:1;border-radius:6px;display:block;}
+.pg-label{font-size:8px;color:var(--muted);letter-spacing:1px;margin-top:4px;}
+
 /* ══════════════════════════════════════
    HOME SCREEN — v7 redesign
    ══════════════════════════════════════ */
@@ -608,9 +677,115 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
 
 @media(max-width:360px){:root{--tile:48px;}}
 @media(max-width:320px){:root{--tile:42px;}}
-</style>
+
+/* ═══════════════════════════════════════════════
+   DESKTOP CENTRING — keeps 480px game column
+   centred on any screen wider than 520px
+   ═══════════════════════════════════════════════ */
+#app{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;position:relative;}
+
+/* All fixed screens must be constrained to the 480px column, centred */
+.screen{
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  width:100% !important;
+  max-width:480px !important;
+}
+
+/* Overlays that use position:fixed also need centring */
+.pause-overlay{
+  left:50% !important;
+  transform:translateX(-50%) !important;
+  width:480px !important;
+  max-width:480px !important;
+}
+
+/* Toast, achievement slides, milestone pops — all centre on the app column */
+.toast,.ach-new{left:50% !important;transform:translateX(-50%) !important;}
+.milestone-pop{left:50% !important;transform:translate(-50%,-50%) !important;}
+
+/* Desktop background glow behind the column */
+@media(min-width:520px){
+  body{background:#050508;}
+  #app::before{content:'';position:absolute;top:0;left:-60px;right:-60px;bottom:0;
+    background:var(--bg);border-left:1px solid var(--border);border-right:1px solid var(--border);
+    pointer-events:none;z-index:-1;}
+  body::after{content:'';position:fixed;inset:0;
+    background:radial-gradient(ellipse 600px 400px at 50% 0%,rgba(0,229,255,.03) 0%,transparent 80%);
+    pointer-events:none;z-index:0;}
+}
+
+/* ═══════════════════════════════════════════════
+   XP / RANK SYSTEM
+   ═══════════════════════════════════════════════ */
+.xp-bar-wrap{width:100%;max-width:440px;margin:0 0 8px;padding:0 4px;}
+.xp-bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.xp-rank-label{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;}
+.xp-next{font-size:8px;color:var(--muted);letter-spacing:1px;}
+.xp-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.xp-fill{height:100%;border-radius:2px;transition:width .6s ease;
+  background:linear-gradient(90deg,var(--c6),var(--c2));}
+
+/* ═══════════════════════════════════════════════
+   STREAK REWARD CALENDAR
+   ═══════════════════════════════════════════════ */
+.streak-cal{width:100%;max-width:440px;background:var(--panel);border:1px solid var(--border);
+  border-radius:14px;padding:12px 14px;margin-bottom:8px;}
+.sc-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--c3);margin-bottom:8px;}
+.sc-days{display:flex;gap:4px;}
+.sc-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:7px 2px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);}
+.sc-day.done{background:rgba(57,255,20,.08);border-color:var(--c4);}
+.sc-day.today{border-color:var(--c3);background:rgba(255,230,0,.06);}
+.sc-day.future{opacity:.45;}
+.sc-d-num{font-size:8px;color:var(--muted);letter-spacing:1px;}
+.sc-d-ico{font-size:14px;}
+.sc-d-coins{font-size:7px;color:var(--gold);font-weight:700;}
+
+/* ═══════════════════════════════════════════════
+   REFERRAL SYSTEM
+   ═══════════════════════════════════════════════ */
+.referral-card{width:100%;max-width:440px;background:linear-gradient(135deg,rgba(0,229,255,.05),rgba(191,90,242,.04));
+  border:1px solid rgba(0,229,255,.2);border-radius:14px;padding:13px 14px;margin-bottom:8px;}
+.ref-code-box{display:flex;align-items:center;gap:8px;margin:8px 0;}
+.ref-code{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:6px;
+  color:var(--c2);background:var(--bg2);padding:6px 14px;border-radius:8px;
+  border:1px solid var(--border);flex:1;text-align:center;}
+.ref-copy-btn{background:var(--c2);border:none;border-radius:8px;padding:8px 14px;
+  font-family:'Bebas Neue',sans-serif;font-size:13px;color:#000;cursor:pointer;white-space:nowrap;}
+
+/* ═══════════════════════════════════════════════
+   QUICK-TIPS TUTORIAL OVERLAY (first play)
+   ═══════════════════════════════════════════════ */
+.tutorial-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:800;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;}
+.tutorial-card{background:var(--panel);border:1px solid var(--border2);border-radius:18px;
+  padding:24px 20px;width:100%;max-width:360px;text-align:center;}
+.tut-icon{font-size:48px;margin-bottom:10px;}
+.tut-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;
+  color:var(--c2);margin-bottom:6px;}
+.tut-body{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:16px;}
+.tut-dots{display:flex;justify-content:center;gap:6px;margin-bottom:16px;}
+.tut-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:background .2s;}
+.tut-dot.active{background:var(--c2);}
+.tut-next-btn{background:linear-gradient(135deg,var(--c1),var(--c2));border:none;border-radius:10px;
+  padding:10px 32px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;
+  color:#fff;cursor:pointer;width:100%;}
+
+/* ═══════════════════════════════════════════════
+   SEASON BANNER on home screen
+   ═══════════════════════════════════════════════ */
+.season-banner{width:100%;max-width:440px;border-radius:12px;padding:10px 14px;margin:0 0 8px;
+  display:flex;align-items:center;gap:10px;cursor:pointer;overflow:hidden;position:relative;}
+.sb-emoji{font-size:28px;flex-shrink:0;}
+.sb-body{flex:1;}
+.sb-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;}
+.sb-sub{font-size:9px;opacity:.7;margin-top:1px;}
+.sb-days{font-family:'Bebas Neue',sans-serif;font-size:13px;white-space:nowrap;opacity:.8;}
 </head>
 <body>
+<div id="app">
 
 <!-- ═══════════ HOME SCREEN ═══════════ -->
 <div class="screen" id="startScreen" style="padding:0;align-items:stretch;gap:0;">
@@ -626,7 +801,7 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
   <div id="challengeBannerStart" class="challenge-banner hidden" style="margin:0 16px 6px;"></div>
 
   <!-- Big PLAY button -->
-  <button class="home-play-btn" onclick="startGame(false)">PLAY NOW</button>
+  <button class="home-play-btn" onclick="onPlayNowTap()">PLAY NOW</button>
 
   <!-- Daily challenge card -->
   <div class="home-daily" onclick="startGame(true)">
@@ -658,6 +833,20 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
     </div>
   </div>
 
+  <!-- XP / Rank bar -->
+  <div style="padding:0 16px;width:100%;box-sizing:border-box;margin-bottom:6px;">
+    <div class="xp-bar-wrap" style="margin:0;">
+      <div class="xp-bar-top">
+        <span class="xp-rank-label" id="homeRankLabel" style="color:var(--c6);">🎮 ROOKIE</span>
+        <span class="xp-next" id="homeXpNext">0 XP</span>
+      </div>
+      <div class="xp-track"><div class="xp-fill" id="homeXpFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Season banner -->
+  <div id="homeSeasonBanner" class="season-banner" style="margin:0 16px 6px;width:auto;" onclick="showScreen('storeScreen')"></div>
+
   <!-- Global top score -->
   <div class="home-world-card" onclick="showScreen('leaderboardScreen')" id="homeWorldCard" style="display:none;">
     <div class="hwc-icon">🌍</div>
@@ -666,6 +855,14 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
       <div class="hwc-name" id="hwcName">Loading…</div>
     </div>
     <div class="hwc-score" id="hwcScore">—</div>
+  </div>
+
+  <!-- Streak Reward Calendar -->
+  <div style="padding:0 16px;width:100%;box-sizing:border-box;margin-bottom:6px;">
+    <div class="streak-cal">
+      <div class="sc-title">🔥 7-DAY LOGIN REWARDS</div>
+      <div class="sc-days" id="streakCalDays"></div>
+    </div>
   </div>
 
   <!-- Nav grid — coloured per section -->
@@ -678,6 +875,14 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
       <div class="hnb-icon">🪙</div>
       <div class="hnb-body"><div class="hnb-title">COIN STORE</div><div class="hnb-sub">Power-ups & VIP</div></div>
     </button>
+    <button class="home-nav-btn" style="--nc:var(--c6)" onclick="showScreen('puzzleScreen')">
+      <div class="hnb-icon">🧩</div>
+      <div class="hnb-body"><div class="hnb-title">PUZZLES</div><div class="hnb-sub" id="homePuzzleCount">Earn pieces in-game</div></div>
+    </button>
+    <button class="home-nav-btn" style="--nc:var(--c2)" onclick="showScreen('profileScreen')">
+      <div class="hnb-icon">👤</div>
+      <div class="hnb-body"><div class="hnb-title">PROFILE</div><div class="hnb-sub" id="homeProfileSub">View your stats</div></div>
+    </button>
     <button class="home-nav-btn" style="--nc:var(--c5)" onclick="showScreen('achScreen')">
       <div class="hnb-icon">🏅</div>
       <div class="hnb-body"><div class="hnb-title">ACHIEVEMENTS</div><div class="hnb-sub" id="homeAchCount">0 / 16 unlocked</div></div>
@@ -685,14 +890,6 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
     <button class="home-nav-btn" style="--nc:var(--c4)" onclick="showScreen('missionsScreen')">
       <div class="hnb-icon">🎯</div>
       <div class="hnb-body"><div class="hnb-title">MISSIONS</div><div class="hnb-sub" id="homeMissionCount">Daily quests</div></div>
-    </button>
-    <button class="home-nav-btn" style="--nc:var(--c2)" onclick="showScreen('statsScreen')">
-      <div class="hnb-icon">📊</div>
-      <div class="hnb-body"><div class="hnb-title">MY STATS</div><div class="hnb-sub">Progress tracker</div></div>
-    </button>
-    <button class="home-nav-btn" style="--nc:var(--c6)" onclick="showScreen('instrScreen')">
-      <div class="hnb-icon">📖</div>
-      <div class="hnb-body"><div class="hnb-title">HOW TO PLAY</div><div class="hnb-sub">Rules & tips</div></div>
     </button>
   </div>
 
@@ -704,17 +901,39 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
     <div class="tip-pill">💣 <span>Bomb blasts neighbours</span></div>
   </div>
 
+  <!-- Referral card -->
+  <div style="padding:0 16px;width:100%;box-sizing:border-box;">
+    <div class="referral-card">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);letter-spacing:2px;margin-bottom:2px;">🤝 INVITE A FRIEND — BOTH GET 20🪙</div>
+      <div style="font-size:9px;color:var(--muted);margin-bottom:4px;">Share your code. When a friend enters it in-game, you both get 20 free coins.</div>
+      <div class="ref-code-box">
+        <div class="ref-code" id="refCodeDisplay">—</div>
+        <button class="ref-copy-btn" onclick="copyReferralCode()">COPY & SHARE</button>
+      </div>
+      <div style="font-size:9px;color:var(--muted);" id="refStatus"></div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <div class="home-footer">
     <button onclick="toggleMode()" id="modeFooterBtn">🌙 Theme</button>
     <button onclick="toggleColourBlind()">👁️ Accessibility</button>
     <a href="https://policies.google.com/privacy" target="_blank">Privacy</a>
-    <button onclick="showToast('GRIDLOCK v7.0 — playgridlock.site')">v7.0</button>
+    <button onclick="showToast('GRIDLOCK v9.0 — playgridlock.site')">v9.0</button>
   </div>
 
 </div>
 
-<!-- ═══════════ INSTRUCTIONS ═══════════ -->
+<!-- ═══════════ TUTORIAL OVERLAY ═══════════ -->
+<div class="tutorial-overlay hidden" id="tutorialOverlay">
+  <div class="tutorial-card">
+    <div class="tut-icon" id="tutIcon">👆</div>
+    <div class="tut-title" id="tutTitle">HOW TO PLAY</div>
+    <div class="tut-body" id="tutBody">Welcome to GRIDLOCK!</div>
+    <div class="tut-dots" id="tutDots"></div>
+    <button class="tut-next-btn" id="tutNextBtn" onclick="tutorialNext()">NEXT →</button>
+  </div>
+</div>
 <div class="screen hidden" id="instrScreen">
   <div style="margin-top:6px;"></div>
   <div class="scr-title" style="color:var(--c2);font-size:38px;">HOW TO PLAY</div>
@@ -831,37 +1050,158 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
 </div>
 
 <!-- ═══════════ GAME OVER ═══════════ -->
-<div class="screen hidden" id="gameOverScreen">
-  <div style="margin-top:6px;"></div>
-  <div class="scr-title" style="color:var(--c1);font-size:44px;line-height:1.1;">GAME<br>OVER</div>
-  <div id="newBestMsg" class="new-best hidden">🏆 NEW HIGH SCORE!</div>
-  <div class="go-score" id="goScore">0</div>
-  <div class="lvl-badge" id="goLevel">LEVEL 1</div>
-  <div class="go-stats">
-    <div class="go-stat"><div class="go-sv" id="goBestChain">0</div><div class="go-sl">BEST CHAIN</div></div>
-    <div class="go-stat"><div class="go-sv" id="goTiles">0</div><div class="go-sl">TILES</div></div>
-    <div class="go-stat"><div class="go-sv" id="goHiScore">0</div><div class="go-sl">HIGH SCORE</div></div>
-    <div class="go-stat"><div class="go-sv" id="goChains">0</div><div class="go-sl">CHAINS</div></div>
+<div class="screen hidden" id="gameOverScreen" style="padding:0;align-items:stretch;">
+
+  <!-- Score hero block -->
+  <div style="background:linear-gradient(180deg,rgba(255,45,85,.07) 0%,transparent 100%);padding:18px 20px 10px;text-align:center;">
+    <div id="newBestMsg" class="new-best hidden" style="margin-bottom:4px;">🏆 NEW HIGH SCORE!</div>
+    <div class="go-score" id="goScore">0</div>
+    <div class="lvl-badge" id="goLevel">LEVEL 1</div>
+    <div id="puzzlePieceEarned" style="display:none;margin-top:8px;background:rgba(191,90,242,.1);border:1px solid rgba(191,90,242,.3);border-radius:10px;padding:7px 12px;display:inline-flex;align-items:center;gap:8px;">
+      <span style="font-size:20px;">🧩</span>
+      <span style="font-size:9px;color:var(--c6);" id="puzzlePieceText">+1 puzzle piece earned!</span>
+    </div>
   </div>
-  <div id="doublerBanner" class="doubler-banner hidden">
+
+  <!-- Quick stats row -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:0 14px 8px;">
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:8px 4px;text-align:center;">
+      <div class="go-sv" id="goBestChain" style="font-size:20px;">0</div><div class="go-sl">BEST CHAIN</div>
+    </div>
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:8px 4px;text-align:center;">
+      <div class="go-sv" id="goTiles" style="font-size:20px;">0</div><div class="go-sl">TILES</div>
+    </div>
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:8px 4px;text-align:center;">
+      <div class="go-sv" id="goHiScore" style="font-size:20px;">0</div><div class="go-sl">BEST EVER</div>
+    </div>
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:8px 4px;text-align:center;">
+      <div class="go-sv" id="goChains" style="font-size:20px;">0</div><div class="go-sl">CHAINS</div>
+    </div>
+  </div>
+
+  <!-- Coin doubler -->
+  <div id="doublerBanner" class="doubler-banner hidden" style="margin:0 14px 8px;width:auto;max-width:none;flex-shrink:0;">
     <div class="dbl-title">🔥 COIN DOUBLER ACTIVE!</div>
     <div class="dbl-timer" id="doublerTimer">10:00</div>
     <div style="font-size:9px;color:var(--muted);">Next purchase gives 2× coins</div>
   </div>
-  <button class="big-btn" onclick="startGame(false)">↺ PLAY AGAIN</button>
-  <button class="ghost-btn" style="border-color:var(--c4);color:var(--c4);" onclick="tryRevive()">💚 REVIVE (50🪙) — KEEP SCORE</button>
-  <button class="ghost-btn" onclick="startGame(true)">📅 DAILY CHALLENGE</button>
+
+  <!-- Primary actions -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 14px 8px;">
+    <button onclick="startGame(false)" style="background:linear-gradient(135deg,var(--c1),var(--c5));border:none;border-radius:14px;padding:16px 8px;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#fff;cursor:pointer;box-shadow:0 4px 20px rgba(255,45,85,.3);">↺ PLAY AGAIN</button>
+    <button onclick="tryRevive()" style="background:var(--panel);border:2px solid var(--c4);border-radius:14px;padding:12px 8px;font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--c4);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;"><span>💚 REVIVE</span><span style="font-size:9px;font-family:'Space Mono',monospace;color:var(--muted);">50🪙 · keep score</span></button>
+  </div>
+
+  <!-- Secondary nav grid (3 columns) -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 14px 8px;">
+    <button class="go-nav-btn" onclick="showScreen('leaderboardScreen')"><span>🏆</span><span>BOARD</span></button>
+    <button class="go-nav-btn" onclick="showScreen('storeScreen')"><span>🪙</span><span>STORE</span></button>
+    <button class="go-nav-btn" onclick="showScreen('puzzleScreen')"><span>🧩</span><span>PUZZLES</span></button>
+    <button class="go-nav-btn" onclick="showScreen('profileScreen')"><span>👤</span><span>PROFILE</span></button>
+    <button class="go-nav-btn" onclick="startGame(true)"><span>📅</span><span>DAILY</span></button>
+    <button class="go-nav-btn" onclick="generateShareCard()"><span>🟥</span><span>SHARE</span></button>
+  </div>
+
   <!-- Share card -->
-  <div class="share-card" id="shareCard" style="display:none;">
-    <div class="share-title">🟥 MY GRIDLOCK RESULT 🟥</div>
+  <div class="share-card" id="shareCard" style="display:none;margin:0 14px 8px;">
+    <div class="share-title">🟥 MY GRIDLOCK RESULT</div>
     <div class="share-grid" id="shareGrid"></div>
     <div style="font-size:9px;color:var(--muted);">Score: <span id="shareScoreText">0</span> · Level <span id="shareLevelText">1</span></div>
   </div>
-  <button class="ghost-btn" onclick="generateShareCard()">🟥 SHARE CARD</button>
-  <button class="ghost-btn" onclick="shareScore()">📤 CHALLENGE A FRIEND</button>
-  <button class="ghost-btn" onclick="showScreen('leaderboardScreen')">🏆 LEADERBOARD</button>
-  <button class="ghost-btn" onclick="showScreen('storeScreen')">🪙 GET COINS</button>
-  <button class="ghost-btn" onclick="showScreen('missionsScreen')">🎯 MISSIONS</button>
+
+  <!-- Back to menu -->
+  <div style="margin:0 14px 20px;">
+    <button onclick="returnToHome()" style="width:100%;background:transparent;border:1px solid var(--border);border-radius:12px;padding:11px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);cursor:pointer;letter-spacing:2px;transition:all .15s;">← BACK TO MENU</button>
+  </div>
+</div>
+
+<!-- ═══════════ PROFILE SCREEN ═══════════ -->
+<div class="screen hidden" id="profileScreen">
+  <div style="margin-top:10px;"></div>
+  <div class="scr-title" style="color:var(--c2);font-size:40px;">PROFILE</div>
+
+  <!-- Avatar & name -->
+  <div class="profile-avatar" id="profileAvatar">🎮</div>
+  <div class="profile-name" id="profileNameDisplay">PLAYER</div>
+  <div class="profile-tag" id="profileTag">#gridlock · joined today</div>
+
+  <!-- Edit name section -->
+  <div id="profileEditSection" style="display:none;flex-direction:column;align-items:center;width:100%;margin-bottom:10px;">
+    <input id="profileNameInput" class="profile-input" type="text" maxlength="14" placeholder="Your name…">
+    <button class="profile-save-btn" onclick="saveProfileName()">SAVE NAME</button>
+  </div>
+  <button class="profile-edit-btn" id="profileEditBtn" onclick="toggleProfileEdit()">✏️ Edit Name</button>
+
+  <!-- Stats grid -->
+  <div class="profile-stat-grid">
+    <div class="ps-box"><div class="ps-val" id="prHiScore">0</div><div class="ps-lbl">HIGH SCORE</div></div>
+    <div class="ps-box"><div class="ps-val" id="prGames">0</div><div class="ps-lbl">GAMES</div></div>
+    <div class="ps-box"><div class="ps-val" id="prStreak">0</div><div class="ps-lbl">DAY STREAK</div></div>
+    <div class="ps-box"><div class="ps-val" id="prTiles">0</div><div class="ps-lbl">TILES CLEARED</div></div>
+    <div class="ps-box"><div class="ps-val" id="prPuzzles">0</div><div class="ps-lbl">PUZZLES DONE</div></div>
+    <div class="ps-box"><div class="ps-val" id="prPieces">0</div><div class="ps-lbl">PIECES EARNED</div></div>
+  </div>
+
+  <!-- Puzzle showcase -->
+  <div style="width:100%;max-width:440px;margin-bottom:6px;">
+    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;">🧩 COMPLETED PUZZLES</div>
+    <div class="puzzle-gallery" id="profilePuzzleGallery">
+      <div style="grid-column:1/-1;text-align:center;font-size:11px;color:var(--muted);padding:16px;">Complete puzzles to display them here</div>
+    </div>
+  </div>
+
+  <div style="width:100%;max-width:440px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.15);border-radius:12px;padding:11px;margin-bottom:10px;text-align:center;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c2);letter-spacing:2px;margin-bottom:3px;">📤 SHARE YOUR PROFILE</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:7px;">Let friends see your high score and completed puzzles</div>
+    <button onclick="shareProfile()" style="background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.25);border-radius:8px;padding:6px 16px;font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c2);cursor:pointer;letter-spacing:1px;">SHARE PROFILE</button>
+  </div>
+
+  <button class="big-btn" onclick="hideScreen('profileScreen')">← BACK</button>
+</div>
+
+<!-- ═══════════ PUZZLE SCREEN ═══════════ -->
+<div class="screen hidden" id="puzzleScreen">
+  <div style="margin-top:10px;"></div>
+  <div class="scr-title" style="font-size:40px;background:linear-gradient(135deg,var(--c3),var(--c6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">PUZZLES</div>
+  <div class="scr-sub">EARN PIECES · COMPLETE PUZZLES · WIN COINS</div>
+
+  <!-- Active puzzle progress -->
+  <div id="activePuzzleCard" style="width:100%;max-width:440px;background:linear-gradient(135deg,rgba(191,90,242,.08),rgba(255,215,0,.05));border:1px solid rgba(191,90,242,.3);border-radius:14px;padding:14px;margin-bottom:10px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+      <div>
+        <div style="font-size:8px;color:var(--c6);letter-spacing:2px;margin-bottom:2px;">ACTIVE PUZZLE</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;" id="activePuzzleName">—</div>
+      </div>
+      <div id="activeTierBadge" style="font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px;background:#cd7f32;color:#fff;">BRONZE</div>
+    </div>
+    <div class="puzzle-preview" id="activePuzzleGrid" style="max-width:196px;"></div>
+    <div class="puzzle-progress-bar"><div class="puzzle-progress-fill" id="activePuzzleFill" style="width:0%;background:linear-gradient(90deg,var(--c6),var(--c3));"></div></div>
+    <div class="puzzle-meta">
+      <span class="puzzle-pieces-text" id="activePuzzleProgress">0 / 50 pieces</span>
+      <span style="font-size:9px;color:var(--muted);" id="activePuzzleReward">Reward: 150🪙</span>
+    </div>
+    <div style="margin-top:8px;font-size:9px;color:var(--muted);">Earn 1 piece every <strong style="color:var(--text);">2 levels</strong> cleared. Pieces drop faster at higher levels.</div>
+  </div>
+
+  <!-- Tier tabs -->
+  <div class="puzzle-tier-tab">
+    <div class="pt-tab active" data-tier="bronze" onclick="switchPuzzleTier('bronze')">🥉 BRONZE</div>
+    <div class="pt-tab" data-tier="silver" onclick="switchPuzzleTier('silver')">🥈 SILVER</div>
+    <div class="pt-tab" data-tier="gold" onclick="switchPuzzleTier('gold')">🥇 GOLD</div>
+    <div class="pt-tab" data-tier="platinum" onclick="switchPuzzleTier('platinum')">💎 PLATINUM</div>
+    <div class="pt-tab" data-tier="vip" onclick="switchPuzzleTier('vip')">👑 VIP</div>
+  </div>
+
+  <!-- Puzzle list -->
+  <div id="puzzleList" style="width:100%;max-width:440px;"></div>
+
+  <!-- Puzzle leaderboard toggle -->
+  <div style="width:100%;max-width:440px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:11px;margin-bottom:10px;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c3);letter-spacing:2px;margin-bottom:6px;">🏆 PUZZLE LEADERBOARD</div>
+    <div id="puzzleLbList" style="font-size:10px;color:var(--muted);">Loading…</div>
+  </div>
+
+  <button class="big-btn" onclick="hideScreen('puzzleScreen')">← BACK</button>
 </div>
 
 <!-- ═══════════ STORE ═══════════ -->
@@ -1106,33 +1446,317 @@ const STRIPE = {
 const BASE_COINS = {starter:100,popular:600,gamer:1400,whale:3500};
 
 // ═══════════════════════════════════════════════
-// COIN ECONOMY CONSTANTS (rebalanced v4)
-// Earning: scarce but fair. Spending: meaningful.
+// COIN ECONOMY v8 — significantly scarcer
+// Design philosophy: coins feel like real achievements.
+// Average player earns ~15-25 coins/session (down from ~40+).
 // ═══════════════════════════════════════════════
 const ECONOMY = {
-  startCoins:      20,   // reduced from 50 — makes early powerup choices feel weighty
-  levelUpLow:       3,   // coins for levels 1-4
-  levelUpMid:       5,   // coins for levels 5-9
-  levelUpHigh:      8,   // coins for levels 10+
-  streakBonus5:     4,   // coins per 5-chain streak milestone (down from 5)
-  missionReward:   [8, 12, 16],  // reward per mission slot (down from 10,15,20)
-  dailyBonus:      20,   // down from 30
-  watchAd1:        10,   // unchanged — still meaningful
-  watchAd2:        25,   // unchanged
-  dailyAllMissions:10,   // bonus for completing all 3 in a day
-  chestCost:       25,   // spend 25
-  chestRewards:    [10,10,10,15,15,15,20,25,30,50,75,100], // weighted toward low
-  reviveCost:      50,
-  streakProtectCost:15,
-  hintCost:        25,   // up from 20
-  shuffleCost:     40,   // up from 30
-  bombCost:        60,   // up from 50
-  timeCost:        50,   // up from 40
+  startCoins:      10,   // v8: down from 20 — minimal starting purse
+  levelUpLow:       1,   // levels 1-4: just 1 coin (was 3)
+  levelUpMid:       2,   // levels 5-9: 2 coins (was 5)
+  levelUpHigh:      4,   // levels 10+: 4 coins (was 8)
+  streakBonus5:     2,   // 5-streak reward (was 4)
+  missionReward:   [5, 8, 12],  // per mission slot (was 8,12,16)
+  dailyBonus:      15,   // daily claim (was 20)
+  watchAd1:         8,   // ad 1 (was 10)
+  watchAd2:        18,   // ad series (was 25)
+  dailyAllMissions: 8,   // all-3 bonus (was 10)
+  chestCost:       30,   // now costs more to open (was 25)
+  chestRewards:    [8,8,10,10,12,15,18,22,28,40,60,80], // slightly lower ceiling
+  reviveCost:      60,   // revive more expensive (was 50)
+  streakProtectCost:20,  // streak protect (was 15)
+  hintCost:        30,   // hint (was 25)
+  shuffleCost:     50,   // shuffle (was 40)
+  bombCost:        75,   // bomb (was 60)
+  timeCost:        60,   // time (was 50)
+  // Puzzle system
+  puzzlePieceInterval: 2, // earn 1 piece every N levels completed
 };
 
 // ═══════════════════════════════════════════════
-// THEMES
+// PUZZLE SYSTEM v8
+// Tiers: bronze, silver, gold, platinum, vip
+// Each puzzle = 50 pieces. Pieces drop on level up.
+// Cost to buy outright: 10,000 coins (reduced by pieces held).
+// Reward on completion: varies by tier.
 // ═══════════════════════════════════════════════
+const PUZZLE_TIERS = {
+  bronze:   {label:'BRONZE',   color:'#cd7f32', reward:100,  pieceRate:2, vipOnly:false},
+  silver:   {label:'SILVER',   color:'#c0c0c0', reward:200,  pieceRate:3, vipOnly:false},
+  gold:     {label:'GOLD',     color:'#ffd700', reward:400,  pieceRate:4, vipOnly:false},
+  platinum: {label:'PLATINUM', color:'#e5e4e2', reward:750,  pieceRate:5, vipOnly:false},
+  vip:      {label:'VIP',      color:'#bf5af2', reward:1500, pieceRate:6, vipOnly:true},
+};
+const PUZZLE_DEFS = [
+  // Bronze puzzles
+  {id:'b1', tier:'bronze', name:'CITY GRID',    seed:1001, totalPieces:50},
+  {id:'b2', tier:'bronze', name:'NEON MAZE',    seed:1002, totalPieces:50},
+  {id:'b3', tier:'bronze', name:'PIXEL TOWER',  seed:1003, totalPieces:50},
+  // Silver puzzles
+  {id:'s1', tier:'silver', name:'OCEAN WAVE',   seed:2001, totalPieces:50},
+  {id:'s2', tier:'silver', name:'CRYSTAL CAVE', seed:2002, totalPieces:50},
+  {id:'s3', tier:'silver', name:'STORM FRONT',  seed:2003, totalPieces:50},
+  // Gold puzzles
+  {id:'g1', tier:'gold',   name:'SOLAR FLARE',  seed:3001, totalPieces:50},
+  {id:'g2', tier:'gold',   name:'DRAGON PEAK',  seed:3002, totalPieces:50},
+  // Platinum puzzles
+  {id:'p1', tier:'platinum',name:'COSMOS',      seed:4001, totalPieces:50},
+  {id:'p2', tier:'platinum',name:'ABYSS',       seed:4002, totalPieces:50},
+  // VIP puzzles
+  {id:'v1', tier:'vip',    name:'VIP CROWN',    seed:5001, totalPieces:50},
+  {id:'v2', tier:'vip',    name:'ELITE GRID',   seed:5002, totalPieces:50},
+];
+const PUZZLE_PIECES_KEY = 'gl_puzzle_pieces_v1'; // {puzzleId: piecesEarned}
+const PUZZLE_DONE_KEY   = 'gl_puzzle_done_v1';   // {puzzleId: true}
+const PUZZLE_LB_KEY     = 'gridlock_puzzle_lb_v1'; // shared
+
+function loadPuzzleState(){
+  try{return JSON.parse(localStorage.getItem(PUZZLE_PIECES_KEY)||'{}');}catch(e){return {};}
+}
+function savePuzzleState(ps){localStorage.setItem(PUZZLE_PIECES_KEY,JSON.stringify(ps));}
+function loadPuzzleDone(){
+  try{return JSON.parse(localStorage.getItem(PUZZLE_DONE_KEY)||'{}');}catch(e){return {};}
+}
+function savePuzzleDone(pd){localStorage.setItem(PUZZLE_DONE_KEY,JSON.stringify(pd));}
+
+// Generate a deterministic colourful preview grid from a seed (7×7 = 49 cells ≈ 50 pieces)
+function puzzlePreviewColors(seed){
+  let s=seed; function rng(){s=((s*1664525+1013904223)>>>0);return s/4294967296;}
+  const cols=['#ff2d55','#00e5ff','#ffe600','#39ff14','#ff6b00','#bf5af2'];
+  return Array.from({length:49},()=>cols[Math.floor(rng()*cols.length)]);
+}
+
+// Get the active (first incomplete) puzzle for a given tier
+function getActivePuzzle(tier){
+  const ps=loadPuzzleState(); const pd=loadPuzzleDone();
+  return PUZZLE_DEFS.filter(p=>p.tier===tier&&!pd[p.id])[0]||null;
+}
+
+// Earn a puzzle piece after level up — called from doLevelUp
+function tryEarnPuzzlePiece(){
+  // Find the first incomplete puzzle (by tier priority)
+  const tierOrder=['bronze','silver','gold','platinum','vip'];
+  const ps=loadPuzzleState(); const pd=loadPuzzleDone();
+  let target=null;
+  for(const t of tierOrder){
+    if(t==='vip'&&!S.vip) continue;
+    const active=PUZZLE_DEFS.filter(p=>p.tier===t&&!pd[p.id])[0];
+    if(active){target=active;break;}
+  }
+  if(!target) return null;
+  const pieces=(ps[target.id]||0)+1;
+  ps[target.id]=pieces;
+  savePuzzleState(ps);
+  // Check completion
+  if(pieces>=target.totalPieces){
+    completePuzzle(target);
+    return {puzzle:target, pieces, completed:true};
+  }
+  return {puzzle:target, pieces, completed:false};
+}
+
+function completePuzzle(def){
+  const pd=loadPuzzleDone(); pd[def.id]=true; savePuzzleDone(pd);
+  const tier=PUZZLE_TIERS[def.tier];
+  S.coins+=tier.reward; saveCoins(); updateUI();
+  // Submit to puzzle leaderboard
+  submitPuzzleLb(def);
+  // Big celebration
+  spawnConfetti();
+  setTimeout(()=>{
+    showToast(`🧩 PUZZLE COMPLETE! ${def.name} +${tier.reward}🪙`);
+  },300);
+}
+
+async function submitPuzzleLb(def){
+  const name=localStorage.getItem('gl_player_name')||'Anonymous';
+  try{
+    const res=await window.storage.get(PUZZLE_LB_KEY,true);
+    let board=res?JSON.parse(res.value):[];
+    // Remove old entry for this player+puzzle
+    board=board.filter(e=>!(e.name===name&&e.puzzleId===def.id));
+    board.push({name,puzzleId:def.id,puzzleName:def.name,tier:def.tier,ts:Date.now()});
+    board=board.slice(0,200);
+    await window.storage.set(PUZZLE_LB_KEY,JSON.stringify(board),true);
+  }catch(e){}
+}
+
+async function renderPuzzleLeaderboard(){
+  const el=document.getElementById('puzzleLbList'); if(!el)return;
+  el.textContent='Loading…';
+  try{
+    const res=await window.storage.get(PUZZLE_LB_KEY,true);
+    const board=res?JSON.parse(res.value):[];
+    if(!board.length){el.textContent='No completions yet — be the first!';return;}
+    // Count completions per player
+    const counts={};
+    board.forEach(e=>{counts[e.name]=(counts[e.name]||0)+1;});
+    const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    const medals=['🥇','🥈','🥉'];
+    el.innerHTML=sorted.map(([name,count],i)=>
+      `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:10px;">
+        <span>${medals[i]||`${i+1}.`} ${name}</span>
+        <span style="color:var(--c6);">${count} puzzle${count>1?'s':''}</span>
+      </div>`
+    ).join('');
+  }catch(e){el.textContent='Could not load puzzle leaderboard.';}
+}
+
+function renderPuzzleScreen(){
+  // Render active puzzle card
+  const tierOrder=['bronze','silver','gold','platinum','vip'];
+  const ps=loadPuzzleState(); const pd=loadPuzzleDone();
+  let active=null;
+  for(const t of tierOrder){
+    if(t==='vip'&&!S.vip) continue;
+    active=PUZZLE_DEFS.filter(p=>p.tier===t&&!pd[p.id])[0];
+    if(active) break;
+  }
+  if(active){
+    document.getElementById('activePuzzleName').textContent=active.name;
+    const tier=PUZZLE_TIERS[active.tier];
+    document.getElementById('activeTierBadge').textContent=tier.label;
+    document.getElementById('activeTierBadge').style.background=tier.color;
+    document.getElementById('activeTierBadge').style.color= active.tier==='platinum'?'#333':'#fff';
+    const pieces=ps[active.id]||0;
+    document.getElementById('activePuzzleProgress').textContent=`${pieces} / ${active.totalPieces} pieces`;
+    document.getElementById('activePuzzleFill').style.width=`${(pieces/active.totalPieces)*100}%`;
+    document.getElementById('activePuzzleReward').textContent=`Reward: ${tier.reward}🪙`;
+    // Draw mini preview
+    const grid=document.getElementById('activePuzzleGrid');
+    const colors=puzzlePreviewColors(active.seed);
+    grid.innerHTML='';
+    colors.forEach((col,i)=>{
+      const cell=document.createElement('div');
+      cell.className='puzzle-piece-cell '+(i<pieces?'piece-filled':'piece-empty');
+      cell.style.background=col;
+      grid.appendChild(cell);
+    });
+  }
+  // Render the first tier by default
+  switchPuzzleTier('bronze');
+  renderPuzzleLeaderboard();
+}
+
+let _activePuzzleTier='bronze';
+function switchPuzzleTier(tier){
+  _activePuzzleTier=tier;
+  document.querySelectorAll('.pt-tab').forEach(t=>t.classList.toggle('active',t.dataset.tier===tier));
+  const ps=loadPuzzleState(); const pd=loadPuzzleDone();
+  const list=document.getElementById('puzzleList'); if(!list) return;
+  list.innerHTML='';
+  const tierDefs=PUZZLE_DEFS.filter(p=>p.tier===tier);
+  const tierInfo=PUZZLE_TIERS[tier];
+  tierDefs.forEach(def=>{
+    const pieces=ps[def.id]||0;
+    const done=!!pd[def.id];
+    const isVipLocked=def.tier==='vip'&&!S.vip;
+    const colors=puzzlePreviewColors(def.seed);
+    const pct=Math.min(100,(pieces/def.totalPieces)*100);
+    // Cost to buy remaining pieces
+    const remaining=def.totalPieces-pieces;
+    const coinCost=Math.max(0,Math.round(10000*(remaining/def.totalPieces)));
+
+    const card=document.createElement('div');
+    card.className='puzzle-card'+(isVipLocked?' locked':'');
+    card.innerHTML=`
+      <div class="puzzle-tier-badge" style="background:${tierInfo.color};color:${tier==='platinum'?'#333':'#fff'}">${tierInfo.label}</div>
+      <div class="puzzle-card-title">${isVipLocked?'🔒 VIP ONLY':def.name}</div>
+      <div class="puzzle-preview" style="margin:8px 0;">${colors.map((c,i)=>`<div class="puzzle-piece-cell ${i<pieces&&!isVipLocked?'piece-filled':'piece-empty'}" style="background:${c}"></div>`).join('')}</div>
+      <div class="puzzle-progress-bar"><div class="puzzle-progress-fill" style="width:${done?100:pct}%;background:${tierInfo.color};"></div></div>
+      <div class="puzzle-meta">
+        <span class="puzzle-pieces-text">${done?'✅ COMPLETE':isVipLocked?'Subscribe to unlock':`${pieces} / ${def.totalPieces} pieces`}</span>
+        ${done?`<span style="font-size:22px;">🏆</span>`:isVipLocked?'':`<button class="puzzle-buy-btn" onclick="buyPuzzlePieces('${def.id}')" style="background:${tierInfo.color};color:${tier==='platinum'?'#333':'#fff'};">BUY ${coinCost}🪙</button>`}
+      </div>
+      ${done?'<div class="puzzle-completed-seal">✅</div>':''}
+    `;
+    list.appendChild(card);
+  });
+}
+
+function buyPuzzlePieces(puzzleId){
+  const def=PUZZLE_DEFS.find(p=>p.id===puzzleId); if(!def) return;
+  const ps=loadPuzzleState();
+  const pieces=ps[puzzleId]||0;
+  const remaining=def.totalPieces-pieces;
+  if(remaining<=0){showToast('Already complete!');return;}
+  const coinCost=Math.max(0,Math.round(10000*(remaining/def.totalPieces)));
+  if(coinCost===0){showToast('Almost done — just play to finish!');return;}
+  if(!spendCoins(coinCost)){showToast(`Need ${coinCost}🪙 to unlock this puzzle`);showScreen('storeScreen');return;}
+  ps[puzzleId]=def.totalPieces;
+  savePuzzleState(ps);
+  completePuzzle(def);
+  renderPuzzleScreen();
+}
+
+function renderProfileScreen(){
+  const name=localStorage.getItem('gl_player_name')||'PLAYER';
+  document.getElementById('profileNameDisplay').textContent=name.toUpperCase();
+  document.getElementById('profileTag').textContent=`#gridlock · ${(S.stats.gamesPlayed||0)} games played`;
+  // Pick avatar emoji based on high score
+  const avatars=['🎮','⭐','🔥','💎','👑'];
+  const idx=Math.min(Math.floor(S.highScore/5000),4);
+  document.getElementById('profileAvatar').textContent=avatars[idx];
+  document.getElementById('prHiScore').textContent=S.highScore.toLocaleString();
+  document.getElementById('prGames').textContent=S.stats.gamesPlayed||0;
+  document.getElementById('prStreak').textContent=S.stats.loginStreak||0;
+  document.getElementById('prTiles').textContent=(S.stats.totalTiles||0).toLocaleString();
+  // Puzzle stats
+  const pd=loadPuzzleDone();
+  const ps=loadPuzzleState();
+  const puzzlesDone=Object.keys(pd).length;
+  const totalPieces=Object.values(ps).reduce((a,b)=>a+b,0);
+  document.getElementById('prPuzzles').textContent=puzzlesDone;
+  document.getElementById('prPieces').textContent=totalPieces;
+  // Gallery
+  const gallery=document.getElementById('profilePuzzleGallery');
+  const completed=PUZZLE_DEFS.filter(d=>pd[d.id]);
+  if(!completed.length){
+    gallery.innerHTML='<div style="grid-column:1/-1;text-align:center;font-size:10px;color:var(--muted);padding:16px;">Complete puzzles to display them here</div>';
+  } else {
+    gallery.innerHTML=completed.map(def=>{
+      const colors=puzzlePreviewColors(def.seed);
+      const tier=PUZZLE_TIERS[def.tier];
+      const cells=colors.map(c=>`<div style="width:100%;padding-top:100%;background:${c};border-radius:2px;"></div>`).join('');
+      return `<div class="pg-item completed" title="${def.name}">
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1px;border-radius:6px;overflow:hidden;">${cells}</div>
+        <div class="pg-label" style="color:${tier.color};">${def.name}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function toggleProfileEdit(){
+  const sec=document.getElementById('profileEditSection');
+  const btn=document.getElementById('profileEditBtn');
+  const showing=sec.style.display==='flex';
+  sec.style.display=showing?'none':'flex';
+  btn.textContent=showing?'✏️ Edit Name':'✕ Cancel';
+  if(!showing){
+    const inp=document.getElementById('profileNameInput');
+    inp.value=localStorage.getItem('gl_player_name')||'';
+    inp.focus();
+  }
+}
+
+function saveProfileName(){
+  const inp=document.getElementById('profileNameInput');
+  const name=inp.value.trim().slice(0,14);
+  if(!name){showToast('Please enter a name');return;}
+  localStorage.setItem('gl_player_name',name);
+  document.getElementById('profileNameDisplay').textContent=name.toUpperCase();
+  toggleProfileEdit();
+  showToast(`✅ Name saved: ${name}`);
+}
+
+function shareProfile(){
+  const name=localStorage.getItem('gl_player_name')||'A player';
+  const pd=loadPuzzleDone();
+  const puzzlesDone=Object.keys(pd).length;
+  const text=`🎮 ${name.toUpperCase()} on GRIDLOCK\n🏆 Best score: ${S.highScore.toLocaleString()}\n🧩 Puzzles completed: ${puzzlesDone}\n📅 ${S.stats.loginStreak||0} day streak\n\nPlay free: ${location.origin}`;
+  if(navigator.share) navigator.share({title:'My GRIDLOCK Profile',text}).catch(()=>{});
+  else navigator.clipboard?.writeText(text).then(()=>showToast('Profile copied! 📋'));
+}
 const THEMES = {
   neon:   {name:'NEON',   price:0,   swatch:'linear-gradient(135deg,#ff2d55,#00e5ff)', vars:{}},
   pastel: {name:'PASTEL', price:30,  swatch:'linear-gradient(135deg,#ffb3c1,#b3e0ff)',
@@ -2069,6 +2693,8 @@ function updateHomeScreen(){
   const games = document.getElementById('homeGamesPlayed');
   const achCount = document.getElementById('homeAchCount');
   const missionCount = document.getElementById('homeMissionCount');
+  const puzzleCount = document.getElementById('homePuzzleCount');
+  const profileSub = document.getElementById('homeProfileSub');
   if(hi) hi.textContent = S.highScore > 0 ? S.highScore.toLocaleString() : '—';
   if(streak) streak.textContent = (S.stats.loginStreak||0) > 0 ? (S.stats.loginStreak)+'🔥' : '—';
   if(coins) coins.textContent = S.coins.toLocaleString();
@@ -2083,16 +2709,34 @@ function updateHomeScreen(){
     const doneCnt = missions.filter((_,i)=>(S.missionProgress['m'+i]||0)>=missions[i].target).length;
     missionCount.textContent = doneCnt===3 ? '✅ All done today!' : `${doneCnt}/3 complete`;
   }
+  if(puzzleCount){
+    try{
+      const pd=loadPuzzleDone();
+      const ps=loadPuzzleState();
+      const done=Object.keys(pd).length;
+      const pieces=Object.values(ps).reduce((a,b)=>a+b,0);
+      puzzleCount.textContent = done>0 ? `${done} completed · ${pieces}🧩` : `${pieces}🧩 pieces earned`;
+    }catch(e){}
+  }
+  if(profileSub){
+    const name=localStorage.getItem('gl_player_name');
+    profileSub.textContent = name ? name.toUpperCase() : 'Set your name';
+  }
   // Hero sub text
   const hiBar = document.getElementById('startHiScore');
   if(hiBar){
+    const xp=loadXP(); const rank=getRank(xp);
     const msgs=[];
     if(S.highScore>0) msgs.push(`🏆 Best: ${S.highScore.toLocaleString()}`);
-    const bonusLast=parseInt(localStorage.getItem('gl_daily_bonus')||'0');
-    if(new Date(bonusLast).toDateString()!==new Date().toDateString()) msgs.push('🎁 Bonus ready!');
+    msgs.push(`🏅 ${rank.name}`);
     if(S.vip) msgs.push('👑 VIP');
     hiBar.textContent=msgs.join('  ·  ');
   }
+  // New feature renderers
+  updateXPBar();
+  renderStreakCalendar();
+  renderSeasonBanner();
+  renderReferralCard();
   // Load world top score card
   (async()=>{
     try{
@@ -2173,7 +2817,38 @@ function buyVIP(){
 function generateGrid(rngFn){
   const rng=rngFn||Math.random.bind(Math);
   const colors=COLORS.slice(0,S.colorsInPlay);
+
+  // Higher levels = fewer clusters = harder matches to find.
+  // We control this via "cluster probability": at low levels tiles cluster
+  // more (easy chains), at high levels they're near-random (sparse matches).
+  const clusterStrength=Math.max(0, 0.55 - (S.level * 0.035)); // 0.55→0.0 over ~16 levels
+  // Start with fully random grid
   S.grid=Array.from({length:S.cols*S.rows},()=>colors[Math.floor(rng()*colors.length)]);
+
+  if(clusterStrength>0.05){
+    // At lower levels, replace some tiles with neighbours' colours to create clusters
+    for(let pass=0;pass<2;pass++){
+      for(let i=0;i<S.grid.length;i++){
+        if(rng()<clusterStrength){
+          const adj=getAdjacent(i);
+          if(adj.length>0) S.grid[i]=S.grid[adj[Math.floor(rng()*adj.length)]];
+        }
+      }
+    }
+  }
+  // At levels 8+ also add some deliberate anti-clusters (swap isolated same-colours apart)
+  if(S.level>=8){
+    for(let i=0;i<S.grid.length;i++){
+      const adj=getAdjacent(i);
+      const sameNeighbours=adj.filter(a=>S.grid[a]===S.grid[i]).length;
+      // If a tile has 3+ same neighbours, randomly swap its colour (break up big clusters)
+      if(sameNeighbours>=3 && rng()<0.45){
+        const otherColors=colors.filter(c=>c!==S.grid[i]);
+        if(otherColors.length) S.grid[i]=otherColors[Math.floor(rng()*otherColors.length)];
+      }
+    }
+  }
+
   S.frozenTiles=new Set();
   S.wildTiles=new Set();
   S.bombTiles=new Set();
@@ -2475,6 +3150,21 @@ function doLevelUp(){
   document.body.appendChild(el); playLevelUpSound(); spawnConfetti(); setTimeout(()=>el.remove(),1000);
   showToast(`🎉 Level ${S.level}! +${bonus}🪙`);
   checkAchievements(); checkMissionProgress();
+
+  // Puzzle piece — every ECONOMY.puzzlePieceInterval levels
+  if(S.level % ECONOMY.puzzlePieceInterval === 0){
+    const result=tryEarnPuzzlePiece();
+    if(result){
+      setTimeout(()=>{
+        if(result.completed){
+          showToast(`🧩 PUZZLE COMPLETE! ${result.puzzle.name}`);
+        } else {
+          showToast(`🧩 Puzzle piece! ${result.pieces}/${result.puzzle.totalPieces} — ${result.puzzle.name}`);
+        }
+      },700);
+    }
+  }
+
   const rng=S.isDailyChallenge?seededRNG(todaySeed()+S.level*1999):null;
   generateGrid(rng);
   setTimeout(()=>showLevelIntro(S.level,S.chainsNeeded,S.roundTime),200);
@@ -2521,6 +3211,8 @@ function endGame(){
   document.getElementById('newBestMsg').classList.toggle('hidden',!isNew);
   // Hide share card until clicked
   const sc=document.getElementById('shareCard'); if(sc)sc.style.display='none';
+  // Award XP
+  awardGameXP();
   updateDoublerUI();
   showScreen('gameOverScreen');
   if(isNew){spawnCoinRain(20); autoSubmitIfNamed(S.highScore);}
@@ -2528,6 +3220,16 @@ function endGame(){
   try{if(navigator.vibrate)navigator.vibrate(isNew?[100,50,100]:80);}catch(e){}
   // Update home screen stats for next visit
   updateHomeScreen();
+}
+
+function onPlayNowTap(){
+  // Show tutorial on very first play, otherwise go straight to game
+  const tutDone=localStorage.getItem(TUT_KEY);
+  if(!tutDone&&(S.stats.gamesPlayed||0)===0){
+    showTutorial();
+  } else {
+    startGame(false);
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -2721,21 +3423,235 @@ function playLevelUpSound(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>bee
 function playChainSound(len){const b=[330,392,494,587,698,880,1047,1175];for(let i=0;i<Math.min(len,b.length);i++)setTimeout(()=>beep(b[i],.13,'sine',.09),i*38);}
 
 // ═══════════════════════════════════════════════
+// XP / RANK SYSTEM
+// Players earn XP from: scores, chains, levels, daily bonus
+// XP is purely cosmetic — bragging rights + profile badge
+// ═══════════════════════════════════════════════
+const XP_RANKS = [
+  {name:'ROOKIE',     color:'#6a6a8a', min:0},
+  {name:'CHAINER',    color:'#39ff14', min:500},
+  {name:'BLAZER',     color:'#00e5ff', min:1500},
+  {name:'CRUSHER',    color:'#ff6b00', min:3500},
+  {name:'GRIDMASTER', color:'#ffd700', min:7000},
+  {name:'LEGEND',     color:'#ff2d55', min:15000},
+  {name:'ELITE',      color:'#bf5af2', min:30000},
+];
+const XP_KEY = 'gl_xp_v1';
+function loadXP(){return parseInt(localStorage.getItem(XP_KEY)||'0');}
+function saveXP(xp){localStorage.setItem(XP_KEY,String(xp));}
+function awardXP(amount){
+  const xp=loadXP()+amount;
+  saveXP(xp);
+  const before=getRank(xp-amount);
+  const after=getRank(xp);
+  if(after.name!==before.name){
+    setTimeout(()=>showToast(`🏅 RANK UP! You're now ${after.name}!`),400);
+  }
+  return xp;
+}
+function getRank(xp){
+  let rank=XP_RANKS[0];
+  for(const r of XP_RANKS){if(xp>=r.min)rank=r;}
+  return rank;
+}
+function getXPProgress(xp){
+  let rankIdx=0;
+  for(let i=0;i<XP_RANKS.length;i++){if(xp>=XP_RANKS[i].min)rankIdx=i;}
+  if(rankIdx>=XP_RANKS.length-1) return {pct:100,toNext:0,nextName:'MAX'};
+  const cur=XP_RANKS[rankIdx].min;
+  const next=XP_RANKS[rankIdx+1].min;
+  const pct=Math.round(((xp-cur)/(next-cur))*100);
+  return {pct,toNext:next-xp,nextName:XP_RANKS[rankIdx+1].name};
+}
+function updateXPBar(){
+  const xp=loadXP();
+  const rank=getRank(xp);
+  const prog=getXPProgress(xp);
+  const lbl=document.getElementById('homeRankLabel');
+  const fill=document.getElementById('homeXpFill');
+  const next=document.getElementById('homeXpNext');
+  if(lbl){lbl.textContent=`🏅 ${rank.name}`;lbl.style.color=rank.color;}
+  if(fill)fill.style.width=prog.pct+'%';
+  if(next)next.textContent=prog.toNext>0?`${xp.toLocaleString()} XP · ${prog.toNext} to ${prog.nextName}`:`${xp.toLocaleString()} XP — MAX RANK`;
+}
+// Award XP at end of game
+function awardGameXP(){
+  const xp=Math.floor(S.score/10)+S.level*5+S.totalChains*2;
+  awardXP(xp);
+}
+
+// ═══════════════════════════════════════════════
+// STREAK REWARD CALENDAR
+// Shows a 7-day login calendar with escalating rewards
+// Day 7 = big bonus
+// ═══════════════════════════════════════════════
+const STREAK_REWARDS=[
+  {day:1,coins:5,icon:'🪙'},
+  {day:2,coins:8,icon:'🪙'},
+  {day:3,coins:12,icon:'💎'},
+  {day:4,coins:15,icon:'💎'},
+  {day:5,coins:20,icon:'🔥'},
+  {day:6,coins:25,icon:'🔥'},
+  {day:7,coins:50,icon:'👑'},
+];
+function renderStreakCalendar(){
+  const el=document.getElementById('streakCalDays'); if(!el)return;
+  const streak=Math.max(0,S.stats.loginStreak||0);
+  const today=streak; // day the player is on (1-based progress)
+  el.innerHTML=STREAK_REWARDS.map(r=>{
+    const done=streak>=r.day;
+    const isToday=streak===r.day-1; // today they could claim this next
+    const cls=done?'sc-day done':isToday?'sc-day today':'sc-day future';
+    return `<div class="${cls}">
+      <div class="sc-d-num">D${r.day}</div>
+      <div class="sc-d-ico">${done?'✅':r.icon}</div>
+      <div class="sc-d-coins">${done?'done':'+'+r.coins+'🪙'}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// SEASONAL BANNER
+// Shows current season theme — rotates every ~90 days
+// ═══════════════════════════════════════════════
+const SEASONS=[
+  {name:'SPRING BLOOM',    emoji:'🌸', bg:'linear-gradient(135deg,rgba(255,182,193,.18),rgba(255,105,180,.08))', color:'#ff69b4', start:[3,20],end:[6,20]},
+  {name:'SUMMER SURGE',    emoji:'☀️', bg:'linear-gradient(135deg,rgba(255,200,0,.15),rgba(255,120,0,.08))',    color:'#ff9500', start:[6,21],end:[9,22]},
+  {name:'AUTUMN BLAZE',    emoji:'🍂', bg:'linear-gradient(135deg,rgba(255,100,0,.15),rgba(180,60,0,.08))',     color:'#ff6300', start:[9,23],end:[12,20]},
+  {name:'WINTER FROST',    emoji:'❄️', bg:'linear-gradient(135deg,rgba(100,180,255,.15),rgba(60,120,220,.08))', color:'#60a8ff', start:[12,21],end:[3,19]},
+];
+function getCurrentSeason(){
+  const now=new Date();
+  const m=now.getMonth()+1, d=now.getDate();
+  const val=m*100+d;
+  if(val>=320&&val<=620) return SEASONS[0];
+  if(val>=621&&val<=922) return SEASONS[1];
+  if(val>=923&&val<=1220) return SEASONS[2];
+  return SEASONS[3];
+}
+function renderSeasonBanner(){
+  const el=document.getElementById('homeSeasonBanner'); if(!el)return;
+  const s=getCurrentSeason();
+  const now=new Date();
+  // Days until season ends — rough calc
+  el.style.background=s.bg;
+  el.style.border=`1px solid ${s.color}33`;
+  el.innerHTML=`
+    <div class="sb-emoji">${s.emoji}</div>
+    <div class="sb-body">
+      <div class="sb-title" style="color:${s.color};">${s.name} SEASON</div>
+      <div class="sb-sub">Seasonal bonus: VIP themes 20% off · Tap for store</div>
+    </div>
+    <div class="sb-days" style="color:${s.color};">🎁</div>`;
+}
+
+// ═══════════════════════════════════════════════
+// REFERRAL SYSTEM
+// Each player gets a deterministic code from their name + high score seed
+// When someone enters a valid code, both get 20 coins (one-time)
+// ═══════════════════════════════════════════════
+const REF_CLAIMED_KEY='gl_ref_claimed_v1';
+const REF_GIVEN_KEY='gl_ref_given_v1';
+function getMyReferralCode(){
+  let code=localStorage.getItem('gl_my_ref_code');
+  if(!code){
+    // Generate a random 6-char code, store it
+    code=Math.random().toString(36).substring(2,8).toUpperCase();
+    localStorage.setItem('gl_my_ref_code',code);
+  }
+  return code;
+}
+function renderReferralCard(){
+  const el=document.getElementById('refCodeDisplay'); if(!el)return;
+  el.textContent=getMyReferralCode();
+  const status=document.getElementById('refStatus');
+  const claimed=parseInt(localStorage.getItem(REF_GIVEN_KEY)||'0');
+  if(status) status.textContent=claimed>0?`✅ You've gifted ${claimed} friend${claimed>1?'s':''} 20🪙 each`:'Share your code — earn 20🪙 when a friend uses it';
+}
+function copyReferralCode(){
+  const code=getMyReferralCode();
+  const text=`🎮 Play GRIDLOCK with me! Use my code ${code} when you start for 20 free coins.\n👉 ${location.origin}`;
+  if(navigator.share) navigator.share({title:'Play GRIDLOCK!',text}).catch(()=>{});
+  else navigator.clipboard?.writeText(text).then(()=>showToast('Referral link copied! 📋'));
+}
+function checkReferralParam(){
+  const p=new URLSearchParams(location.search);
+  const code=p.get('ref');
+  if(!code)return;
+  const already=localStorage.getItem(REF_CLAIMED_KEY);
+  if(already){showToast('Referral already claimed!');return;}
+  const myCode=getMyReferralCode();
+  if(code.toUpperCase()===myCode){showToast("Can't use your own code!");return;}
+  // Reward the new player
+  S.coins+=20; saveCoins(); updateUI();
+  localStorage.setItem(REF_CLAIMED_KEY,code);
+  showToast('🎉 Referral bonus! +20🪙 Welcome gift!');
+  // In a real implementation you'd also reward the referrer via a backend.
+  // For now we show the toast; the referrer is thanked when friends use the link.
+}
+
+// ═══════════════════════════════════════════════
+// TUTORIAL OVERLAY — shown on first ever play
+// ═══════════════════════════════════════════════
+const TUT_KEY='gl_tut_done_v1';
+const TUT_STEPS=[
+  {icon:'🎮',title:'WELCOME TO GRIDLOCK',body:'Chain matching tiles to clear the board and score points. The bigger the chain, the higher the multiplier!'},
+  {icon:'👆',title:'TAP TO SELECT',body:'Tap any tile to start a chain. Then tap or drag to adjacent tiles of the same colour to extend your chain.'},
+  {icon:'⚡',title:'COMMIT YOUR CHAIN',body:'When you\'re happy with your chain, tap the ⚡ CHAIN button — or press Space on desktop — to clear the tiles and score!'},
+  {icon:'🔥',title:'MULTIPLIERS',body:'Chains of 3–4 tiles = 2×. Five or six = 3×. Seven or more = a massive 5× multiplier! Hunt for big chains.'},
+  {icon:'🌡️',title:'FEVER MODE',body:'Chain quickly! Three rapid chains fills the Fever bar. In Fever, ALL multipliers double for 8 seconds. Chain like mad!'},
+  {icon:'🪙',title:'EARN COINS',body:'Level up, complete missions, and watch ads to earn coins. Spend them on power-ups like Hints, Shuffles, and Bombs.'},
+  {icon:'🚀',title:'READY? LET\'S GO!',body:'You\'re all set. Good luck, chain well, and beat your high score! Tap GO to start your first game.'},
+];
+let _tutStep=0;
+function showTutorial(){
+  if(localStorage.getItem(TUT_KEY)) return; // already seen
+  _tutStep=0;
+  renderTutStep();
+  document.getElementById('tutorialOverlay').classList.remove('hidden');
+}
+function renderTutStep(){
+  const s=TUT_STEPS[_tutStep];
+  document.getElementById('tutIcon').textContent=s.icon;
+  document.getElementById('tutTitle').textContent=s.title;
+  document.getElementById('tutBody').textContent=s.body;
+  document.getElementById('tutNextBtn').textContent=_tutStep===TUT_STEPS.length-1?'🚀 LET\'S GO!':'NEXT →';
+  // Dots
+  const dots=document.getElementById('tutDots');
+  dots.innerHTML=TUT_STEPS.map((_,i)=>`<div class="tut-dot${i===_tutStep?' active':''}"></div>`).join('');
+}
+function tutorialNext(){
+  _tutStep++;
+  if(_tutStep>=TUT_STEPS.length){
+    document.getElementById('tutorialOverlay').classList.add('hidden');
+    localStorage.setItem(TUT_KEY,'1');
+    startGame(false);
+  } else {
+    renderTutStep();
+  }
+}
+
+// ═══════════════════════════════════════════════
 // SCREEN MANAGEMENT
 // ═══════════════════════════════════════════════
 const SCREENS=['startScreen','instrScreen','gameOverScreen','storeScreen',
-               'missionsScreen','leaderboardScreen','achScreen','statsScreen'];
+               'missionsScreen','leaderboardScreen','achScreen','statsScreen',
+               'profileScreen','puzzleScreen'];
 function showScreen(id){
-  document.getElementById(id).classList.remove('hidden');
+  const el=document.getElementById(id); if(!el)return;
+  el.classList.remove('hidden');
   if(id==='storeScreen'){updateFreeUI();renderThemes();updateDoublerUI();}
   if(id==='achScreen')renderAchievements();
   if(id==='statsScreen')renderStatsScreen();
   if(id==='missionsScreen')updateMissionsUI();
-  if(id==='leaderboardScreen'){ renderLeaderboard(); }
-  if(id==='startScreen') updateHomeScreen();
+  if(id==='leaderboardScreen'){renderLeaderboard();}
+  if(id==='startScreen')updateHomeScreen();
+  if(id==='profileScreen')renderProfileScreen();
+  if(id==='puzzleScreen'){renderPuzzleScreen();renderPuzzleLeaderboard();}
 }
-function hideScreen(id){document.getElementById(id).classList.add('hidden');}
+function hideScreen(id){const el=document.getElementById(id);if(el)el.classList.add('hidden');}
 function hideAllScreens(){SCREENS.forEach(hideScreen);}
+function returnToHome(){hideAllScreens();showScreen('startScreen');}
 
 // ═══════════════════════════════════════════════
 // KEYBOARD
@@ -2754,6 +3670,7 @@ document.addEventListener('keydown',e=>{
   applyTheme(S.theme);
   checkChallengeParams();
   checkGiftParams();
+  checkReferralParam();
   setInterval(updateDoublerUI,1000);
   updateFreeUI();
   updateHomeScreen();
@@ -2825,5 +3742,6 @@ document.addEventListener('keydown',e=>{
   }
 })();
 </script>
+</div><!-- /#app -->
 </body>
 </html>
