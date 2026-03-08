@@ -1264,11 +1264,70 @@ header,
 
   <!-- Coin Chest -->
   <div class="chest-wrap">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:2px;margin-bottom:3px;">🎁 COIN CHEST — 25🪙</div>
-    <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Spend 25 coins, always get 10–100 back. Never a loss!</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:2px;margin-bottom:3px;">🎁 COIN CHEST — 30🪙</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Spend 30 coins, always get more back. Never a loss!</div>
     <span class="chest-icon" id="chestIcon" onclick="openChest()">🎁</span>
     <div style="font-size:9px;color:var(--muted);margin-top:5px;" id="chestResult"></div>
   </div>
+
+  <!-- ═══ POWER-UP STOCKPILE ═══ -->
+  <div style="width:100%;max-width:340px;margin-bottom:6px;flex-shrink:0;">
+    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">⚡ POWER-UP STOCKPILE</div>
+  </div>
+  <div style="width:100%;max-width:340px;display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;flex-shrink:0;">
+
+    <!-- Coin Doubler -->
+    <div class="store-item" onclick="buyDoubler()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">🔥</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c5);letter-spacing:1px;">COIN DOUBLER</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">2× coins for 10 min</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);">80🪙</div>
+    </div>
+
+    <!-- Score Boost -->
+    <div class="store-item" onclick="buyScoreBoost()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">🎯</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c4);letter-spacing:1px;">SCORE BOOST</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">2× score next game</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);" id="scoreBoostBtn">60🪙</div>
+    </div>
+
+    <!-- Time Freeze (storable) -->
+    <div class="store-item" onclick="buyTimeFreezeItem()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">❄️</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c2);letter-spacing:1px;">TIME FREEZE</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">Freeze timer 5s · <span id="tfStoredCount">0</span> stored</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);">45🪙</div>
+    </div>
+
+    <!-- Revive Pack -->
+    <div class="store-item" onclick="buyRevivePack()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">💊</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c1);letter-spacing:1px;">REVIVE PACK</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">3 revives · <span id="revivePackCount">0</span> stored</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);">120🪙</div>
+    </div>
+
+    <!-- XP Boost -->
+    <div class="store-item" onclick="buyXPBoost()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">⭐</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c3);letter-spacing:1px;">XP BOOST</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">3× XP next game</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);" id="xpBoostBtn">70🪙</div>
+    </div>
+
+    <!-- Tile Magnet -->
+    <div class="store-item" onclick="buyMagnet()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">🧲</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c6);letter-spacing:1px;">TILE MAGNET</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">Auto-chain biggest group</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);">50🪙</div>
+    </div>
+
+  </div>
+
+  <!-- Active boosts status bar -->
+  <div id="activeBoostsBar" style="display:none;width:100%;max-width:340px;background:rgba(255,230,0,.06);border:1px solid rgba(255,230,0,.2);border-radius:10px;padding:8px 12px;margin-bottom:10px;flex-shrink:0;font-size:9px;color:var(--gold);letter-spacing:1px;text-align:center;"></div>
 
   <!-- Free coins -->
   <div class="free-section">
@@ -1323,11 +1382,14 @@ header,
   <div style="width:100%;max-width:340px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px;flex-shrink:0;">
     <div style="font-size:8px;color:var(--muted);margin-bottom:5px;letter-spacing:1px;">SPEND COINS ON:</div>
     <div style="display:flex;flex-wrap:wrap;gap:4px;">
-      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💡 Hint 25🪙</span>
-      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🔀 Shuffle 40🪙</span>
-      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💣 Bomb 60🪙</span>
-      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">⏱️ +Time 50🪙</span>
-      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💚 Revive 50🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💡 Hint 30🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🔀 Shuffle 50🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💣 Bomb 75🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">⏱️ +Time 60🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💚 Revive 60🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🔥 Doubler 80🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🎯 Boost 60🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🧲 Magnet 50🪙</span>
       <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🎨 Themes 30–100🪙</span>
     </div>
   </div>
@@ -1442,6 +1504,8 @@ header,
   <button class="pu-btn" style="--pc:var(--c4)" onclick="useShuffle()"><span class="pu-ico">🔀</span><span class="pu-nm">SHUFFLE</span><span class="pu-cost">50🪙</span></button>
   <button class="pu-btn" style="--pc:var(--c1)" onclick="useBomb()"><span class="pu-ico">💣</span><span class="pu-nm">BOMB</span><span class="pu-cost">75🪙</span></button>
   <button class="pu-btn" style="--pc:var(--c3)" onclick="useTime()"><span class="pu-ico">⏱️</span><span class="pu-nm">+TIME</span><span class="pu-cost">60🪙</span></button>
+  <button class="pu-btn" style="--pc:var(--c2)" onclick="useTimeFreezeStored()" id="tfBtn"><span class="pu-ico">❄️</span><span class="pu-nm">FREEZE</span><span class="pu-cost" id="tfBtnCost">0</span></button>
+  <button class="pu-btn" style="--pc:var(--c6)" onclick="useMagnet()"><span class="pu-ico">🧲</span><span class="pu-nm">MAGNET</span><span class="pu-cost">50🪙</span></button>
   <button class="pu-btn" style="--pc:#ff2d55" id="buyHeartBtn" onclick="buyHeart()"><span class="pu-ico">❤️</span><span class="pu-nm">HEART</span><span class="pu-cost" id="heartCostDisp">40🪙</span></button>
 </div>
 
@@ -1509,8 +1573,15 @@ const ECONOMY = {
   timeCost:        60,   // time (was 50)
   // Puzzle system
   puzzlePieceInterval: 2,
-  heartCost: 40,   // buy 1 extra heart mid-game
-  maxHearts:  5,   // hard cap on simultaneous hearts
+  heartCost: 40,
+  maxHearts:  5,
+  // New store items v2
+  magnetCost:      50,  // tile magnet — highlights dominant colour group
+  timeFreezeStoreCost: 45, // buy a time freeze powerup to use mid-game
+  scoreBoostCost:  60,  // 2× score multiplier for next round
+  revivePackCost: 120,  // stockpile 3 revives at a discount
+  doublerCost:     80,  // buy coin doubler (10 min)
+  xpBoostCost:     70,  // 3× XP for next game
 };
 
 // ═══════════════════════════════════════════════
@@ -1877,6 +1948,11 @@ const S = {
   leaderboard: JSON.parse(localStorage.getItem('gl_lb')||'[]'),
   mode: localStorage.getItem('gl_mode')||'dark',
   vip: localStorage.getItem('gl_vip')==='1',
+  // New store items — stockpile counts
+  storedRevives:   parseInt(localStorage.getItem('gl_stored_revives')||'0'),
+  scoreBoostActive: localStorage.getItem('gl_score_boost')==='1',
+  xpBoostActive:   localStorage.getItem('gl_xp_boost')==='1',
+  timeFreezeStored: parseInt(localStorage.getItem('gl_tf_stored')||'0'),
   // Special tiles tracking
   frozenTiles:  new Set(),
   wildTiles:    new Set(),
@@ -2532,6 +2608,138 @@ function isStreakFrozen(){
 }
 
 // ═══════════════════════════════════════════════
+// NEW STORE ITEMS v2
+// ═══════════════════════════════════════════════
+
+function buyDoubler(){
+  if(!spendCoins(ECONOMY.doublerCost)) return;
+  activateDoubler();
+  showToast('🔥 Coin Doubler active! 2× coins for 10 minutes!');
+  spawnParticles(6);
+  updateActiveBoostsBar();
+}
+
+function buyScoreBoost(){
+  if(S.scoreBoostActive){ showToast('🎯 Score Boost already active for next game!'); return; }
+  if(!spendCoins(ECONOMY.scoreBoostCost)) return;
+  S.scoreBoostActive=true;
+  localStorage.setItem('gl_score_boost','1');
+  document.getElementById('scoreBoostBtn').textContent='ACTIVE ✓';
+  showToast('🎯 Score Boost ready! Your next game scores 2×!');
+  spawnParticles(6);
+  updateActiveBoostsBar();
+}
+
+function buyTimeFreezeItem(){
+  if(!spendCoins(ECONOMY.timeFreezeStoreCost)) return;
+  S.timeFreezeStored++;
+  localStorage.setItem('gl_tf_stored', S.timeFreezeStored);
+  updateStoreCounts();
+  showToast(`❄️ Time Freeze stored! You have ${S.timeFreezeStored} ready.`);
+}
+
+function useTimeFreezeStored(){
+  if(!S.running) return;
+  if(S.timeFreezeStored<=0){
+    showToast('❄️ No Time Freezes! Buy them in the store.');
+    return;
+  }
+  // Pause timer for 5 seconds
+  clearInterval(S.timerInterval);
+  S.timeFreezeStored--;
+  localStorage.setItem('gl_tf_stored', S.timeFreezeStored);
+  updateStoreCounts();
+  showToast('❄️ Timer frozen for 5 seconds!');
+  const bar=document.getElementById('timerBar');
+  if(bar){ bar.style.background='var(--c2)'; bar.style.transition='none'; }
+  setTimeout(()=>{
+    if(!S.running) return;
+    if(bar){ bar.style.background=''; bar.style.transition=''; }
+    startTimer();
+    showToast('▶️ Timer resumed!');
+  }, 5000);
+}
+
+function buyRevivePack(){
+  if(!spendCoins(ECONOMY.revivePackCost)) return;
+  S.storedRevives+=3;
+  localStorage.setItem('gl_stored_revives', S.storedRevives);
+  updateStoreCounts();
+  showToast(`💊 Revive Pack! You now have ${S.storedRevives} revives stored.`);
+  spawnParticles(6);
+}
+
+function buyXPBoost(){
+  if(S.xpBoostActive){ showToast('⭐ XP Boost already active for next game!'); return; }
+  if(!spendCoins(ECONOMY.xpBoostCost)) return;
+  S.xpBoostActive=true;
+  localStorage.setItem('gl_xp_boost','1');
+  document.getElementById('xpBoostBtn').textContent='ACTIVE ✓';
+  showToast('⭐ XP Boost ready! Your next game earns 3× XP!');
+  spawnParticles(6);
+  updateActiveBoostsBar();
+}
+
+function buyMagnet(){
+  if(!S.running){ showToast('🧲 Use Magnet during a game!'); return; }
+  if(!spendCoins(ECONOMY.magnetCost)) return;
+  // Find the largest colour group and auto-select all tiles of that colour
+  const freq={};
+  S.grid.forEach(c=>{ if(c) freq[c]=(freq[c]||0)+1; });
+  const dominant=Object.entries(freq).sort((a,b)=>b[1]-a[1])[0]?.[0];
+  if(!dominant){ showToast('🧲 No tiles to attract!'); return; }
+  const indices=S.grid.map((c,i)=>c===dominant?i:-1).filter(i=>i>=0);
+  // Highlight them all with a flash, then auto-select the group
+  indices.forEach(i=>{
+    const t=getTile(i);
+    if(t){ t.classList.add('hint-glow'); }
+  });
+  setTimeout(()=>{
+    indices.forEach(i=>getTile(i)?.classList.remove('hint-glow'));
+    // Select the largest contiguous group of this colour
+    const best=largestGroup();
+    if(best.length>=2){
+      S.selected=best;
+      commitChain();
+      showToast(`🧲 Magnet chained ${best.length} tiles!`);
+    } else {
+      showToast('🧲 No valid chain found — coins refunded!');
+      S.coins+=ECONOMY.magnetCost; saveCoins(); updateUI();
+    }
+  }, 600);
+}
+
+function updateStoreCounts(){
+  const tf=document.getElementById('tfStoredCount');
+  const rv=document.getElementById('revivePackCount');
+  const tfBtn=document.getElementById('tfBtnCost');
+  if(tf) tf.textContent=S.timeFreezeStored;
+  if(rv) rv.textContent=S.storedRevives;
+  if(tfBtn) tfBtn.textContent=S.timeFreezeStored>0?`${S.timeFreezeStored}×`:'0';
+}
+
+function updateActiveBoostsBar(){
+  const bar=document.getElementById('activeBoostsBar');
+  if(!bar) return;
+  const active=[];
+  if(S.scoreBoostActive) active.push('🎯 Score Boost active');
+  if(S.xpBoostActive) active.push('⭐ XP Boost active');
+  const doublerRem=S.doublerExpiry-Date.now();
+  if(doublerRem>0){
+    const m=Math.ceil(doublerRem/60000);
+    active.push(`🔥 Coin Doubler (${m}m left)`);
+  }
+  if(active.length){
+    bar.style.display='block';
+    bar.textContent='ACTIVE: '+active.join(' · ');
+  } else {
+    bar.style.display='none';
+  }
+}
+
+
+
+// ═══════════════════════════════════════════════
 // PARTICLE BURST on mega chains
 // ═══════════════════════════════════════════════
 function spawnParticles(len){
@@ -2846,7 +3054,8 @@ function updateXPBar(){
 }
 // Award XP at end of game
 function awardGameXP(){
-  const xp=Math.floor(S.score/10)+S.level*5+S.totalChains*2;
+  let xp=Math.floor(S.score/10)+S.level*5+S.totalChains*2;
+  if(S.xpBoostActive){ xp*=3; S.xpBoostActive=false; localStorage.removeItem('gl_xp_boost'); showToast('⭐ XP Boost used! 3× XP earned!'); }
   awardXP(xp);
 }
 
@@ -3462,7 +3671,8 @@ function commitChain(){
   if(hasWild){mult++;S.stats.wildChained=true;localStorage.setItem('gl_stats',JSON.stringify(S.stats));}
   if(S.feverActive)mult*=2;
   if(S.bonusRoundActive)mult+=1; // bonus round extra pts via flat bonus below
-  const pts=S.bonusRoundActive ? len*10*mult+len*5 : len*10*mult;
+  let pts=S.bonusRoundActive ? len*10*mult+len*5 : len*10*mult;
+  if(S.scoreBoostActive) pts*=2;
   showMultPopup(mult,len); showChainMilestone(len);
   const toRemove=[...S.selected];
 
@@ -3729,6 +3939,10 @@ function startGame(isDaily){
     _pressureTiles:0, blockedTiles:new Set(),
   });
   _nextMilestone=0; _paused=false; _pausedMidGame=false; clearHotTiles();
+  // Consume score boost — active for this game
+  if(S.scoreBoostActive){ showToast('🎯 Score Boost active — 2× score this game!'); }
+  // Consume XP boost notification
+  if(S.xpBoostActive){ showToast('⭐ XP Boost active — 3× XP this game!'); }
   document.getElementById('pauseOverlay').classList.add('hidden');
   document.getElementById('pauseBtn').textContent='⏸️';
   const bbBadge=document.getElementById('bbBadge');
@@ -3741,6 +3955,8 @@ function endGame(){
   S.running=false; clearInterval(S.timerInterval);
   clearHotTiles();
   clearTimeout(S.feverTimeout);
+  // Consume score boost (one game use)
+  if(S.scoreBoostActive){ S.scoreBoostActive=false; localStorage.removeItem('gl_score_boost'); }
   const bbBadge=document.getElementById('bbBadge');
   if(bbBadge) bbBadge.classList.remove('show');
   saveStats(); saveCoins(); checkAchievements(); checkMissionProgress();
@@ -3882,7 +4098,19 @@ function largestGroup(){
 // REVIVE
 // ═══════════════════════════════════════════════
 function tryRevive(){
-  // Try ad-revive first (free for player, earns us revenue)
+  // Priority: stored revive pack → ad revive → coin revive
+  if(S.storedRevives>0){
+    S.storedRevives--;
+    localStorage.setItem('gl_stored_revives', S.storedRevives);
+    updateStoreCounts();
+    S.lives=1; S.running=true;
+    hideScreen('gameOverScreen');
+    clearHotTiles(); startTimer(); updateLivesUI(); updateUI();
+    showToast(`💊 Revive Pack used! ${S.storedRevives} remaining.`);
+    playLevelUpSound();
+    return;
+  }
+  // Try ad-revive (free for player, earns us revenue)
   if(typeof adBreak!=='undefined'){
     adBreak({
       type:'reward',
@@ -3897,7 +4125,6 @@ function tryRevive(){
       },
       adDismissed:()=>{ showToast('Watch the full ad to revive for free'); },
       adBreakDone:(info)=>{
-        // If no ad was available, fall back to coin revive
         if(info.breakStatus!=='viewed'){
           _coinRevive();
         }
@@ -4002,6 +4229,13 @@ function updateFreeUI(){
     const claimed=new Date(bonusLast).toDateString()===new Date().toDateString();
     cdEl.textContent=claimed?'Tomorrow':'CLAIM!'; btn.style.opacity=claimed?'.45':'1';
   }
+  updateStoreCounts();
+  updateActiveBoostsBar();
+  // Refresh boost buttons
+  const sbBtn=document.getElementById('scoreBoostBtn');
+  if(sbBtn) sbBtn.textContent=S.scoreBoostActive?'ACTIVE ✓':'60🪙';
+  const xbBtn=document.getElementById('xpBoostBtn');
+  if(xbBtn) xbBtn.textContent=S.xpBoostActive?'ACTIVE ✓':'70🪙';
 }
 
 // ═══════════════════════════════════════════════
