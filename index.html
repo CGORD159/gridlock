@@ -4117,6 +4117,19 @@ document.addEventListener('keydown',e=>{
     }catch(e){}
   })();
 
+  // Suppress tutorial for any returning player (highscore is the most reliable signal)
+  if(!localStorage.getItem(TUT_KEY)){
+    if(S.highScore>0 || (S.stats.gamesPlayed||0)>0){
+      localStorage.setItem(TUT_KEY,'1');
+    }
+  }
+  // Force-hide tutorial overlay on load just in case
+  const _tov=document.getElementById('tutorialOverlay');
+  if(_tov && localStorage.getItem(TUT_KEY)){
+    _tov.classList.add('hidden');
+    _tov.style.display='none';
+  }
+
   // Daily bonus notification badge
   const bonusLast=parseInt(localStorage.getItem('gl_daily_bonus')||'0');
   const bonusReady=new Date(bonusLast).toDateString()!==new Date().toDateString();
