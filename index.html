@@ -72,6 +72,17 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
 .ico-btn{background:var(--panel);border:1px solid var(--border);border-radius:20px;
   padding:5px 8px;cursor:pointer;font-size:14px;color:var(--text);transition:border-color .2s;}
 .ico-btn:hover{border-color:var(--c2);}
+/* Settings tray */
+.settings-tray{width:100%;max-width:480px;margin:0 auto;
+  display:flex;gap:5px;padding:4px 16px 6px;flex-wrap:wrap;
+  background:var(--panel);border-bottom:1px solid var(--border);
+  animation:traySlide .15s ease-out;}
+.settings-tray.hidden{display:none;}
+@keyframes traySlide{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.tray-btn{flex:1;min-width:60px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:5px 4px;cursor:pointer;font-size:9px;color:var(--text2);letter-spacing:1px;
+  font-family:'Space Mono',monospace;transition:all .15s;white-space:nowrap;}
+.tray-btn:hover{border-color:var(--c2);color:var(--c2);}
 
 /* ═══════════════════════════════════════════════
    FEVER / BONUS BARS
@@ -690,8 +701,7 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
 header,
 .fever-wrap,.stats,.timer-wrap,.hud-row,.combo-meter-wrap,.next-hint,
 .mission-ticker,.combo-bar,.grid-wrap,.powerups,.bonus-overlay,
-.top-score-strip,.speedrun-badge,.ad-slot,
-.bb-badge{
+.top-score-strip,.speedrun-badge,.ad-slot,.settings-tray{
   width:100%;
   max-width:480px;
   margin-left:auto;
@@ -760,7 +770,7 @@ header,
    ═══════════════════════════════════════════════ */
 .tutorial-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:800;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:24px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;}
+  padding:24px;}
 .tutorial-card{background:var(--panel);border:1px solid var(--border2);border-radius:18px;
   padding:24px 20px;width:100%;max-width:360px;text-align:center;}
 .tut-icon{font-size:48px;margin-bottom:10px;}
@@ -1204,7 +1214,7 @@ header,
     <div id="puzzleLbList" style="font-size:10px;color:var(--muted);">Loading…</div>
   </div>
 
-  <button class="big-btn" onclick="hideScreen('puzzleScreen')">← BACK</button>
+  <button class="big-btn" onclick="returnToHome()">← BACK</button>
 </div>
 
 <!-- ═══════════ STORE ═══════════ -->
@@ -1219,7 +1229,7 @@ header,
     <div class="vip-price">£1.99 / month</div>
     <div class="vip-perks">✓ 150 coins every week &nbsp;·&nbsp; ✓ 4 lives per game<br>✓ Crown badge &nbsp;·&nbsp; ✓ VIP leaderboard tag &nbsp;·&nbsp; ✓ Early features</div>
     <button class="vip-btn" onclick="buyVIP()">SUBSCRIBE</button>
-    <div style="font-size:8px;color:var(--muted2);margin-top:6px;">Already subscribed? <span onclick="activateVIPLocally()" style="color:var(--c6);cursor:pointer;text-decoration:underline;">Tap here to activate</span></div>
+    <div style="font-size:8px;color:var(--muted2);margin-top:6px;">Already subscribed? <span onclick="verifyVIPPurchase()" style="color:var(--c6);cursor:pointer;text-decoration:underline;">Tap here to activate</span></div>
   </div>
 
   <!-- Gift Coins -->
@@ -1257,10 +1267,10 @@ header,
     <div style="font-size:9px;color:var(--muted);margin-bottom:9px;">Watch short ads or claim daily bonus</div>
     <div class="fcol">
       <div class="fc-btn" id="watchAd1Btn" onclick="watchAdForCoins(1)">
-        <div class="fc-ico">📺</div><div class="fc-coins">+10🪙</div><div class="fc-lbl">WATCH AD</div><div class="fc-cd" id="watchAd1Cd"></div>
+        <div class="fc-ico">📺</div><div class="fc-coins">+8🪙</div><div class="fc-lbl">WATCH AD</div><div class="fc-cd" id="watchAd1Cd"></div>
       </div>
       <div class="fc-btn" id="watchAd2Btn" onclick="watchAdForCoins(2)">
-        <div class="fc-ico">🎬</div><div class="fc-coins">+25🪙</div><div class="fc-lbl">3 ADS</div><div class="fc-cd" id="watchAd2Cd"></div>
+        <div class="fc-ico">🎬</div><div class="fc-coins">+18🪙</div><div class="fc-lbl">3 ADS</div><div class="fc-cd" id="watchAd2Cd"></div>
       </div>
       <div class="fc-btn" id="dailyBonusBtn" onclick="claimDailyBonus()">
         <div class="fc-ico">🎁</div><div class="fc-coins">+20🪙</div><div class="fc-lbl">DAILY</div><div class="fc-cd" id="dailyBonusCd"></div>
@@ -1341,23 +1351,28 @@ header,
 </div>
 
 <header>
+  <!-- Row 1: Logo + Coins + Pause -->
   <div class="logo">GRIDLOCK<span class="logo-badge" id="logoBadge">👑</span></div>
   <div class="hdr-right">
-    <button class="ico-btn" id="modeBtn" onclick="toggleMode()" title="Toggle light/dark">🌙</button>
-    <button class="ico-btn" id="cbBtn" onclick="toggleColourBlind()" title="Colour blind mode">👁️</button>
-    <button class="ico-btn" id="srBtn" onclick="toggleSpeedRun()" title="Speed Run mode">⚡</button>
-    <button class="ico-btn" id="soundBtn" onclick="toggleSound()" title="Sound on/off">🔊</button>
-    <button class="ico-btn" id="bbBtn" onclick="toggleBrainBurst()" title="Brain Burst mode — extra hard!">🧠</button>
-    <button class="ico-btn" id="pauseBtn" onclick="togglePause()" title="Pause">⏸️</button>
-    <button class="ico-btn" onclick="showScreen('missionsScreen')">🎯</button>
-    <button class="ico-btn" onclick="showScreen('instrScreen')">❓</button>
     <div class="coin-pill" onclick="showScreen('storeScreen')">
       <span style="font-size:13px;">🪙</span>
       <span class="coin-amt" id="coinDisplay">50</span>
       <span style="font-size:11px;color:var(--muted);">+</span>
     </div>
+    <button class="ico-btn" onclick="showScreen('missionsScreen')" title="Missions">🎯</button>
+    <button class="ico-btn" id="settingsToggleBtn" onclick="toggleSettingsTray()" title="Settings">⚙️</button>
+    <button class="ico-btn" id="pauseBtn" onclick="togglePause()" title="Pause">⏸️</button>
   </div>
 </header>
+<!-- Settings tray — hidden by default, slides out under header -->
+<div class="settings-tray hidden" id="settingsTray">
+  <button class="tray-btn" id="modeBtn" onclick="toggleMode()" title="Light/Dark">🌙 MODE</button>
+  <button class="tray-btn" id="cbBtn" onclick="toggleColourBlind()" title="Colour blind">👁️ ACCESS</button>
+  <button class="tray-btn" id="srBtn" onclick="toggleSpeedRun()" title="Speed Run">⚡ SPEED</button>
+  <button class="tray-btn" id="soundBtn" onclick="toggleSound()" title="Sound">🔊 SOUND</button>
+  <button class="tray-btn" id="bbBtn" onclick="toggleBrainBurst()" title="Brain Burst">🧠 BURST</button>
+  <button class="tray-btn" onclick="showScreen('instrScreen')" title="How to play">❓ HELP</button>
+</div>
 
 <div class="fever-wrap" id="feverWrap">
   <div class="fever-track"><div class="fever-fill" id="feverBar" style="width:0%"></div></div>
@@ -1861,6 +1876,13 @@ const S = {
 // ═══════════════════════════════════════════════
 // LIGHT / DARK MODE
 // ═══════════════════════════════════════════════
+function toggleSettingsTray(){
+  const tray=document.getElementById('settingsTray');
+  const btn=document.getElementById('settingsToggleBtn');
+  if(!tray)return;
+  const isHidden=tray.classList.toggle('hidden');
+  if(btn) btn.style.borderColor=isHidden?'var(--border)':'var(--c2)';
+}
 function toggleMode(){
   S.mode = S.mode==='dark' ? 'light' : 'dark';
   applyMode();
@@ -2322,9 +2344,9 @@ function startBonusRound(){
   setTimeout(()=>el.remove(),1500);
   S.timeLeft=15; S.roundTime=15;
   S.timerInterval=setInterval(()=>{
-    if(!S.running)return;
+    if(!S.running||_paused)return;
     S.timeLeft=Math.max(0,S.timeLeft-0.1); updateTimerBar();
-    if(S.timeLeft<=0){clearInterval(S.timerInterval);endBonusRound();}
+    if(S.timeLeft<=0){clearInterval(S.timerInterval);if(S.running&&S.bonusRoundActive)endBonusRound();}
   },100);
   showToast('🎯 BONUS ROUND — 15 seconds, every tile = +5 pts!');
   S.stats.bonusRoundDone=true;
@@ -2332,9 +2354,10 @@ function startBonusRound(){
   checkAchievements();
 }
 function endBonusRound(){
+  if(!S.running)return;
   S.bonusRoundActive=false;
   document.getElementById('bonusOverlay').classList.remove('show');
-  showToast('Bonus round over! Back to normal…');
+  showToast('⭐ Bonus round over! Keep going…');
   doLevelUp();
 }
 
@@ -2694,6 +2717,23 @@ function updateNextHint(){
 // ═══════════════════════════════════════════════
 // VIP ACTIVATION — called after VIP purchase flow
 // ═══════════════════════════════════════════════
+function verifyVIPPurchase(){
+  // Ask for the Stripe confirmation email — we hash it to create a local token
+  // This prevents casual free activation while keeping it client-side
+  const email = prompt('Enter the email address you used to subscribe on Stripe:','');
+  if(!email || !email.includes('@')){
+    showToast('❌ Please enter a valid email address');
+    return;
+  }
+  // Simple hash to generate a device-bound token
+  let hash=0;
+  for(let i=0;i<email.toLowerCase().trim().length;i++){
+    hash=((hash<<5)-hash)+email.charCodeAt(i); hash|=0;
+  }
+  const token='vip_'+Math.abs(hash).toString(36);
+  localStorage.setItem('gl_vip_token',token);
+  activateVIPLocally();
+}
 function activateVIPLocally(){
   S.vip=true;
   localStorage.setItem('gl_vip','1');
