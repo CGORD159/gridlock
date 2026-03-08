@@ -2441,10 +2441,14 @@ function startBonusRound(){
 }
 function endBonusRound(){
   if(!S.running)return;
+  if(!S.bonusRoundActive)return; // guard against double-fire
   S.bonusRoundActive=false;
+  clearInterval(S.timerInterval); // kill bonus timer explicitly
+  S.timerInterval=null;
   document.getElementById('bonusOverlay').classList.remove('show');
   showToast('⭐ Bonus round over! Keep going…');
-  doLevelUp();
+  // Small delay so any in-flight timer callbacks see bonusRoundActive=false before doLevelUp restarts
+  setTimeout(()=>doLevelUp(), 50);
 }
 
 // ═══════════════════════════════════════════════
@@ -3613,7 +3617,8 @@ function isCompatible(idx, chainColor){
 function onTileDown(idx){
   if(!S.running||S.animating||!S.grid[idx])return;
   if((S.blockedTiles||new Set()).has(idx)){showToast('🔒 Blocked! Clear surrounding tiles first');return;}
-  if(S.frozenTiles.has(idx)){showToast('❄️ Frozen! Include in a chain to unfreeze');return;}
+  // Frozen tiles can be added mid-chain but cannot START a chain
+  if(S.frozenTiles.has(idx)&&S.selected.length===0){showToast('❄️ Frozen! Start your chain from a normal tile');return;}
   const pos=S.selected.indexOf(idx);
   if(S.selected.length===0){S.selected.push(idx);refreshVisuals();updateComboUI();return;}
   if(pos>=0){S.selected.splice(pos+1);refreshVisuals();updateComboUI();return;}
@@ -3622,12 +3627,19 @@ function onTileDown(idx){
   if(isCompatible(idx,chainColor)&&isAdj(last,idx)){
     S.selected.push(idx);refreshVisuals();updateComboUI();playTick();
   } else {
-    clearSelection();S.selected.push(idx);refreshVisuals();updateComboUI();
+    clearSelection();
+    // If it's frozen, don't restart the selection with it
+    if(!S.frozenTiles.has(idx)){S.selected.push(idx);refreshVisuals();updateComboUI();}
   }
 }
 function onTileDrag(idx){
   if(!S.running||S.animating||!S.grid[idx])return;
-  if(S.selected.length===0){onTileDown(idx);return;}
+  if((S.blockedTiles||new Set()).has(idx))return;
+  if(S.selected.length===0){
+    // Can't start drag from a frozen tile
+    if(!S.frozenTiles.has(idx)) onTileDown(idx);
+    return;
+  }
   const pos=S.selected.indexOf(idx);
   if(pos===S.selected.length-1)return;
   if(pos>=0){S.selected.splice(pos+1);refreshVisuals();updateComboUI();return;}
@@ -3793,6 +3805,8 @@ function updateTimerBar(){
 }
 function onTimerEnd(){
   clearInterval(S.timerInterval);
+  // Never penalise player if bonus round just ended and regular timer hasn't fully started
+  if(S.bonusRoundActive) return;
   clearHotTiles();
   if(S.streak>=3) showStreakProtect();
   else loseLife();
@@ -3841,16 +3855,20 @@ function doLevelUp(){
   S.chainsMadeThisRound=0;
 
   // ── INTERSTITIAL AD every 4 levels ──────────────
-  // Pause timer, show ad, then resume level setup
   if(S.level>1 && S.level%4===0 && typeof adBreak!=='undefined'){
     clearInterval(S.timerInterval);
+    let setupCalled=false;
+    const safeSetup=()=>{ if(!setupCalled){setupCalled=true;_doLevelUpSetup();} };
+    // Safety: always call setup after 4s even if afterAd never fires
+    const adFallback=setTimeout(safeSetup, 4000);
     adBreak({
       type:'next',
       name:'between-levels',
       beforeAd:()=>{ clearInterval(S.timerInterval); },
-      afterAd:()=>{ _doLevelUpSetup(); }
+      afterAd:()=>{ clearTimeout(adFallback); safeSetup(); },
+      adBreakDone:()=>{ clearTimeout(adFallback); safeSetup(); }
     });
-    return; // _doLevelUpSetup called in afterAd callback
+    return;
   }
   _doLevelUpSetup();
 }
