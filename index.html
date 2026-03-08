@@ -983,10 +983,10 @@ header,
   </div>
   <div class="instr-sec">
     <div class="instr-title" style="color:var(--c4);">💡 POWER-UPS</div>
-    <div class="instr-row"><div class="instr-ico">💡</div><div class="instr-text"><strong>HINT 25🪙</strong> — Highlights the biggest matching group.</div></div>
-    <div class="instr-row"><div class="instr-ico">🔀</div><div class="instr-text"><strong>SHUFFLE 40🪙</strong> — Randomises all tiles when stuck.</div></div>
-    <div class="instr-row"><div class="instr-ico">💣</div><div class="instr-text"><strong>BOMB 60🪙</strong> — Blasts all tiles of one colour.</div></div>
-    <div class="instr-row"><div class="instr-ico">⏱️</div><div class="instr-text"><strong>+TIME 50🪙</strong> — Adds 8 seconds to the clock.</div></div>
+    <div class="instr-row"><div class="instr-ico">💡</div><div class="instr-text"><strong>HINT 30🪙</strong> — Highlights the biggest matching group.</div></div>
+    <div class="instr-row"><div class="instr-ico">🔀</div><div class="instr-text"><strong>SHUFFLE 50🪙</strong> — Randomises all tiles when stuck.</div></div>
+    <div class="instr-row"><div class="instr-ico">💣</div><div class="instr-text"><strong>BOMB 75🪙</strong> — Blasts all tiles of one colour.</div></div>
+    <div class="instr-row"><div class="instr-ico">⏱️</div><div class="instr-text"><strong>+TIME 60🪙</strong> — Adds 8 seconds to the clock.</div></div>
   </div>
   <div class="instr-sec">
     <div class="instr-title" style="color:var(--c5);">🔥 FEVER &amp; BONUS ROUND</div>
@@ -1282,7 +1282,7 @@ header,
         <div class="fc-ico">🎬</div><div class="fc-coins">+18🪙</div><div class="fc-lbl">3 ADS</div><div class="fc-cd" id="watchAd2Cd"></div>
       </div>
       <div class="fc-btn" id="dailyBonusBtn" onclick="claimDailyBonus()">
-        <div class="fc-ico">🎁</div><div class="fc-coins">+20🪙</div><div class="fc-lbl">DAILY</div><div class="fc-cd" id="dailyBonusCd"></div>
+        <div class="fc-ico">🎁</div><div class="fc-coins">+15🪙</div><div class="fc-lbl">DAILY</div><div class="fc-cd" id="dailyBonusCd"></div>
       </div>
     </div>
   </div>
@@ -1341,10 +1341,10 @@ header,
 <div class="streak-protect hidden" id="streakProtect">
   <div>
     <div class="sp-text">🔥 PROTECT <span id="spNum">5</span>-CHAIN STREAK!</div>
-    <div class="sp-sub">Spend 15🪙 to keep it going</div>
+    <div class="sp-sub">Spend 20🪙 to keep it going</div>
   </div>
   <div class="sp-cd" id="spCd">3</div>
-  <button class="sp-btn" onclick="protectStreak()">SAVE (15🪙)</button>
+  <button class="sp-btn" onclick="protectStreak()">SAVE (20🪙)</button>
   <button class="sp-skip" onclick="dismissStreakProtect()">SKIP</button>
 </div>
 
@@ -3933,34 +3933,44 @@ function watchAdForCoins(slot){
   const cdKey=`gl_adcd_${slot}`;
   const last=parseInt(localStorage.getItem(cdKey)||'0');
   const cdMs=30*60*1000;
-  if(Date.now()-last<cdMs){showToast(`⏳ Come back in ${Math.ceil((cdMs-(Date.now()-last))/60000)}m`);return;}
-  const reward=slot===1?ECONOMY.watchAd1:ECONOMY.watchAd2;
-
-  // Check if adBreak API is available (it won't be in dev/localhost)
-  if(typeof adBreak==='undefined'){
-    showToast('Ads not available right now — try again later');
+  if(Date.now()-last<cdMs){
+    showToast(`⏳ Come back in ${Math.ceil((cdMs-(Date.now()-last))/60000)}m`);
     return;
   }
+  const reward=slot===1?ECONOMY.watchAd1:ECONOMY.watchAd2;
+
+  // adBreak is defined in the head — check it's the real API (not just our stub)
+  const adReady = typeof adBreak!=='undefined' && typeof window.adsbygoogle!=='undefined';
+  if(!adReady){
+    showToast('📺 Ads loading — try again in a moment');
+    return;
+  }
+
+  showToast('📺 Loading ad…');
+  let rewarded=false;
 
   adBreak({
     type:'reward',
     name: slot===1 ? 'watch-ad-coins-1' : 'watch-ad-coins-2',
-    beforeReward:(showAdFn)=>{ showAdFn(); },
+    beforeReward:(showAdFn)=>{
+      showAdFn(); // user already tapped, show immediately
+    },
     adViewed:()=>{
-      // Only fires when the FULL ad was watched — safe to grant reward here
+      rewarded=true;
       S.coins+=reward; saveCoins(); updateUI();
       localStorage.setItem(cdKey, Date.now());
       updateFreeUI();
-      showToast(`+${reward}🪙 Thanks for watching! 🎉`);
+      showToast(`+${reward}🪙 Coins added! Thanks for watching 🎉`);
       playLevelUpSound();
     },
     adDismissed:()=>{
-      showToast('❌ Watch the full ad to earn coins');
+      if(!rewarded) showToast('❌ Watch the full ad to earn coins');
     },
-    adBreakDone:(placementInfo)=>{
-      // placementInfo.breakStatus tells us what happened
-      if(placementInfo.breakStatus==='notReady'){
-        showToast('No ad available right now — try again soon');
+    adBreakDone:(info)=>{
+      if(info.breakStatus==='notReady' || info.breakStatus==='noAdPreloaded'){
+        showToast('📺 No ad available right now — try again soon');
+      } else if(info.breakStatus==='frequencyCapped'){
+        showToast('⏳ Ad limit reached — come back in 30 mins');
       }
     }
   });
