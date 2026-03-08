@@ -245,7 +245,9 @@ html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
 /* ═══════════════════════════════════════════════
    SCREENS
    ═══════════════════════════════════════════════ */
-.screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;
+.screen{position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;
+  background:var(--bg);display:flex;flex-direction:column;
   align-items:center;justify-content:flex-start;z-index:200;padding:18px 20px 28px;
   overflow-y:auto;transition:background .3s;}
 .screen.hidden{display:none;}
@@ -684,35 +686,14 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
    ═══════════════════════════════════════════════ */
 #app{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;position:relative;}
 
-/* All fixed screens must be constrained to the 480px column, centred */
-.screen{
-  left:50% !important;
-  transform:translateX(-50%) !important;
-  width:100% !important;
-  max-width:480px !important;
-}
+/* Overlays: pause, streak-protect — also centred */
+.pause-overlay{position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;}
 
-/* Overlays that use position:fixed also need centring */
-.pause-overlay{
-  left:50% !important;
-  transform:translateX(-50%) !important;
-  width:480px !important;
-  max-width:480px !important;
-}
-
-/* Toast, achievement slides, milestone pops — all centre on the app column */
-.toast,.ach-new{left:50% !important;transform:translateX(-50%) !important;}
-.milestone-pop{left:50% !important;transform:translate(-50%,-50%) !important;}
-
-/* Desktop background glow behind the column */
+/* Desktop: darken the gutters, keep game column in its own bg */
 @media(min-width:520px){
-  body{background:#050508;}
-  #app::before{content:'';position:absolute;top:0;left:-60px;right:-60px;bottom:0;
-    background:var(--bg);border-left:1px solid var(--border);border-right:1px solid var(--border);
-    pointer-events:none;z-index:-1;}
-  body::after{content:'';position:fixed;inset:0;
-    background:radial-gradient(ellipse 600px 400px at 50% 0%,rgba(0,229,255,.03) 0%,transparent 80%);
-    pointer-events:none;z-index:0;}
+  body{background:#06060a;}
+  #app{box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);}
 }
 
 /* ═══════════════════════════════════════════════
@@ -1226,6 +1207,13 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
     <button onclick="giftCoins()" style="background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3);border-radius:8px;padding:7px 18px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);cursor:pointer;letter-spacing:2px;">SEND A GIFT 🎁</button>
   </div>
 
+  <!-- Buy a Heart -->
+  <div style="width:100%;max-width:340px;background:rgba(255,45,85,.06);border:1px solid rgba(255,45,85,.3);border-radius:12px;padding:12px;margin-bottom:10px;flex-shrink:0;text-align:center;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c1);letter-spacing:2px;margin-bottom:3px;">❤️ EXTRA HEART</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Add a life mid-game or before starting. Max 5 hearts total.</div>
+    <button onclick="buyHeart()" style="background:rgba(255,45,85,.18);border:1px solid rgba(255,45,85,.4);border-radius:8px;padding:7px 18px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c1);cursor:pointer;letter-spacing:2px;">❤️ +1 HEART — 40🪙</button>
+  </div>
+
   <!-- Streak Freeze -->
   <div style="width:100%;max-width:340px;background:rgba(0,229,255,.04);border:1px solid rgba(100,180,255,.25);border-radius:12px;padding:11px;margin-bottom:10px;flex-shrink:0;text-align:center;">
     <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);letter-spacing:2px;margin-bottom:3px;">🧊 STREAK FREEZE</div>
@@ -1321,6 +1309,7 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
 
 <!-- ═══════════ GAME HUD ═══════════ -->
 <div class="speedrun-badge" id="speedrunBadge">⚡ SPEED RUN MODE</div>
+<div class="bb-badge" id="bbBadge">🧠 BRAIN BURST — BONUS COLOURS ON!</div>
 
 <div class="top-score-strip" id="topScoreStrip" style="display:none;">
   <div class="tss-inner">
@@ -1337,6 +1326,7 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
     <button class="ico-btn" id="cbBtn" onclick="toggleColourBlind()" title="Colour blind mode">👁️</button>
     <button class="ico-btn" id="srBtn" onclick="toggleSpeedRun()" title="Speed Run mode">⚡</button>
     <button class="ico-btn" id="soundBtn" onclick="toggleSound()" title="Sound on/off">🔊</button>
+    <button class="ico-btn" id="bbBtn" onclick="toggleBrainBurst()" title="Brain Burst mode — extra hard!">🧠</button>
     <button class="ico-btn" id="pauseBtn" onclick="togglePause()" title="Pause">⏸️</button>
     <button class="ico-btn" onclick="showScreen('missionsScreen')">🎯</button>
     <button class="ico-btn" onclick="showScreen('instrScreen')">❓</button>
@@ -1403,10 +1393,11 @@ html[data-cb="on"] .tile::before{content:attr(data-sym);position:absolute;font-s
 <div class="bonus-overlay hidden" id="bonusOverlay"></div>
 
 <div class="powerups">
-  <button class="pu-btn" style="--pc:var(--c2)" onclick="useHint()"><span class="pu-ico">💡</span><span class="pu-nm">HINT</span><span class="pu-cost">25🪙</span></button>
-  <button class="pu-btn" style="--pc:var(--c4)" onclick="useShuffle()"><span class="pu-ico">🔀</span><span class="pu-nm">SHUFFLE</span><span class="pu-cost">40🪙</span></button>
-  <button class="pu-btn" style="--pc:var(--c1)" onclick="useBomb()"><span class="pu-ico">💣</span><span class="pu-nm">BOMB</span><span class="pu-cost">60🪙</span></button>
-  <button class="pu-btn" style="--pc:var(--c3)" onclick="useTime()"><span class="pu-ico">⏱️</span><span class="pu-nm">+TIME</span><span class="pu-cost">50🪙</span></button>
+  <button class="pu-btn" style="--pc:var(--c2)" onclick="useHint()"><span class="pu-ico">💡</span><span class="pu-nm">HINT</span><span class="pu-cost">30🪙</span></button>
+  <button class="pu-btn" style="--pc:var(--c4)" onclick="useShuffle()"><span class="pu-ico">🔀</span><span class="pu-nm">SHUFFLE</span><span class="pu-cost">50🪙</span></button>
+  <button class="pu-btn" style="--pc:var(--c1)" onclick="useBomb()"><span class="pu-ico">💣</span><span class="pu-nm">BOMB</span><span class="pu-cost">75🪙</span></button>
+  <button class="pu-btn" style="--pc:var(--c3)" onclick="useTime()"><span class="pu-ico">⏱️</span><span class="pu-nm">+TIME</span><span class="pu-cost">60🪙</span></button>
+  <button class="pu-btn" style="--pc:#ff2d55" id="buyHeartBtn" onclick="buyHeart()"><span class="pu-ico">❤️</span><span class="pu-nm">HEART</span><span class="pu-cost" id="heartCostDisp">40🪙</span></button>
 </div>
 
 <!-- ═══════════ PAUSE OVERLAY ═══════════ -->
@@ -1470,7 +1461,9 @@ const ECONOMY = {
   bombCost:        75,   // bomb (was 60)
   timeCost:        60,   // time (was 50)
   // Puzzle system
-  puzzlePieceInterval: 2, // earn 1 piece every N levels completed
+  puzzlePieceInterval: 2,
+  heartCost: 40,   // buy 1 extra heart mid-game
+  maxHearts:  5,   // hard cap on simultaneous hearts
 };
 
 // ═══════════════════════════════════════════════
@@ -2817,17 +2810,14 @@ function buyVIP(){
 function generateGrid(rngFn){
   const rng=rngFn||Math.random.bind(Math);
   const colors=COLORS.slice(0,S.colorsInPlay);
-
-  // Higher levels = fewer clusters = harder matches to find.
-  // We control this via "cluster probability": at low levels tiles cluster
-  // more (easy chains), at high levels they're near-random (sparse matches).
-  const clusterStrength=Math.max(0, 0.55 - (S.level * 0.035)); // 0.55→0.0 over ~16 levels
-  // Start with fully random grid
+  // clusterStrength: 1.0=fully grouped (easy), 0=random+broken (hard)
+  // L1→0.52, L6→0.27, L13→0.0  — steeper ramp than v8
+  const clusterStrength=Math.max(0, 0.52-(S.level*0.042));
   S.grid=Array.from({length:S.cols*S.rows},()=>colors[Math.floor(rng()*colors.length)]);
-
-  if(clusterStrength>0.05){
-    // At lower levels, replace some tiles with neighbours' colours to create clusters
-    for(let pass=0;pass<2;pass++){
+  // Low levels: clustering passes to create obvious chains
+  if(clusterStrength>0.04){
+    const passes=clusterStrength>0.3?3:2;
+    for(let pass=0;pass<passes;pass++){
       for(let i=0;i<S.grid.length;i++){
         if(rng()<clusterStrength){
           const adj=getAdjacent(i);
@@ -2836,38 +2826,27 @@ function generateGrid(rngFn){
       }
     }
   }
-  // At levels 8+ also add some deliberate anti-clusters (swap isolated same-colours apart)
-  if(S.level>=8){
+  // Level 6+: actively break up clusters. Probability rises with level.
+  if(S.level>=6){
+    const breakProb=Math.min(0.72,(S.level-5)*0.09);
+    const thresh=S.level>=12?2:3; // break 2-neighbour groups at L12+
     for(let i=0;i<S.grid.length;i++){
       const adj=getAdjacent(i);
-      const sameNeighbours=adj.filter(a=>S.grid[a]===S.grid[i]).length;
-      // If a tile has 3+ same neighbours, randomly swap its colour (break up big clusters)
-      if(sameNeighbours>=3 && rng()<0.45){
-        const otherColors=colors.filter(c=>c!==S.grid[i]);
-        if(otherColors.length) S.grid[i]=otherColors[Math.floor(rng()*otherColors.length)];
+      const sameN=adj.filter(a=>S.grid[a]===S.grid[i]).length;
+      if(sameN>=thresh&&rng()<breakProb){
+        const other=colors.filter(c=>c!==S.grid[i]);
+        if(other.length) S.grid[i]=other[Math.floor(rng()*other.length)];
       }
     }
   }
-
-  S.frozenTiles=new Set();
-  S.wildTiles=new Set();
-  S.bombTiles=new Set();
-  // Inject special tiles at higher levels
-  if(S.level>=3 && !S.isDailyChallenge){
-    const frozenCount=Math.min(Math.floor(S.level/3),3);
-    for(let i=0;i<frozenCount;i++){
-      const idx=Math.floor(rng()*S.grid.length);
-      S.frozenTiles.add(idx);
-    }
+  S.frozenTiles=new Set(); S.wildTiles=new Set(); S.bombTiles=new Set();
+  if(S.level>=3&&!S.isDailyChallenge){
+    const fc=Math.min(Math.floor(S.level/3),4);
+    for(let i=0;i<fc;i++) S.frozenTiles.add(Math.floor(rng()*S.grid.length));
   }
-  if(S.level>=5 && !S.isDailyChallenge){
-    const wildIdx=Math.floor(rng()*S.grid.length);
-    S.wildTiles.add(wildIdx);
-  }
-  if(S.level>=6 && !S.isDailyChallenge && rng()<0.4){
-    const bombIdx=Math.floor(rng()*S.grid.length);
-    S.bombTiles.add(bombIdx);
-  }
+  if(S.level>=5&&!S.isDailyChallenge) S.wildTiles.add(Math.floor(rng()*S.grid.length));
+  if(S.level>=6&&!S.isDailyChallenge&&rng()<Math.min(0.7,0.35+(S.level-6)*0.05))
+    S.bombTiles.add(Math.floor(rng()*S.grid.length));
   S.selected=[]; renderGrid();
 }
 function renderGrid(){
@@ -3001,6 +2980,7 @@ function commitChain(){
   if(S.feverActive)mult*=2;
   if(S.bonusRoundActive)mult+=1; // bonus round extra pts via flat bonus below
   const pts=S.bonusRoundActive ? len*10*mult+len*5 : len*10*mult;
+  showMultPopup(mult,len); showChainMilestone(len);
   const toRemove=[...S.selected];
 
   // Bomb blast bonus: remove all adjacent tiles
@@ -3127,7 +3107,28 @@ function loseLife(){
   clearSelection(); startTimer(); updateUI();
   showToast(`⚠️ Life lost — ${S.lives} remaining`);
 }
-function updateLivesUI(){for(let i=1;i<=3;i++)document.getElementById(`life${i}`).classList.toggle('lost',i>S.lives);}
+function updateLivesUI(){
+  const wrap=document.querySelector('.lives');
+  if(!wrap)return;
+  // rebuild hearts dynamically
+  wrap.querySelectorAll('.life').forEach(e=>e.remove());
+  const show=Math.max(S.lives,3);
+  for(let i=1;i<=show;i++){
+    const sp=document.createElement('span');
+    sp.className='life'+(i>S.lives?' lost':'');
+    sp.textContent='❤️';
+    wrap.appendChild(sp);
+  }
+  // grey out buy-heart button when at cap
+  const btn=document.getElementById('buyHeartBtn');
+  if(btn){
+    const full=S.lives>=ECONOMY.maxHearts;
+    btn.style.opacity=full?'0.35':'1';
+    btn.style.pointerEvents=full?'none':'auto';
+    const cd=document.getElementById('heartCostDisp');
+    if(cd) cd.textContent=full?'FULL':`${ECONOMY.heartCost}🪙`;
+  }
+}
 
 // ═══════════════════════════════════════════════
 // ROUND COMPLETE / LEVEL UP
@@ -3165,6 +3166,7 @@ function doLevelUp(){
     }
   }
 
+  applyBrainBurst(); // Brain Burst: extra colour + faster timer
   const rng=S.isDailyChallenge?seededRNG(todaySeed()+S.level*1999):null;
   generateGrid(rng);
   setTimeout(()=>showLevelIntro(S.level,S.chainsNeeded,S.roundTime),200);
@@ -3335,6 +3337,15 @@ function tryRevive(){
   S.lives=1; S.running=true;
   hideScreen('gameOverScreen'); updateLivesUI(); updateUI(); startTimer();
   showToast('💚 Revived! 1 life — keep going!');
+}
+function buyHeart(){
+  if(S.lives>=ECONOMY.maxHearts){showToast(`Already at max hearts (${ECONOMY.maxHearts})!`);return;}
+  if(!spendCoins(ECONOMY.heartCost)){showToast(`Need ${ECONOMY.heartCost}🪙 for a heart!`);showScreen('storeScreen');return;}
+  S.lives++;
+  updateLivesUI(); updateUI();
+  showToast(`❤️ +1 Heart! ${S.lives} lives remaining`);
+  spawnConfetti();
+  try{if(navigator.vibrate)navigator.vibrate([30,20,30]);}catch(e){}
 }
 
 // ═══════════════════════════════════════════════
@@ -3629,6 +3640,63 @@ function tutorialNext(){
   } else {
     renderTutStep();
   }
+}
+
+
+// ═══════════════════════════════════════════════
+// CHAIN MILESTONE FLASH — shows big text on notable chains
+// ═══════════════════════════════════════════════
+function showChainMilestone(len){
+  const milestones={5:'NICE!',7:'BLAZING!',10:'INSANE!',15:'LEGENDARY!',20:'GODLIKE!'};
+  let msg=null;
+  for(const [threshold,label] of Object.entries(milestones).reverse()){
+    if(len>=parseInt(threshold)){msg=label;break;}
+  }
+  if(!msg)return;
+  const el=document.createElement('div');
+  el.className='chain-flash';
+  el.textContent=msg;
+  document.getElementById('app').appendChild(el);
+  setTimeout(()=>el.remove(),900);
+}
+
+// ═══════════════════════════════════════════════
+// MULTIPLIER POPUP — floats above grid on commit
+// ═══════════════════════════════════════════════
+function showMultPopup(mult,len){
+  if(mult<2)return;
+  const el=document.createElement('div');
+  el.className='mult-popup';
+  const colors={2:'#00e5ff',3:'#ff6b00',5:'#ff2d55'};
+  const col=mult>=5?colors[5]:mult>=3?colors[3]:colors[2];
+  const gridEl=document.getElementById('grid');
+  const rect=gridEl?gridEl.getBoundingClientRect():{top:window.innerHeight/2};
+  el.style.top=(rect.top-50)+'px';
+  el.style.fontSize=(28+mult*4)+'px';
+  el.style.color=col;
+  el.style.textShadow=`0 0 20px ${col}`;
+  el.innerHTML=`${mult}× <span style="font-size:.6em;opacity:.8">(${len} tiles)</span>`;
+  document.getElementById('app').appendChild(el);
+  setTimeout(()=>el.remove(),950);
+}
+
+// ═══════════════════════════════════════════════
+// BRAIN BURST MODE — toggleable mode with extra colours
+// and faster timer for hardcore players
+// ═══════════════════════════════════════════════
+const BB_KEY='gl_brainburst_v1';
+function toggleBrainBurst(){
+  S.brainBurst=!S.brainBurst;
+  localStorage.setItem(BB_KEY,S.brainBurst?'1':'');
+  const badge=document.getElementById('bbBadge');
+  if(badge) badge.classList.toggle('show',S.brainBurst&&S.running);
+  showToast(S.brainBurst?'🧠 Brain Burst ON — extra colours, faster rounds!':'🧠 Brain Burst OFF');
+}
+function applyBrainBurst(){
+  if(!S.brainBurst)return;
+  // Add extra colour from level 1; shorten round time by 20%
+  S.colorsInPlay=Math.min(6,S.colorsInPlay+1);
+  S.roundTime=Math.max(6,S.roundTime*0.8);
 }
 
 // ═══════════════════════════════════════════════
