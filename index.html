@@ -2679,6 +2679,272 @@ function checkGiftParams(){
 // ═══════════════════════════════════════════════
 // HOME SCREEN STATS UPDATER
 // ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// XP / RANK SYSTEM
+// Players earn XP from: scores, chains, levels, daily bonus
+// XP is purely cosmetic — bragging rights + profile badge
+// ═══════════════════════════════════════════════
+const XP_RANKS = [
+  {name:'ROOKIE',     color:'#6a6a8a', min:0},
+  {name:'CHAINER',    color:'#39ff14', min:500},
+  {name:'BLAZER',     color:'#00e5ff', min:1500},
+  {name:'CRUSHER',    color:'#ff6b00', min:3500},
+  {name:'GRIDMASTER', color:'#ffd700', min:7000},
+  {name:'LEGEND',     color:'#ff2d55', min:15000},
+  {name:'ELITE',      color:'#bf5af2', min:30000},
+];
+const XP_KEY = 'gl_xp_v1';
+function loadXP(){return parseInt(localStorage.getItem(XP_KEY)||'0');}
+function saveXP(xp){localStorage.setItem(XP_KEY,String(xp));}
+function awardXP(amount){
+  const xp=loadXP()+amount;
+  saveXP(xp);
+  const before=getRank(xp-amount);
+  const after=getRank(xp);
+  if(after.name!==before.name){
+    setTimeout(()=>showToast(`🏅 RANK UP! You're now ${after.name}!`),400);
+  }
+  return xp;
+}
+function getRank(xp){
+  let rank=XP_RANKS[0];
+  for(const r of XP_RANKS){if(xp>=r.min)rank=r;}
+  return rank;
+}
+function getXPProgress(xp){
+  let rankIdx=0;
+  for(let i=0;i<XP_RANKS.length;i++){if(xp>=XP_RANKS[i].min)rankIdx=i;}
+  if(rankIdx>=XP_RANKS.length-1) return {pct:100,toNext:0,nextName:'MAX'};
+  const cur=XP_RANKS[rankIdx].min;
+  const next=XP_RANKS[rankIdx+1].min;
+  const pct=Math.round(((xp-cur)/(next-cur))*100);
+  return {pct,toNext:next-xp,nextName:XP_RANKS[rankIdx+1].name};
+}
+function updateXPBar(){
+  const xp=loadXP();
+  const rank=getRank(xp);
+  const prog=getXPProgress(xp);
+  const lbl=document.getElementById('homeRankLabel');
+  const fill=document.getElementById('homeXpFill');
+  const next=document.getElementById('homeXpNext');
+  if(lbl){lbl.textContent=`🏅 ${rank.name}`;lbl.style.color=rank.color;}
+  if(fill)fill.style.width=prog.pct+'%';
+  if(next)next.textContent=prog.toNext>0?`${xp.toLocaleString()} XP · ${prog.toNext} to ${prog.nextName}`:`${xp.toLocaleString()} XP — MAX RANK`;
+}
+// Award XP at end of game
+function awardGameXP(){
+  const xp=Math.floor(S.score/10)+S.level*5+S.totalChains*2;
+  awardXP(xp);
+}
+
+// ═══════════════════════════════════════════════
+// STREAK REWARD CALENDAR
+// Shows a 7-day login calendar with escalating rewards
+// Day 7 = big bonus
+// ═══════════════════════════════════════════════
+const STREAK_REWARDS=[
+  {day:1,coins:5,icon:'🪙'},
+  {day:2,coins:8,icon:'🪙'},
+  {day:3,coins:12,icon:'💎'},
+  {day:4,coins:15,icon:'💎'},
+  {day:5,coins:20,icon:'🔥'},
+  {day:6,coins:25,icon:'🔥'},
+  {day:7,coins:50,icon:'👑'},
+];
+function renderStreakCalendar(){
+  const el=document.getElementById('streakCalDays'); if(!el)return;
+  const streak=Math.max(0,S.stats.loginStreak||0);
+  const today=streak; // day the player is on (1-based progress)
+  el.innerHTML=STREAK_REWARDS.map(r=>{
+    const done=streak>=r.day;
+    const isToday=streak===r.day-1; // today they could claim this next
+    const cls=done?'sc-day done':isToday?'sc-day today':'sc-day future';
+    return `<div class="${cls}">
+      <div class="sc-d-num">D${r.day}</div>
+      <div class="sc-d-ico">${done?'✅':r.icon}</div>
+      <div class="sc-d-coins">${done?'done':'+'+r.coins+'🪙'}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// SEASONAL BANNER
+// Shows current season theme — rotates every ~90 days
+// ═══════════════════════════════════════════════
+const SEASONS=[
+  {name:'SPRING BLOOM',    emoji:'🌸', bg:'linear-gradient(135deg,rgba(255,182,193,.18),rgba(255,105,180,.08))', color:'#ff69b4', start:[3,20],end:[6,20]},
+  {name:'SUMMER SURGE',    emoji:'☀️', bg:'linear-gradient(135deg,rgba(255,200,0,.15),rgba(255,120,0,.08))',    color:'#ff9500', start:[6,21],end:[9,22]},
+  {name:'AUTUMN BLAZE',    emoji:'🍂', bg:'linear-gradient(135deg,rgba(255,100,0,.15),rgba(180,60,0,.08))',     color:'#ff6300', start:[9,23],end:[12,20]},
+  {name:'WINTER FROST',    emoji:'❄️', bg:'linear-gradient(135deg,rgba(100,180,255,.15),rgba(60,120,220,.08))', color:'#60a8ff', start:[12,21],end:[3,19]},
+];
+function getCurrentSeason(){
+  const now=new Date();
+  const m=now.getMonth()+1, d=now.getDate();
+  const val=m*100+d;
+  if(val>=320&&val<=620) return SEASONS[0];
+  if(val>=621&&val<=922) return SEASONS[1];
+  if(val>=923&&val<=1220) return SEASONS[2];
+  return SEASONS[3];
+}
+function renderSeasonBanner(){
+  const el=document.getElementById('homeSeasonBanner'); if(!el)return;
+  const s=getCurrentSeason();
+  const now=new Date();
+  // Days until season ends — rough calc
+  el.style.background=s.bg;
+  el.style.border=`1px solid ${s.color}33`;
+  el.innerHTML=`
+    <div class="sb-emoji">${s.emoji}</div>
+    <div class="sb-body">
+      <div class="sb-title" style="color:${s.color};">${s.name} SEASON</div>
+      <div class="sb-sub">Seasonal bonus: VIP themes 20% off · Tap for store</div>
+    </div>
+    <div class="sb-days" style="color:${s.color};">🎁</div>`;
+}
+
+// ═══════════════════════════════════════════════
+// REFERRAL SYSTEM
+// Each player gets a deterministic code from their name + high score seed
+// When someone enters a valid code, both get 20 coins (one-time)
+// ═══════════════════════════════════════════════
+const REF_CLAIMED_KEY='gl_ref_claimed_v1';
+const REF_GIVEN_KEY='gl_ref_given_v1';
+function getMyReferralCode(){
+  let code=localStorage.getItem('gl_my_ref_code');
+  if(!code){
+    // Generate a random 6-char code, store it
+    code=Math.random().toString(36).substring(2,8).toUpperCase();
+    localStorage.setItem('gl_my_ref_code',code);
+  }
+  return code;
+}
+function renderReferralCard(){
+  const el=document.getElementById('refCodeDisplay'); if(!el)return;
+  el.textContent=getMyReferralCode();
+  const status=document.getElementById('refStatus');
+  const claimed=parseInt(localStorage.getItem(REF_GIVEN_KEY)||'0');
+  if(status) status.textContent=claimed>0?`✅ You've gifted ${claimed} friend${claimed>1?'s':''} 20🪙 each`:'Share your code — earn 20🪙 when a friend uses it';
+}
+function copyReferralCode(){
+  const code=getMyReferralCode();
+  const text=`🎮 Play GRIDLOCK with me! Use my code ${code} when you start for 20 free coins.\n👉 ${location.origin}`;
+  if(navigator.share) navigator.share({title:'Play GRIDLOCK!',text}).catch(()=>{});
+  else navigator.clipboard?.writeText(text).then(()=>showToast('Referral link copied! 📋'));
+}
+function checkReferralParam(){
+  const p=new URLSearchParams(location.search);
+  const code=p.get('ref');
+  if(!code)return;
+  const already=localStorage.getItem(REF_CLAIMED_KEY);
+  if(already){showToast('Referral already claimed!');return;}
+  const myCode=getMyReferralCode();
+  if(code.toUpperCase()===myCode){showToast("Can't use your own code!");return;}
+  // Reward the new player
+  S.coins+=20; saveCoins(); updateUI();
+  localStorage.setItem(REF_CLAIMED_KEY,code);
+  showToast('🎉 Referral bonus! +20🪙 Welcome gift!');
+  // In a real implementation you'd also reward the referrer via a backend.
+  // For now we show the toast; the referrer is thanked when friends use the link.
+}
+
+// ═══════════════════════════════════════════════
+// TUTORIAL OVERLAY — shown on first ever play
+// ═══════════════════════════════════════════════
+const TUT_KEY='gl_tut_done_v1';
+const TUT_STEPS=[
+  {icon:'🎮',title:'WELCOME TO GRIDLOCK',body:'Chain matching tiles to clear the board and score points. The bigger the chain, the higher the multiplier!'},
+  {icon:'👆',title:'TAP TO SELECT',body:'Tap any tile to start a chain. Then tap or drag to adjacent tiles of the same colour to extend your chain.'},
+  {icon:'⚡',title:'COMMIT YOUR CHAIN',body:'When you\'re happy with your chain, tap the ⚡ CHAIN button — or press Space on desktop — to clear the tiles and score!'},
+  {icon:'🔥',title:'MULTIPLIERS',body:'Chains of 3–4 tiles = 2×. Five or six = 3×. Seven or more = a massive 5× multiplier! Hunt for big chains.'},
+  {icon:'🌡️',title:'FEVER MODE',body:'Chain quickly! Three rapid chains fills the Fever bar. In Fever, ALL multipliers double for 8 seconds. Chain like mad!'},
+  {icon:'🪙',title:'EARN COINS',body:'Level up, complete missions, and watch ads to earn coins. Spend them on power-ups like Hints, Shuffles, and Bombs.'},
+  {icon:'🚀',title:'READY? LET\'S GO!',body:'You\'re all set. Good luck, chain well, and beat your high score! Tap GO to start your first game.'},
+];
+let _tutStep=0;
+function showTutorial(){
+  if(localStorage.getItem(TUT_KEY)) return; // already seen
+  _tutStep=0;
+  renderTutStep();
+  document.getElementById('tutorialOverlay').classList.remove('hidden');
+}
+function renderTutStep(){
+  const s=TUT_STEPS[_tutStep];
+  document.getElementById('tutIcon').textContent=s.icon;
+  document.getElementById('tutTitle').textContent=s.title;
+  document.getElementById('tutBody').textContent=s.body;
+  document.getElementById('tutNextBtn').textContent=_tutStep===TUT_STEPS.length-1?'🚀 LET\'S GO!':'NEXT →';
+  // Dots
+  const dots=document.getElementById('tutDots');
+  dots.innerHTML=TUT_STEPS.map((_,i)=>`<div class="tut-dot${i===_tutStep?' active':''}"></div>`).join('');
+}
+function tutorialNext(){
+  _tutStep++;
+  if(_tutStep>=TUT_STEPS.length){
+    document.getElementById('tutorialOverlay').classList.add('hidden');
+    localStorage.setItem(TUT_KEY,'1');
+    startGame(false);
+  } else {
+    renderTutStep();
+  }
+}
+
+
+// ═══════════════════════════════════════════════
+// CHAIN MILESTONE FLASH — shows big text on notable chains
+// ═══════════════════════════════════════════════
+function showChainMilestone(len){
+  const milestones={5:'NICE!',7:'BLAZING!',10:'INSANE!',15:'LEGENDARY!',20:'GODLIKE!'};
+  let msg=null;
+  for(const [threshold,label] of Object.entries(milestones).reverse()){
+    if(len>=parseInt(threshold)){msg=label;break;}
+  }
+  if(!msg)return;
+  const el=document.createElement('div');
+  el.className='chain-flash';
+  el.textContent=msg;
+  document.getElementById('app').appendChild(el);
+  setTimeout(()=>el.remove(),900);
+}
+
+// ═══════════════════════════════════════════════
+// MULTIPLIER POPUP — floats above grid on commit
+// ═══════════════════════════════════════════════
+function showMultPopup(mult,len){
+  if(mult<2)return;
+  const el=document.createElement('div');
+  el.className='mult-popup';
+  const colors={2:'#00e5ff',3:'#ff6b00',5:'#ff2d55'};
+  const col=mult>=5?colors[5]:mult>=3?colors[3]:colors[2];
+  const gridEl=document.getElementById('grid');
+  const rect=gridEl?gridEl.getBoundingClientRect():{top:window.innerHeight/2};
+  el.style.top=(rect.top-50)+'px';
+  el.style.fontSize=(28+mult*4)+'px';
+  el.style.color=col;
+  el.style.textShadow=`0 0 20px ${col}`;
+  el.innerHTML=`${mult}× <span style="font-size:.6em;opacity:.8">(${len} tiles)</span>`;
+  document.getElementById('app').appendChild(el);
+  setTimeout(()=>el.remove(),950);
+}
+
+// ═══════════════════════════════════════════════
+// BRAIN BURST MODE — toggleable mode with extra colours
+// and faster timer for hardcore players
+// ═══════════════════════════════════════════════
+const BB_KEY='gl_brainburst_v1';
+function toggleBrainBurst(){
+  S.brainBurst=!S.brainBurst;
+  localStorage.setItem(BB_KEY,S.brainBurst?'1':'');
+  const badge=document.getElementById('bbBadge');
+  if(badge) badge.classList.toggle('show',S.brainBurst&&S.running);
+  showToast(S.brainBurst?'🧠 Brain Burst ON — extra colours, faster rounds!':'🧠 Brain Burst OFF');
+}
+function applyBrainBurst(){
+  if(!S.brainBurst)return;
+  // Add extra colour from level 1; shorten round time by 20%
+  S.colorsInPlay=Math.min(6,S.colorsInPlay+1);
+  S.roundTime=Math.max(6,S.roundTime*0.8);
+}
+
 function updateHomeScreen(){
   const hi = document.getElementById('homeHiScore');
   const streak = document.getElementById('homeStreak');
@@ -3432,272 +3698,6 @@ function playTick(){beep(900,.04,'square',.05);}
 function playLifeLostSound(){beep(180,.5,'sawtooth',.1);}
 function playLevelUpSound(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.18,'sine',.1),i*75));}
 function playChainSound(len){const b=[330,392,494,587,698,880,1047,1175];for(let i=0;i<Math.min(len,b.length);i++)setTimeout(()=>beep(b[i],.13,'sine',.09),i*38);}
-
-// ═══════════════════════════════════════════════
-// XP / RANK SYSTEM
-// Players earn XP from: scores, chains, levels, daily bonus
-// XP is purely cosmetic — bragging rights + profile badge
-// ═══════════════════════════════════════════════
-const XP_RANKS = [
-  {name:'ROOKIE',     color:'#6a6a8a', min:0},
-  {name:'CHAINER',    color:'#39ff14', min:500},
-  {name:'BLAZER',     color:'#00e5ff', min:1500},
-  {name:'CRUSHER',    color:'#ff6b00', min:3500},
-  {name:'GRIDMASTER', color:'#ffd700', min:7000},
-  {name:'LEGEND',     color:'#ff2d55', min:15000},
-  {name:'ELITE',      color:'#bf5af2', min:30000},
-];
-const XP_KEY = 'gl_xp_v1';
-function loadXP(){return parseInt(localStorage.getItem(XP_KEY)||'0');}
-function saveXP(xp){localStorage.setItem(XP_KEY,String(xp));}
-function awardXP(amount){
-  const xp=loadXP()+amount;
-  saveXP(xp);
-  const before=getRank(xp-amount);
-  const after=getRank(xp);
-  if(after.name!==before.name){
-    setTimeout(()=>showToast(`🏅 RANK UP! You're now ${after.name}!`),400);
-  }
-  return xp;
-}
-function getRank(xp){
-  let rank=XP_RANKS[0];
-  for(const r of XP_RANKS){if(xp>=r.min)rank=r;}
-  return rank;
-}
-function getXPProgress(xp){
-  let rankIdx=0;
-  for(let i=0;i<XP_RANKS.length;i++){if(xp>=XP_RANKS[i].min)rankIdx=i;}
-  if(rankIdx>=XP_RANKS.length-1) return {pct:100,toNext:0,nextName:'MAX'};
-  const cur=XP_RANKS[rankIdx].min;
-  const next=XP_RANKS[rankIdx+1].min;
-  const pct=Math.round(((xp-cur)/(next-cur))*100);
-  return {pct,toNext:next-xp,nextName:XP_RANKS[rankIdx+1].name};
-}
-function updateXPBar(){
-  const xp=loadXP();
-  const rank=getRank(xp);
-  const prog=getXPProgress(xp);
-  const lbl=document.getElementById('homeRankLabel');
-  const fill=document.getElementById('homeXpFill');
-  const next=document.getElementById('homeXpNext');
-  if(lbl){lbl.textContent=`🏅 ${rank.name}`;lbl.style.color=rank.color;}
-  if(fill)fill.style.width=prog.pct+'%';
-  if(next)next.textContent=prog.toNext>0?`${xp.toLocaleString()} XP · ${prog.toNext} to ${prog.nextName}`:`${xp.toLocaleString()} XP — MAX RANK`;
-}
-// Award XP at end of game
-function awardGameXP(){
-  const xp=Math.floor(S.score/10)+S.level*5+S.totalChains*2;
-  awardXP(xp);
-}
-
-// ═══════════════════════════════════════════════
-// STREAK REWARD CALENDAR
-// Shows a 7-day login calendar with escalating rewards
-// Day 7 = big bonus
-// ═══════════════════════════════════════════════
-const STREAK_REWARDS=[
-  {day:1,coins:5,icon:'🪙'},
-  {day:2,coins:8,icon:'🪙'},
-  {day:3,coins:12,icon:'💎'},
-  {day:4,coins:15,icon:'💎'},
-  {day:5,coins:20,icon:'🔥'},
-  {day:6,coins:25,icon:'🔥'},
-  {day:7,coins:50,icon:'👑'},
-];
-function renderStreakCalendar(){
-  const el=document.getElementById('streakCalDays'); if(!el)return;
-  const streak=Math.max(0,S.stats.loginStreak||0);
-  const today=streak; // day the player is on (1-based progress)
-  el.innerHTML=STREAK_REWARDS.map(r=>{
-    const done=streak>=r.day;
-    const isToday=streak===r.day-1; // today they could claim this next
-    const cls=done?'sc-day done':isToday?'sc-day today':'sc-day future';
-    return `<div class="${cls}">
-      <div class="sc-d-num">D${r.day}</div>
-      <div class="sc-d-ico">${done?'✅':r.icon}</div>
-      <div class="sc-d-coins">${done?'done':'+'+r.coins+'🪙'}</div>
-    </div>`;
-  }).join('');
-}
-
-// ═══════════════════════════════════════════════
-// SEASONAL BANNER
-// Shows current season theme — rotates every ~90 days
-// ═══════════════════════════════════════════════
-const SEASONS=[
-  {name:'SPRING BLOOM',    emoji:'🌸', bg:'linear-gradient(135deg,rgba(255,182,193,.18),rgba(255,105,180,.08))', color:'#ff69b4', start:[3,20],end:[6,20]},
-  {name:'SUMMER SURGE',    emoji:'☀️', bg:'linear-gradient(135deg,rgba(255,200,0,.15),rgba(255,120,0,.08))',    color:'#ff9500', start:[6,21],end:[9,22]},
-  {name:'AUTUMN BLAZE',    emoji:'🍂', bg:'linear-gradient(135deg,rgba(255,100,0,.15),rgba(180,60,0,.08))',     color:'#ff6300', start:[9,23],end:[12,20]},
-  {name:'WINTER FROST',    emoji:'❄️', bg:'linear-gradient(135deg,rgba(100,180,255,.15),rgba(60,120,220,.08))', color:'#60a8ff', start:[12,21],end:[3,19]},
-];
-function getCurrentSeason(){
-  const now=new Date();
-  const m=now.getMonth()+1, d=now.getDate();
-  const val=m*100+d;
-  if(val>=320&&val<=620) return SEASONS[0];
-  if(val>=621&&val<=922) return SEASONS[1];
-  if(val>=923&&val<=1220) return SEASONS[2];
-  return SEASONS[3];
-}
-function renderSeasonBanner(){
-  const el=document.getElementById('homeSeasonBanner'); if(!el)return;
-  const s=getCurrentSeason();
-  const now=new Date();
-  // Days until season ends — rough calc
-  el.style.background=s.bg;
-  el.style.border=`1px solid ${s.color}33`;
-  el.innerHTML=`
-    <div class="sb-emoji">${s.emoji}</div>
-    <div class="sb-body">
-      <div class="sb-title" style="color:${s.color};">${s.name} SEASON</div>
-      <div class="sb-sub">Seasonal bonus: VIP themes 20% off · Tap for store</div>
-    </div>
-    <div class="sb-days" style="color:${s.color};">🎁</div>`;
-}
-
-// ═══════════════════════════════════════════════
-// REFERRAL SYSTEM
-// Each player gets a deterministic code from their name + high score seed
-// When someone enters a valid code, both get 20 coins (one-time)
-// ═══════════════════════════════════════════════
-const REF_CLAIMED_KEY='gl_ref_claimed_v1';
-const REF_GIVEN_KEY='gl_ref_given_v1';
-function getMyReferralCode(){
-  let code=localStorage.getItem('gl_my_ref_code');
-  if(!code){
-    // Generate a random 6-char code, store it
-    code=Math.random().toString(36).substring(2,8).toUpperCase();
-    localStorage.setItem('gl_my_ref_code',code);
-  }
-  return code;
-}
-function renderReferralCard(){
-  const el=document.getElementById('refCodeDisplay'); if(!el)return;
-  el.textContent=getMyReferralCode();
-  const status=document.getElementById('refStatus');
-  const claimed=parseInt(localStorage.getItem(REF_GIVEN_KEY)||'0');
-  if(status) status.textContent=claimed>0?`✅ You've gifted ${claimed} friend${claimed>1?'s':''} 20🪙 each`:'Share your code — earn 20🪙 when a friend uses it';
-}
-function copyReferralCode(){
-  const code=getMyReferralCode();
-  const text=`🎮 Play GRIDLOCK with me! Use my code ${code} when you start for 20 free coins.\n👉 ${location.origin}`;
-  if(navigator.share) navigator.share({title:'Play GRIDLOCK!',text}).catch(()=>{});
-  else navigator.clipboard?.writeText(text).then(()=>showToast('Referral link copied! 📋'));
-}
-function checkReferralParam(){
-  const p=new URLSearchParams(location.search);
-  const code=p.get('ref');
-  if(!code)return;
-  const already=localStorage.getItem(REF_CLAIMED_KEY);
-  if(already){showToast('Referral already claimed!');return;}
-  const myCode=getMyReferralCode();
-  if(code.toUpperCase()===myCode){showToast("Can't use your own code!");return;}
-  // Reward the new player
-  S.coins+=20; saveCoins(); updateUI();
-  localStorage.setItem(REF_CLAIMED_KEY,code);
-  showToast('🎉 Referral bonus! +20🪙 Welcome gift!');
-  // In a real implementation you'd also reward the referrer via a backend.
-  // For now we show the toast; the referrer is thanked when friends use the link.
-}
-
-// ═══════════════════════════════════════════════
-// TUTORIAL OVERLAY — shown on first ever play
-// ═══════════════════════════════════════════════
-const TUT_KEY='gl_tut_done_v1';
-const TUT_STEPS=[
-  {icon:'🎮',title:'WELCOME TO GRIDLOCK',body:'Chain matching tiles to clear the board and score points. The bigger the chain, the higher the multiplier!'},
-  {icon:'👆',title:'TAP TO SELECT',body:'Tap any tile to start a chain. Then tap or drag to adjacent tiles of the same colour to extend your chain.'},
-  {icon:'⚡',title:'COMMIT YOUR CHAIN',body:'When you\'re happy with your chain, tap the ⚡ CHAIN button — or press Space on desktop — to clear the tiles and score!'},
-  {icon:'🔥',title:'MULTIPLIERS',body:'Chains of 3–4 tiles = 2×. Five or six = 3×. Seven or more = a massive 5× multiplier! Hunt for big chains.'},
-  {icon:'🌡️',title:'FEVER MODE',body:'Chain quickly! Three rapid chains fills the Fever bar. In Fever, ALL multipliers double for 8 seconds. Chain like mad!'},
-  {icon:'🪙',title:'EARN COINS',body:'Level up, complete missions, and watch ads to earn coins. Spend them on power-ups like Hints, Shuffles, and Bombs.'},
-  {icon:'🚀',title:'READY? LET\'S GO!',body:'You\'re all set. Good luck, chain well, and beat your high score! Tap GO to start your first game.'},
-];
-let _tutStep=0;
-function showTutorial(){
-  if(localStorage.getItem(TUT_KEY)) return; // already seen
-  _tutStep=0;
-  renderTutStep();
-  document.getElementById('tutorialOverlay').classList.remove('hidden');
-}
-function renderTutStep(){
-  const s=TUT_STEPS[_tutStep];
-  document.getElementById('tutIcon').textContent=s.icon;
-  document.getElementById('tutTitle').textContent=s.title;
-  document.getElementById('tutBody').textContent=s.body;
-  document.getElementById('tutNextBtn').textContent=_tutStep===TUT_STEPS.length-1?'🚀 LET\'S GO!':'NEXT →';
-  // Dots
-  const dots=document.getElementById('tutDots');
-  dots.innerHTML=TUT_STEPS.map((_,i)=>`<div class="tut-dot${i===_tutStep?' active':''}"></div>`).join('');
-}
-function tutorialNext(){
-  _tutStep++;
-  if(_tutStep>=TUT_STEPS.length){
-    document.getElementById('tutorialOverlay').classList.add('hidden');
-    localStorage.setItem(TUT_KEY,'1');
-    startGame(false);
-  } else {
-    renderTutStep();
-  }
-}
-
-
-// ═══════════════════════════════════════════════
-// CHAIN MILESTONE FLASH — shows big text on notable chains
-// ═══════════════════════════════════════════════
-function showChainMilestone(len){
-  const milestones={5:'NICE!',7:'BLAZING!',10:'INSANE!',15:'LEGENDARY!',20:'GODLIKE!'};
-  let msg=null;
-  for(const [threshold,label] of Object.entries(milestones).reverse()){
-    if(len>=parseInt(threshold)){msg=label;break;}
-  }
-  if(!msg)return;
-  const el=document.createElement('div');
-  el.className='chain-flash';
-  el.textContent=msg;
-  document.getElementById('app').appendChild(el);
-  setTimeout(()=>el.remove(),900);
-}
-
-// ═══════════════════════════════════════════════
-// MULTIPLIER POPUP — floats above grid on commit
-// ═══════════════════════════════════════════════
-function showMultPopup(mult,len){
-  if(mult<2)return;
-  const el=document.createElement('div');
-  el.className='mult-popup';
-  const colors={2:'#00e5ff',3:'#ff6b00',5:'#ff2d55'};
-  const col=mult>=5?colors[5]:mult>=3?colors[3]:colors[2];
-  const gridEl=document.getElementById('grid');
-  const rect=gridEl?gridEl.getBoundingClientRect():{top:window.innerHeight/2};
-  el.style.top=(rect.top-50)+'px';
-  el.style.fontSize=(28+mult*4)+'px';
-  el.style.color=col;
-  el.style.textShadow=`0 0 20px ${col}`;
-  el.innerHTML=`${mult}× <span style="font-size:.6em;opacity:.8">(${len} tiles)</span>`;
-  document.getElementById('app').appendChild(el);
-  setTimeout(()=>el.remove(),950);
-}
-
-// ═══════════════════════════════════════════════
-// BRAIN BURST MODE — toggleable mode with extra colours
-// and faster timer for hardcore players
-// ═══════════════════════════════════════════════
-const BB_KEY='gl_brainburst_v1';
-function toggleBrainBurst(){
-  S.brainBurst=!S.brainBurst;
-  localStorage.setItem(BB_KEY,S.brainBurst?'1':'');
-  const badge=document.getElementById('bbBadge');
-  if(badge) badge.classList.toggle('show',S.brainBurst&&S.running);
-  showToast(S.brainBurst?'🧠 Brain Burst ON — extra colours, faster rounds!':'🧠 Brain Burst OFF');
-}
-function applyBrainBurst(){
-  if(!S.brainBurst)return;
-  // Add extra colour from level 1; shorten round time by 20%
-  S.colorsInPlay=Math.min(6,S.colorsInPlay+1);
-  S.roundTime=Math.max(6,S.roundTime*0.8);
-}
 
 // ═══════════════════════════════════════════════
 // SCREEN MANAGEMENT
