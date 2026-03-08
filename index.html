@@ -153,11 +153,15 @@ header{width:100%;max-width:480px;padding:10px 16px 4px;display:flex;justify-con
   box-shadow:0 0 14px currentColor,0 0 3px rgba(255,255,255,.5);}
 .tile.chain-head{transform:scale(1.14);border-color:#fff;z-index:3;box-shadow:0 0 22px currentColor,0 0 8px #fff;}
 .tile.clearing{animation:tBlast .38s forwards;pointer-events:none;}
-.tile.hint-glow{animation:hPulse .55s ease-in-out 3;}
+.tile.blocked{cursor:not-allowed;opacity:0.7;animation:none !important;}
+.tile.blocked:hover{transform:none !important;box-shadow:none !important;}
 .tile.appearing{animation:tAppear .28s cubic-bezier(.34,1.56,.64,1) forwards;opacity:0;}
 .tile.frozen{outline:2px solid #00f0ff;filter:brightness(1.2);}
 .tile.wild{animation:wildGlow .8s ease-in-out infinite alternate;}
 @keyframes wildGlow{from{box-shadow:0 0 8px #fff;}to{box-shadow:0 0 20px #fff,0 0 6px var(--c3);}}
+.tile.hot{outline:2px solid #ff2d55;animation:hotPulse .5s ease-in-out infinite;}
+.tile.hot::before{content:'🔥';position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:10px;z-index:5;}
+@keyframes hotPulse{0%,100%{box-shadow:0 0 6px #ff2d55,0 0 0 2px rgba(255,45,85,0.3);}50%{box-shadow:0 0 18px #ff2d55,0 0 0 4px rgba(255,45,85,0.6);}}
 .tile.selected::after,.tile.chain-head::after{content:attr(data-num);position:absolute;top:-7px;right:-5px;
   background:#fff;color:#000;border-radius:50%;width:15px;height:15px;font-size:8px;font-weight:900;
   display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;z-index:4;}
@@ -516,7 +520,7 @@ html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
 .home-hi{font-size:11px;color:var(--gold);letter-spacing:1px;margin-top:8px;min-height:16px;}
 
 /* Play button — big vibrant CTA */
-.home-play-btn{width:calc(100% - 32px);max-width:440px;margin:10px 16px 8px;
+.home-play-btn{width:calc(100% - 32px);max-width:440px;margin:10px auto 8px;
   background:linear-gradient(135deg,var(--c1) 0%,var(--c5) 60%,var(--c3) 100%);
   border:none;border-radius:20px;padding:20px 24px;
   font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:5px;color:#fff;
@@ -530,7 +534,7 @@ html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
   font-size:20px;opacity:.6;}
 
 /* Daily challenge card */
-.home-daily{width:calc(100% - 32px);max-width:440px;margin:0 16px 8px;
+.home-daily{width:calc(100% - 32px);max-width:440px;margin:0 auto 8px;
   background:linear-gradient(135deg,rgba(0,229,255,.1),rgba(191,90,242,.07));
   border:1px solid rgba(0,229,255,.3);border-radius:16px;
   padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;
@@ -547,7 +551,7 @@ html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
   box-shadow:0 2px 8px rgba(0,229,255,.3);}
 
 /* Stats strip — 4 boxes */
-.home-stats-strip{width:calc(100% - 32px);max-width:440px;margin:0 16px 8px;display:flex;gap:6px;}
+.home-stats-strip{width:calc(100% - 32px);max-width:440px;margin:0 auto 8px;display:flex;gap:6px;}
 .hss-box{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:12px;
   padding:10px 6px;text-align:center;position:relative;overflow:hidden;
   transition:transform .15s;}
@@ -569,7 +573,7 @@ html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
 .hwc-score{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);}
 
 /* Nav grid — 2-column coloured cards */
-.home-nav{width:calc(100% - 32px);max-width:440px;margin:0 16px;
+.home-nav{width:calc(100% - 32px);max-width:440px;margin:0 auto;
   display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .home-nav-btn{background:var(--panel);border:1px solid var(--border);border-radius:16px;
   padding:14px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;
@@ -693,6 +697,20 @@ header,
   margin-left:auto;
   margin-right:auto;
 }
+.bb-badge{
+  display:none;
+  background:linear-gradient(135deg,rgba(191,90,242,.15),rgba(255,45,85,.1));
+  border:1px solid rgba(191,90,242,.4);
+  border-radius:8px;
+  padding:4px 12px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:12px;
+  letter-spacing:2px;
+  color:var(--c6);
+  text-align:center;
+  margin-bottom:2px;
+}
+.bb-badge.show{display:block;}
 /* Screens stay full-width on mobile, centred column on desktop */
 @media(min-width:520px){
   body{background:#0a0a14;}
@@ -771,7 +789,8 @@ header,
 <body>
 
 <!-- ═══════════ HOME SCREEN ═══════════ -->
-<div class="screen" id="startScreen" style="padding:0;align-items:stretch;gap:0;">
+<div class="screen" id="startScreen" style="padding:0;align-items:center;gap:0;">
+<div style="width:100%;max-width:480px;display:flex;flex-direction:column;align-items:stretch;flex:1;padding:0 0 20px;">
 
   <!-- Hero -->
   <div class="home-hero">
@@ -781,7 +800,7 @@ header,
   </div>
 
   <!-- Challenge banner (shown if arriving via challenge URL) -->
-  <div id="challengeBannerStart" class="challenge-banner hidden" style="margin:0 16px 6px;"></div>
+  <div id="challengeBannerStart" class="challenge-banner hidden" style="margin:0 auto 6px;width:calc(100% - 32px);"></div>
 
   <!-- Big PLAY button -->
   <button class="home-play-btn" onclick="onPlayNowTap()">PLAY NOW</button>
@@ -828,7 +847,7 @@ header,
   </div>
 
   <!-- Season banner -->
-  <div id="homeSeasonBanner" class="season-banner" style="margin:0 16px 6px;width:auto;" onclick="showScreen('storeScreen')"></div>
+  <div id="homeSeasonBanner" class="season-banner" style="margin:0 auto 6px;width:calc(100% - 32px);max-width:440px;" onclick="showScreen('storeScreen')"></div>
 
   <!-- Global top score -->
   <div class="home-world-card" onclick="showScreen('leaderboardScreen')" id="homeWorldCard" style="display:none;">
@@ -905,7 +924,8 @@ header,
     <button onclick="showToast('GRIDLOCK v9.0 — playgridlock.site')">v9.0</button>
   </div>
 
-</div>
+</div><!-- end inner wrapper -->
+</div><!-- end startScreen -->
 
 <!-- ═══════════ TUTORIAL OVERLAY ═══════════ -->
 <div class="tutorial-overlay hidden" id="tutorialOverlay">
@@ -1007,7 +1027,7 @@ header,
     🌍 Scores from all players. Updates live. Only your best score is kept.
   </div>
   <button class="ghost-btn" onclick="refreshLeaderboard()">🔄 REFRESH</button>
-  <button class="big-btn" onclick="hideScreen('leaderboardScreen')">← BACK</button>
+  <button class="big-btn" onclick="_returnFromMidGameScreen()">← BACK</button>
 </div>
 
 <!-- ═══════════ ACHIEVEMENTS ═══════════ -->
@@ -1292,7 +1312,7 @@ header,
       <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🎨 Themes 30–100🪙</span>
     </div>
   </div>
-  <button class="ghost-btn" onclick="hideScreen('storeScreen')">← BACK</button>
+  <button class="ghost-btn" onclick="_returnFromMidGameScreen()">← BACK</button>
   <div style="font-size:8px;color:var(--muted);margin-top:5px;text-align:center;max-width:280px;line-height:1.7;flex-shrink:0;">
     Coins = in-game power-ups only. No gambling. No random prizes. UK compliant. 18+.
   </div>
@@ -1311,7 +1331,6 @@ header,
 
 <!-- ═══════════ GAME HUD ═══════════ -->
 <div class="speedrun-badge" id="speedrunBadge">⚡ SPEED RUN MODE</div>
-<div class="bb-badge" id="bbBadge">🧠 BRAIN BURST — BONUS COLOURS ON!</div>
 
 <div class="top-score-strip" id="topScoreStrip" style="display:none;">
   <div class="tss-inner">
@@ -1406,6 +1425,7 @@ header,
 <div class="pause-overlay hidden" id="pauseOverlay">
   <div class="pause-title">PAUSED</div>
   <button class="big-btn" onclick="pauseResume()" style="max-width:240px;">▶ RESUME</button>
+  <button class="ghost-btn" onclick="pauseGoToBoard()" style="max-width:240px;">🏆 LEADERBOARD</button>
   <button class="ghost-btn" onclick="pauseOpenStore()" style="max-width:240px;">🪙 COIN STORE</button>
   <button class="ghost-btn" onclick="pauseQuit()" style="max-width:240px;border-color:var(--c1);color:var(--c1);">✕ QUIT GAME</button>
 </div>
@@ -1847,11 +1867,29 @@ function toggleMode(){
   localStorage.setItem('gl_mode', S.mode);
 }
 function applyMode(){
-  document.getElementById('html').dataset.mode = S.mode;
+  const root=document.documentElement;
+  root.dataset.mode = S.mode;
   const btn = document.getElementById('modeBtn');
   if(btn) btn.textContent = S.mode==='dark' ? '☀️' : '🌙';
+  const footerBtn = document.getElementById('modeFooterBtn');
+  if(footerBtn) footerBtn.textContent = S.mode==='dark' ? '☀️ Theme' : '🌙 Theme';
   const meta = document.getElementById('themeColorMeta');
   if(meta) meta.content = S.mode==='dark' ? '#0a0a0f' : '#f0f0f7';
+  // Force light mode vars as inline styles so they override any active theme
+  if(S.mode==='light'){
+    const lightVars={'bg':'#f5f5fa','bg2':'#ebebf2','panel':'#ffffff','panel2':'#f0f0f8',
+      'border':'#c0c0d8','border2':'#a8a8c8','text':'#0a0a20','text2':'#22224a',
+      'muted':'#5a5a80','muted2':'#7a7a9a','shadow':'rgba(0,0,0,0.08)',
+      'scan':'rgba(200,200,220,0.15)','c1':'#cc0033','c2':'#0066bb','c3':'#bb6600',
+      'c4':'#007700','c5':'#cc4400','c6':'#7700cc','gold':'#996600'};
+    Object.entries(lightVars).forEach(([k,v])=>root.style.setProperty('--'+k,v));
+  } else {
+    // Remove any forced light vars so theme/dark defaults apply
+    ['bg','bg2','panel','panel2','border','border2','text','text2','muted','muted2',
+     'shadow','scan','c1','c2','c3','c4','c5','c6','gold'].forEach(k=>root.style.removeProperty('--'+k));
+    // Re-apply current theme
+    applyTheme(S.theme);
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -1871,6 +1909,7 @@ function todaySeed(){
 // ═══════════════════════════════════════════════
 function applyTheme(id){
   S.theme=id; localStorage.setItem('gl_theme',id);
+  if(S.mode==='light') return; // light mode overrides themes
   const t=THEMES[id], root=document.documentElement;
   Object.keys(THEMES.neon.vars||{}).forEach(k=>root.style.removeProperty('--'+k));
   Object.entries(t.vars||{}).forEach(([k,v])=>root.style.setProperty('--'+k,v));
@@ -2487,6 +2526,7 @@ function spawnParticles(len){
 // PAUSE
 // ═══════════════════════════════════════════════
 let _paused=false;
+let _pausedMidGame=false;
 function togglePause(){
   if(!S.running && !_paused) return;
   _paused=!_paused;
@@ -2495,8 +2535,10 @@ function togglePause(){
   document.getElementById('pauseBtn').textContent=_paused?'▶️':'⏸️';
   if(_paused){
     clearInterval(S.timerInterval);
+    clearHotTiles();
   } else {
     _resumeTimer();
+    setTimeout(()=>startHotTileSystem(),500);
   }
 }
 function _resumeTimer(){
@@ -2515,13 +2557,32 @@ function pauseResume(){
   document.getElementById('pauseBtn').textContent='⏸️';
   _resumeTimer();
 }
+function pauseGoToBoard(){
+  _pausedMidGame=true;
+  const po=document.getElementById('pauseOverlay');
+  if(po){po.classList.add('hidden');po.style.display='none';}
+  showScreen('leaderboardScreen');
+}
 function pauseOpenStore(){
-  _paused=false;
-  document.getElementById('pauseOverlay').classList.add('hidden');
+  _pausedMidGame=true;
+  const po=document.getElementById('pauseOverlay');
+  if(po){po.classList.add('hidden');po.style.display='none';}
   document.getElementById('pauseBtn').textContent='⏸️';
   clearInterval(S.timerInterval);
-  // Temporarily stop the game while in store — timer frozen
   showScreen('storeScreen');
+}
+function _returnFromMidGameScreen(){
+  if(_pausedMidGame && S.running){
+    _pausedMidGame=false;
+    hideAllScreens();
+    _paused=true;
+    const overlay=document.getElementById('pauseOverlay');
+    if(overlay){overlay.style.display='';overlay.classList.remove('hidden');}
+    const pb=document.getElementById('pauseBtn');
+    if(pb) pb.textContent='▶️';
+  } else {
+    returnToHome();
+  }
 }
 function pauseQuit(){
   _paused=false;
@@ -2867,7 +2928,9 @@ function showTutorial(){
   if(localStorage.getItem(TUT_KEY)) return; // already seen
   _tutStep=0;
   renderTutStep();
-  document.getElementById('tutorialOverlay').classList.remove('hidden');
+  const ov=document.getElementById('tutorialOverlay');
+  ov.style.display='';
+  ov.classList.remove('hidden');
 }
 function renderTutStep(){
   const s=TUT_STEPS[_tutStep];
@@ -2882,8 +2945,9 @@ function renderTutStep(){
 function tutorialNext(){
   _tutStep++;
   if(_tutStep>=TUT_STEPS.length){
-    document.getElementById('tutorialOverlay').classList.add('hidden');
     localStorage.setItem(TUT_KEY,'1');
+    const ov=document.getElementById('tutorialOverlay');
+    if(ov){ov.classList.add('hidden');ov.style.display='none';}
     startGame(false);
   } else {
     renderTutStep();
@@ -2904,7 +2968,7 @@ function showChainMilestone(len){
   const el=document.createElement('div');
   el.className='chain-flash';
   el.textContent=msg;
-  document.getElementById('app').appendChild(el);
+  document.body.appendChild(el);
   setTimeout(()=>el.remove(),900);
 }
 
@@ -2924,8 +2988,84 @@ function showMultPopup(mult,len){
   el.style.color=col;
   el.style.textShadow=`0 0 20px ${col}`;
   el.innerHTML=`${mult}× <span style="font-size:.6em;opacity:.8">(${len} tiles)</span>`;
-  document.getElementById('app').appendChild(el);
+  document.body.appendChild(el);
   setTimeout(()=>el.remove(),950);
+}
+
+// ═══════════════════════════════════════════════
+// HOT TILES — escalating difficulty from level 7+
+// Random tiles "catch fire" and must be chained
+// within a countdown or you lose a life.
+// ═══════════════════════════════════════════════
+let _hotTileTimers=[];  // active {idx, timeout} entries
+
+function clearHotTiles(){
+  _hotTileTimers.forEach(h=>clearTimeout(h.timeout));
+  _hotTileTimers=[];
+  document.querySelectorAll('.tile.hot').forEach(el=>el.classList.remove('hot'));
+}
+
+function spawnHotTile(){
+  if(!S.running||_paused||S.animating)return;
+  const lvl=S.level;
+  if(lvl<7)return;
+
+  // How many hot tiles can be active at once: 1 at L7, 2 at L11, 3 at L15
+  const maxHot = lvl>=15?3:lvl>=11?2:1;
+  if(_hotTileTimers.length>=maxHot)return;
+
+  // Fuse time: starts at 9s, drops 0.4s per level, floor 3.5s
+  const fuse = Math.max(3500, 9000-(lvl-7)*400);
+
+  // Pick a random non-special, non-hot, non-blocked tile
+  const candidates=[];
+  for(let i=0;i<S.grid.length;i++){
+    if(S.grid[i]===null)continue;
+    if(S.frozenTiles.has(i)||S.wildTiles.has(i)||S.bombTiles.has(i))continue;
+    if((S.blockedTiles||new Set()).has(i))continue;
+    if(_hotTileTimers.some(h=>h.idx===i))continue;
+    candidates.push(i);
+  }
+  if(candidates.length===0)return;
+
+  const idx=candidates[Math.floor(Math.random()*candidates.length)];
+  const el=getTile(idx);
+  if(!el)return;
+  el.classList.add('hot');
+
+  const timeout=setTimeout(()=>{
+    // Tile was not chained in time — lose a life
+    _hotTileTimers=_hotTileTimers.filter(h=>h.idx!==idx);
+    const tileEl=getTile(idx);
+    if(tileEl){tileEl.classList.remove('hot');tileEl.classList.add('clearing');}
+    if(S.running&&!_paused){
+      showToast('🔥 HOT TILE EXPIRED! -1 LIFE');
+      loseLife();
+    }
+  },fuse);
+
+  _hotTileTimers.push({idx,timeout});
+
+  // Schedule next hot tile spawn (staggered)
+  const spawnDelay=Math.max(4000, fuse*0.8+Math.random()*3000);
+  setTimeout(()=>spawnHotTile(),spawnDelay);
+}
+
+function clearHotTileIfSelected(idx){
+  const h=_hotTileTimers.find(h=>h.idx===idx);
+  if(!h)return;
+  clearTimeout(h.timeout);
+  _hotTileTimers=_hotTileTimers.filter(x=>x.idx!==idx);
+  const el=getTile(idx);
+  if(el)el.classList.remove('hot');
+}
+
+function startHotTileSystem(){
+  clearHotTiles();
+  if(S.level<7||S.isDailyChallenge)return;
+  // First hot tile spawns after a short grace period
+  const grace=Math.max(3000,8000-(S.level-7)*500);
+  setTimeout(()=>spawnHotTile(),grace);
 }
 
 // ═══════════════════════════════════════════════
@@ -3108,6 +3248,7 @@ function generateGrid(rngFn){
     }
   }
   S.frozenTiles=new Set(); S.wildTiles=new Set(); S.bombTiles=new Set();
+  S.blockedTiles=new Set(); // PRESSURE SYSTEM: blocked/locked tiles
   if(S.level>=3&&!S.isDailyChallenge){
     const fc=Math.min(Math.floor(S.level/3),4);
     for(let i=0;i<fc;i++) S.frozenTiles.add(Math.floor(rng()*S.grid.length));
@@ -3115,6 +3256,15 @@ function generateGrid(rngFn){
   if(S.level>=5&&!S.isDailyChallenge) S.wildTiles.add(Math.floor(rng()*S.grid.length));
   if(S.level>=6&&!S.isDailyChallenge&&rng()<Math.min(0.7,0.35+(S.level-6)*0.05))
     S.bombTiles.add(Math.floor(rng()*S.grid.length));
+  // Pressure tiles: blocked cells from level 10 — reduce playable grid
+  if((S._pressureTiles||0)>0&&!S.isDailyChallenge){
+    const used=new Set([...S.frozenTiles,...S.wildTiles,...S.bombTiles]);
+    let placed=0;
+    while(placed<S._pressureTiles){
+      const idx=Math.floor(rng()*S.grid.length);
+      if(!used.has(idx)){S.blockedTiles.add(idx);used.add(idx);placed++;}
+    }
+  }
   S.selected=[]; renderGrid();
 }
 function renderGrid(){
@@ -3132,9 +3282,17 @@ function renderGrid(){
     const isWild=S.wildTiles.has(i);
     const isBomb=S.bombTiles.has(i);
     const isFrozen=S.frozenTiles.has(i);
+    const isBlocked=(S.blockedTiles||new Set()).has(i);
     // Get the CSS-variable resolved hex for this color in current mode
     const hexCol=getLightHex(color,isLight);
-    if(isWild){
+    if(isBlocked){
+      el.style.background=isLight?'#c0c0cc':'rgba(255,255,255,0.06)';
+      el.style.borderColor=isLight?'#9090aa':'rgba(255,255,255,0.12)';
+      el.style.color=isLight?'#888':'rgba(255,255,255,0.25)';
+      el.textContent='🔒';
+      el.classList.add('blocked');
+      el.dataset.color='blocked';
+    } else if(isWild){
       el.style.background=isLight?'#555577':'rgba(255,255,255,0.15)';
       el.style.borderColor=isLight?'#888899':'rgba(255,255,255,0.5)';
       el.style.color='#fff';
@@ -3194,6 +3352,7 @@ function isCompatible(idx, chainColor){
 
 function onTileDown(idx){
   if(!S.running||S.animating||!S.grid[idx])return;
+  if((S.blockedTiles||new Set()).has(idx)){showToast('🔒 Blocked! Clear surrounding tiles first');return;}
   if(S.frozenTiles.has(idx)){showToast('❄️ Frozen! Include in a chain to unfreeze');return;}
   const pos=S.selected.indexOf(idx);
   if(S.selected.length===0){S.selected.push(idx);refreshVisuals();updateComboUI();return;}
@@ -3224,7 +3383,7 @@ function refreshVisuals(){
   for(const el of g.children){el.classList.remove('selected','chain-head');el.removeAttribute('data-num');}
   S.selected.forEach((idx,pos)=>{const el=getTile(idx);if(!el)return;
     el.classList.add(pos===S.selected.length-1?'chain-head':'selected');el.dataset.num=pos+1;});
-  document.getElementById('commitBtn').classList.toggle('ready',S.selected.length>=2);
+  document.getElementById('commitBtn').classList.toggle('ready',S.selected.length>=(S.minChainLen||2));
 }
 function clearSelection(){
   S.selected.forEach(i=>{const el=getTile(i);if(el){el.classList.remove('selected','chain-head');el.removeAttribute('data-num');}});
@@ -3238,7 +3397,12 @@ function clearSelection(){
 // ═══════════════════════════════════════════════
 function commitChain(){
   if(!S.running||S.animating)return;
+  const minLen = S.minChainLen || 2;
   if(S.selected.length<2){showToast('Select 2+ connected same-colour tiles!');return;}
+  if(S.selected.length<minLen){
+    showToast(`⚠️ Need ${minLen}+ tiles to score! (Level ${S.level})`);
+    return;
+  }
   S.animating=true;
   const len=S.selected.length;
   const hasWild=S.selected.some(i=>S.wildTiles.has(i));
@@ -3264,7 +3428,10 @@ function commitChain(){
     showToast('💣 BOMB! Blasted adjacent tiles!');
   }
 
-  toRemove.forEach(i=>{const el=getTile(i);if(el){el.classList.remove('selected','chain-head');el.removeAttribute('data-num');el.classList.add('clearing');}});
+  toRemove.forEach(i=>{
+    clearHotTileIfSelected(i); // defuse any hot tile in the chain
+    const el=getTile(i);if(el){el.classList.remove('selected','chain-head','hot');el.removeAttribute('data-num');el.classList.add('clearing');}
+  });
   showChainBadge(len,hasWild,hasBomb);
   playChainSound(len);
   spawnParticles(len); // particle burst for chains 5+
@@ -3365,13 +3532,15 @@ function updateTimerBar(){
 }
 function onTimerEnd(){
   clearInterval(S.timerInterval);
+  clearHotTiles();
   if(S.streak>=3) showStreakProtect();
   else loseLife();
 }
 function loseLife(){
   S.lives--; S.streak=0; updateStreakUI(); updateLivesUI(); playLifeLostSound();
   if(S.lives<=0){endGame();return;}
-  S.score=Math.max(0,S.score-50); // smaller penalty in v4
+  S.score=Math.max(0,S.score-50);
+  clearHotTiles();
   clearSelection(); startTimer(); updateUI();
   showToast(`⚠️ Life lost — ${S.lives} remaining`);
 }
@@ -3402,22 +3571,54 @@ function updateLivesUI(){
 // ROUND COMPLETE / LEVEL UP
 // ═══════════════════════════════════════════════
 function onRoundComplete(){
-  // Every 3 levels → Bonus Round instead of immediate level up
+  clearHotTiles();
   if(S.level%3===0) startBonusRound();
   else doLevelUp();
 }
 function doLevelUp(){
   S.level++;
   S.chainsMadeThisRound=0;
-  S.chainsNeeded=Math.min(3+Math.floor(S.level/2),8);
-  S.roundTime=Math.max(8,22-S.level*0.7);
-  S.colorsInPlay=Math.min(6,3+Math.floor(S.level/3));
+
+  // ── PRESSURE SYSTEM ─────────────────────────────
+  // Steeper difficulty curve that kicks in hard from level 5+
+  const lvl=S.level;
+
+  // Chains needed: grows faster than before
+  S.chainsNeeded = Math.min(3+Math.floor(lvl/2), 10);
+
+  // Minimum chain length required to score — escalates with level
+  S.minChainLen = lvl <= 3 ? 2 : lvl <= 6 ? 3 : lvl <= 10 ? 4 : lvl <= 15 ? 5 : 6;
+
+  // Round time: sharper drop, harder floor
+  S.roundTime = Math.max(5, 22 - lvl*0.9 - (lvl>8 ? (lvl-8)*0.4 : 0));
+
+  // Colours in play: adds a colour every 2 levels from level 4
+  S.colorsInPlay = Math.min(6, 3 + Math.floor(Math.max(0,lvl-2)/2));
+
+  // Pressure tier announcements
+  let pressureMsg = null;
+  if(lvl===4)  pressureMsg='⚠️ LEVEL 4 — Minimum 3 tiles per chain now!';
+  if(lvl===5)  pressureMsg='🔥 PRESSURE RISING — timer shrinking!';
+  if(lvl===7)  pressureMsg='⚠️ LEVEL 7 — Minimum 4 tiles per chain!';
+  if(lvl===8)  pressureMsg='⚡ DANGER ZONE — 5 chains needed!';
+  if(lvl===11) pressureMsg='💀 LEVEL 11 — Minimum 5 tiles per chain!';
+  if(lvl===12) pressureMsg='💀 EXTREME — all 6 colours active!';
+  if(lvl===15) pressureMsg='👹 LEVEL 15 — Minimum 6 tiles per chain!';
+  if(lvl>15 && lvl%5===0) pressureMsg=`☠️ LEVEL ${lvl} — LEGEND territory!`;
+
+  // From level 10+: "decay" — every chain attempt that takes >75% of time left
+  // adds an invisible "pressure tile" (locked tile) in the grid
+  S._pressureTiles = lvl >= 10 ? Math.min(4, Math.floor((lvl-8)/2)) : 0;
+
+  // ────────────────────────────────────────────────
+
   S.stats.maxLevelToday=Math.max(S.stats.maxLevelToday||0,S.level);
   const bonus= S.level>=10?ECONOMY.levelUpHigh: S.level>=5?ECONOMY.levelUpMid: ECONOMY.levelUpLow;
   S.coins+=bonus; saveCoins(); updateUI();
   const el=document.createElement('div'); el.className='lvlup'; el.textContent=`LEVEL ${S.level}`;
   document.body.appendChild(el); playLevelUpSound(); spawnConfetti(); setTimeout(()=>el.remove(),1000);
-  showToast(`🎉 Level ${S.level}! +${bonus}🪙`);
+  if(pressureMsg) setTimeout(()=>showToast(pressureMsg),600);
+  else showToast(`🎉 Level ${S.level}! +${bonus}🪙`);
   checkAchievements(); checkMissionProgress();
 
   // Puzzle piece — every ECONOMY.puzzlePieceInterval levels
@@ -3439,6 +3640,7 @@ function doLevelUp(){
   generateGrid(rng);
   setTimeout(()=>showLevelIntro(S.level,S.chainsNeeded,S.roundTime),200);
   startTimer(); updateUI();
+  setTimeout(()=>startHotTileSystem(),600); // Hot tiles start after level intro
 }
 
 // ═══════════════════════════════════════════════
@@ -3454,21 +3656,27 @@ function startGame(isDaily){
   Object.assign(S,{
     score:0,level:1,lives:S.vip?4:3,chainsMadeThisRound:0,chainsNeeded:3,
     bestChain:0,tilesCleared:0,totalChains:0,streak:0,
-    cols:5,rows:6,colorsInPlay:4,roundTime:22,timeLeft:22,
+    cols:5,rows:6,colorsInPlay:4,roundTime:22,timeLeft:22,minChainLen:2,
     selected:[],animating:false,running:true,
     feverCharge:0,feverActive:false,bonusRoundActive:false,
     sessionChains:0,sessionTiles:0,
+    _pressureTiles:0, blockedTiles:new Set(),
   });
-  _nextMilestone=0; _paused=false;
+  _nextMilestone=0; _paused=false; _pausedMidGame=false; clearHotTiles();
   document.getElementById('pauseOverlay').classList.add('hidden');
   document.getElementById('pauseBtn').textContent='⏸️';
+  const bbBadge=document.getElementById('bbBadge');
+  if(bbBadge) bbBadge.classList.toggle('show', !!S.brainBurst && !!S.running);
   updateLivesUI(); updateUI(); updateStreakUI();
   const rng=isDaily?seededRNG(todaySeed()):null;
   generateGrid(rng); startTimer(); updateMissionsUI();
 }
 function endGame(){
   S.running=false; clearInterval(S.timerInterval);
+  clearHotTiles();
   clearTimeout(S.feverTimeout);
+  const bbBadge=document.getElementById('bbBadge');
+  if(bbBadge) bbBadge.classList.remove('show');
   saveStats(); saveCoins(); checkAchievements(); checkMissionProgress();
   const isNew=S.score>S.highScore;
   if(isNew){S.highScore=S.score;localStorage.setItem('gl_hs',S.highScore);}
@@ -3515,9 +3723,15 @@ function updateUI(){
 }
 function updateComboUI(){
   const n=S.selected.length, txt=document.getElementById('comboTxt'), cnt=document.getElementById('selCnt');
+  const minLen=S.minChainLen||2;
   updateComboMeter(n);
-  if(n===0){txt.textContent='TAP A TILE TO START';txt.classList.remove('active');cnt.textContent='';return;}
-  if(n===1){txt.textContent='EXTEND THE CHAIN';txt.classList.remove('active');cnt.textContent='1 tile';return;}
+  if(n===0){
+    const minMsg=minLen>2?`MIN ${minLen} TILES · `:'';
+    txt.textContent=`${minMsg}TAP A TILE TO START`;txt.classList.remove('active');cnt.textContent='';return;
+  }
+  if(n<minLen){txt.textContent=`NEED ${minLen} TILES TO SCORE`;txt.classList.remove('active');cnt.textContent=`${n}/${minLen}`;
+    document.getElementById('commitBtn').classList.remove('ready');return;}
+  if(n===1&&minLen===2){txt.textContent='EXTEND THE CHAIN';txt.classList.remove('active');cnt.textContent='1 tile';return;}
   const hasWild=S.selected.some(i=>S.wildTiles.has(i));
   let m=getMultiplier(n); if(hasWild)m++; if(S.feverActive)m*=2;
   const fever=S.feverActive?' 🌡️':'';
@@ -3709,6 +3923,7 @@ const SCREENS=['startScreen','instrScreen','gameOverScreen','storeScreen',
                'profileScreen','puzzleScreen'];
 function showScreen(id){
   const el=document.getElementById(id); if(!el)return;
+  hideAllScreens();
   el.classList.remove('hidden');
   if(id==='storeScreen'){updateFreeUI();renderThemes();updateDoublerUI();}
   if(id==='achScreen')renderAchievements();
@@ -3721,7 +3936,12 @@ function showScreen(id){
 }
 function hideScreen(id){const el=document.getElementById(id);if(el)el.classList.add('hidden');}
 function hideAllScreens(){SCREENS.forEach(hideScreen);}
-function returnToHome(){hideAllScreens();showScreen('startScreen');}
+function returnToHome(){
+  hideAllScreens();
+  const bbBadge=document.getElementById('bbBadge');
+  if(bbBadge) bbBadge.classList.remove('show');
+  showScreen('startScreen');
+}
 
 // ═══════════════════════════════════════════════
 // KEYBOARD
