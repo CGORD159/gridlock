@@ -2976,6 +2976,7 @@ const TUT_STEPS=[
 let _tutStep=0;
 function showTutorial(){
   if(localStorage.getItem(TUT_KEY)) return; // already seen
+  if((S.stats.gamesPlayed||0)>0){ localStorage.setItem(TUT_KEY,'1'); return; } // returning player
   _tutStep=0;
   renderTutStep();
   const ov=document.getElementById('tutorialOverlay');
@@ -3766,11 +3767,13 @@ function endGame(){
 }
 
 function onPlayNowTap(){
-  // Show tutorial on very first play, otherwise go straight to game
+  // Only show tutorial to brand new players — skip if they've played before OR already seen it
   const tutDone=localStorage.getItem(TUT_KEY);
-  if(!tutDone&&(S.stats.gamesPlayed||0)===0){
+  const hasPlayed=(S.stats.gamesPlayed||0)>0;
+  if(!tutDone && !hasPlayed){
     showTutorial();
   } else {
+    if(hasPlayed) localStorage.setItem(TUT_KEY,'1'); // backfill for returning players
     startGame(false);
   }
 }
