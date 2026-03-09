@@ -391,48 +391,28 @@ html[data-mode="light"] .chain-badge { text-shadow:0 2px 8px rgba(0,0,0,0.4); }
   border-radius:10px;padding:12px;margin-bottom:10px;flex-shrink:0;}
 
 /* ── Store ── */
-.store-tabs{display:flex;gap:4px;width:100%;max-width:340px;margin-bottom:14px;flex-shrink:0;background:var(--bg2);border-radius:12px;padding:4px;}
-.store-tab{flex:1;padding:7px 4px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;
-  color:var(--muted);background:none;border:none;border-radius:9px;cursor:pointer;transition:all .18s;text-align:center;}
-.store-tab.active{background:var(--panel);color:var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.3);}
-.store-tab-panel{display:none;width:100%;max-width:340px;flex-direction:column;align-items:center;gap:9px;flex-shrink:0;}
-.store-tab-panel.active{display:flex;}
-.store-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;flex-shrink:0;}
-.store-item{background:var(--panel);border:1px solid var(--border);border-radius:14px;
-  padding:14px 10px;text-align:center;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;}
-.store-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(255,255,255,.03));pointer-events:none;}
-.store-item:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.3);}
-.store-item.featured{border-color:var(--c1);background:linear-gradient(135deg,rgba(255,45,85,.08),rgba(255,45,85,.03));}
-.dbl-tag{position:absolute;top:-1px;right:-1px;background:var(--c5);color:#fff;
-  font-size:7px;font-weight:700;padding:3px 8px;border-radius:0 14px 0 10px;display:none;letter-spacing:.5px;}
+.store-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%;max-width:340px;margin-bottom:10px;flex-shrink:0;}
+.store-item{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:11px 8px;text-align:center;cursor:pointer;transition:all .15s;position:relative;}
+.store-item:hover{border-color:var(--gold);transform:translateY(-2px);}
+.store-item.featured{border-color:var(--c1);background:rgba(255,45,85,.05);}
+.dbl-tag{position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+  background:var(--c5);color:#fff;font-size:7px;font-weight:700;padding:2px 8px;border-radius:10px;display:none;}
 .dbl-tag.show{display:block;}
-.store-coins{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);line-height:1;}
-.store-price{font-size:13px;font-weight:700;color:var(--text);margin:4px 0 2px;}
-.store-note{font-size:8px;color:var(--c4);letter-spacing:1px;font-weight:700;}
-.store-badge{font-size:8px;color:var(--c1);font-weight:700;letter-spacing:1px;margin-bottom:4px;}
-.store-pack-icon{font-size:26px;margin-bottom:6px;display:block;}
-.pu-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;width:100%;}
-.pu-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
-  padding:11px 6px;text-align:center;cursor:pointer;transition:all .18s;position:relative;}
-.pu-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3);}
-.pu-card:active{transform:scale(.96);}
-.pu-ico{font-size:24px;display:block;margin-bottom:5px;}
-.pu-name{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:1px;margin-bottom:3px;}
-.pu-desc{font-size:7px;color:var(--muted);margin-bottom:5px;line-height:1.4;}
-.pu-cost{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);}
-.free-section{width:100%;background:rgba(40,224,0,.04);
-  border:1px solid rgba(40,224,0,.2);border-radius:12px;padding:12px;flex-shrink:0;}
+.store-coins{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);}
+.store-price{font-size:12px;font-weight:700;color:var(--text);margin:2px 0;}
+.store-note{font-size:8px;color:var(--muted);letter-spacing:1px;}
+.store-badge{font-size:8px;color:var(--c1);font-weight:700;letter-spacing:1px;margin-bottom:2px;}
+.free-section{width:100%;max-width:340px;background:rgba(40,224,0,.04);
+  border:1px solid rgba(40,224,0,.2);border-radius:12px;padding:11px;margin-bottom:10px;flex-shrink:0;}
 .fcol{display:flex;gap:6px;}
 .fc-btn{flex:1;background:var(--panel);border:1px solid var(--border);border-radius:10px;
-  padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s;}
-.fc-btn:hover{border-color:var(--c4);transform:translateY(-1px);}
-.fc-ico{font-size:20px;margin-bottom:3px;}
+  padding:8px 4px;text-align:center;cursor:pointer;transition:all .15s;}
+.fc-btn:hover{border-color:var(--c4);}
+.fc-ico{font-size:17px;margin-bottom:2px;}
 .fc-coins{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--c4);}
-.fc-lbl{font-size:7px;color:var(--muted);letter-spacing:1px;}
-.fc-cd{font-size:8px;color:var(--muted);margin-top:2px;}
-.boost-pill-row{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;width:100%;}
-.boost-pill{font-size:9px;background:rgba(255,230,0,.1);border:1px solid rgba(255,230,0,.3);
-  border-radius:20px;padding:3px 10px;color:var(--gold);letter-spacing:.5px;}
+.fc-lbl{font-size:7px;color:var(--muted);}
+.fc-cd{font-size:8px;color:var(--muted);margin-top:1px;}
 
 /* ── Theme row ── */
 .theme-row{display:flex;gap:5px;flex-wrap:wrap;width:100%;max-width:340px;margin-bottom:10px;flex-shrink:0;}
@@ -997,7 +977,7 @@ header,
   </div>
   <div class="instr-sec">
     <div class="instr-title" style="color:var(--c4);">🆕 SPECIAL TILES</div>
-    <div class="instr-row"><div class="instr-ico">❄️</div><div class="instr-text"><strong>Frozen tiles</strong> — appear at higher levels. Must be included in a chain to unfreeze. They do not score until unfrozen.</div></div>
+    <div class="instr-row"><div class="instr-ico">❄️</div><div class="instr-text"><strong>Frozen tiles</strong> — appear at higher levels. Cannot be included in any chain — they block that tile until the round ends.</div></div>
     <div class="instr-row"><div class="instr-ico">✨</div><div class="instr-text"><strong>Wild tiles</strong> — match any colour. Including one in a chain activates +1 bonus multiplier on top of chain length.</div></div>
     <div class="instr-row"><div class="instr-ico">💣</div><div class="instr-text"><strong>Bomb tiles</strong> — appear at level 6+. Committing a chain with a Bomb tile blasts all surrounding tiles as a bonus.</div></div>
   </div>
@@ -1252,193 +1232,173 @@ header,
   <div class="scr-title" style="color:var(--gold);font-size:40px;">COIN STORE</div>
   <div class="scr-sub">POWER UP YOUR GAME</div>
 
-  <!-- Active boosts bar -->
-  <div id="activeBoostsBar" style="display:none;width:100%;max-width:340px;flex-shrink:0;">
-    <div class="boost-pill-row" id="activeBoostsPills"></div>
+  <!-- VIP Pass -->
+  <div class="vip-banner">
+    <div class="vip-title">👑 VIP PASS</div>
+    <div class="vip-price">£1.99 / month</div>
+    <div class="vip-perks">✓ 150 coins every week &nbsp;·&nbsp; ✓ 4 lives per game<br>✓ Crown badge &nbsp;·&nbsp; ✓ VIP leaderboard tag &nbsp;·&nbsp; ✓ Early features</div>
+    <button class="vip-btn" onclick="buyVIP()">SUBSCRIBE</button>
+    <div style="font-size:8px;color:var(--muted2);margin-top:6px;">Already subscribed? <span onclick="verifyVIPPurchase()" style="color:var(--c6);cursor:pointer;text-decoration:underline;">Tap here to activate</span></div>
   </div>
 
-  <!-- Tab bar -->
-  <div class="store-tabs">
-    <button class="store-tab active" onclick="switchStoreTab('vip',this)">👑 VIP</button>
-    <button class="store-tab" onclick="switchStoreTab('powerups',this)">⚡ POWER-UPS</button>
-    <button class="store-tab" onclick="switchStoreTab('coins',this)">🪙 COINS</button>
-    <button class="store-tab" onclick="switchStoreTab('free',this)">🎁 FREE</button>
+  <!-- Gift Coins -->
+  <div style="width:100%;max-width:340px;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.2);border-radius:12px;padding:11px;margin-bottom:10px;flex-shrink:0;text-align:center;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);letter-spacing:2px;margin-bottom:3px;">🎁 GIFT COINS TO A FRIEND</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Send a one-time coin gift — your friend claims it when they open the link</div>
+    <button onclick="giftCoins()" style="background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3);border-radius:8px;padding:7px 18px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);cursor:pointer;letter-spacing:2px;">SEND A GIFT 🎁</button>
   </div>
 
-  <!-- ── TAB: VIP ── -->
-  <div class="store-tab-panel active" id="stab-vip">
-    <div class="vip-banner" style="margin-bottom:0;">
-      <div class="vip-title">👑 VIP PASS</div>
-      <div class="vip-price">£1.99 / month</div>
-      <div class="vip-perks">✓ 150 coins every week &nbsp;·&nbsp; ✓ 4 lives per game<br>✓ Crown badge &nbsp;·&nbsp; ✓ VIP leaderboard tag &nbsp;·&nbsp; ✓ Early features</div>
-      <button class="vip-btn" onclick="buyVIP()">SUBSCRIBE NOW</button>
-      <div style="font-size:8px;color:var(--muted2);margin-top:6px;">Already subscribed? <span onclick="verifyVIPPurchase()" style="color:var(--c6);cursor:pointer;text-decoration:underline;">Tap here to activate</span></div>
-    </div>
-
-    <!-- Extra Heart -->
-    <div style="width:100%;background:rgba(255,45,85,.06);border:1px solid rgba(255,45,85,.3);border-radius:14px;padding:14px;text-align:center;">
-      <div style="font-size:28px;margin-bottom:6px;">❤️</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--c1);letter-spacing:2px;margin-bottom:4px;">EXTRA HEART</div>
-      <div style="font-size:9px;color:var(--muted);margin-bottom:10px;">Add a life mid-game or before starting. Max 5 hearts total.</div>
-      <button onclick="buyHeart()" style="background:rgba(255,45,85,.18);border:1px solid rgba(255,45,85,.4);border-radius:9px;padding:8px 22px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c1);cursor:pointer;letter-spacing:2px;">❤️ +1 HEART — 40🪙</button>
-    </div>
-
-    <!-- Gift Coins -->
-    <div style="width:100%;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.2);border-radius:14px;padding:14px;text-align:center;">
-      <div style="font-size:28px;margin-bottom:6px;">🎁</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--c2);letter-spacing:2px;margin-bottom:4px;">GIFT COINS</div>
-      <div style="font-size:9px;color:var(--muted);margin-bottom:10px;">Send a one-time coin gift — your friend claims it when they open the link.</div>
-      <button onclick="giftCoins()" style="background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3);border-radius:9px;padding:8px 22px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);cursor:pointer;letter-spacing:2px;">SEND A GIFT 🎁</button>
-    </div>
-
-    <!-- Streak Freeze -->
-    <div style="width:100%;background:rgba(0,229,255,.04);border:1px solid rgba(100,180,255,.25);border-radius:14px;padding:14px;text-align:center;">
-      <div style="font-size:28px;margin-bottom:6px;">🧊</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--c2);letter-spacing:2px;margin-bottom:4px;">STREAK FREEZE</div>
-      <div style="font-size:9px;color:var(--muted);margin-bottom:10px;">Protect your daily streak for 24 hours even if you miss a day.</div>
-      <button onclick="buyStreakFreeze()" style="background:rgba(0,180,255,.15);border:1px solid rgba(0,180,255,.35);border-radius:9px;padding:8px 22px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);cursor:pointer;letter-spacing:2px;">🧊 FREEZE — 30🪙</button>
-    </div>
-
-    <!-- Coin Chest -->
-    <div class="chest-wrap" style="margin-bottom:0;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:2px;margin-bottom:3px;">🎁 COIN CHEST — 30🪙</div>
-      <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Spend 30 coins, always get more back. Never a loss!</div>
-      <span class="chest-icon" id="chestIcon" onclick="openChest()">🎁</span>
-      <div style="font-size:9px;color:var(--muted);margin-top:5px;" id="chestResult"></div>
-    </div>
+  <!-- Buy a Heart -->
+  <div style="width:100%;max-width:340px;background:rgba(255,45,85,.06);border:1px solid rgba(255,45,85,.3);border-radius:12px;padding:12px;margin-bottom:10px;flex-shrink:0;text-align:center;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c1);letter-spacing:2px;margin-bottom:3px;">❤️ EXTRA HEART</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Add a life mid-game or before starting. Max 5 hearts total.</div>
+    <button onclick="buyHeart()" style="background:rgba(255,45,85,.18);border:1px solid rgba(255,45,85,.4);border-radius:8px;padding:7px 18px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c1);cursor:pointer;letter-spacing:2px;">❤️ +1 HEART — 40🪙</button>
   </div>
 
-  <!-- ── TAB: POWER-UPS ── -->
-  <div class="store-tab-panel" id="stab-powerups">
-    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;align-self:flex-start;">⚡ STOCKPILE POWER-UPS</div>
-    <div class="pu-grid">
-      <div class="pu-card" onclick="buyDoubler()">
-        <span class="pu-ico">🔥</span>
-        <div class="pu-name" style="color:var(--c5);">DOUBLER</div>
-        <div class="pu-desc">2× coins for 10 min</div>
-        <div class="pu-cost">80🪙</div>
-      </div>
-      <div class="pu-card" onclick="buyScoreBoost()">
-        <span class="pu-ico">🎯</span>
-        <div class="pu-name" style="color:var(--c4);">SCORE BOOST</div>
-        <div class="pu-desc">2× score next game</div>
-        <div class="pu-cost" id="scoreBoostBtn">60🪙</div>
-      </div>
-      <div class="pu-card" onclick="buyTimeFreezeItem()">
-        <span class="pu-ico">❄️</span>
-        <div class="pu-name" style="color:var(--c2);">TIME FREEZE</div>
-        <div class="pu-desc">5s freeze · <span id="tfStoredCount">0</span> stored</div>
-        <div class="pu-cost">45🪙</div>
-      </div>
-      <div class="pu-card" onclick="buyRevivePack()">
-        <span class="pu-ico">💊</span>
-        <div class="pu-name" style="color:var(--c1);">REVIVE PACK</div>
-        <div class="pu-desc">3 revives · <span id="revivePackCount">0</span> stored</div>
-        <div class="pu-cost">120🪙</div>
-      </div>
-      <div class="pu-card" onclick="buyXPBoost()">
-        <span class="pu-ico">⭐</span>
-        <div class="pu-name" style="color:var(--c3);">XP BOOST</div>
-        <div class="pu-desc">3× XP next game</div>
-        <div class="pu-cost" id="xpBoostBtn">70🪙</div>
-      </div>
-      <div class="pu-card" onclick="buyMagnet()">
-        <span class="pu-ico">🧲</span>
-        <div class="pu-name" style="color:var(--c6);">MAGNET</div>
-        <div class="pu-desc">Auto-chain biggest group</div>
-        <div class="pu-cost">50🪙</div>
-      </div>
-    </div>
-
-    <!-- In-game powerup reference -->
-    <div style="width:100%;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px;">
-      <div style="font-size:8px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">SPEND COINS IN-GAME ON:</div>
-      <div style="display:flex;flex-wrap:wrap;gap:5px;">
-        <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💡 Hint 30🪙</span>
-        <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🔀 Shuffle 50🪙</span>
-        <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💣 Bomb 75🪙</span>
-        <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">⏱️ +Time 60🪙</span>
-        <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💚 Revive 60🪙</span>
-        <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🎨 Themes 30–100🪙</span>
-      </div>
-    </div>
-
-    <!-- Tile Themes -->
-    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;align-self:flex-start;">🎨 TILE THEMES</div>
-    <div class="theme-row" id="themeRow"></div>
+  <!-- Streak Freeze -->
+  <div style="width:100%;max-width:340px;background:rgba(0,229,255,.04);border:1px solid rgba(100,180,255,.25);border-radius:12px;padding:11px;margin-bottom:10px;flex-shrink:0;text-align:center;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);letter-spacing:2px;margin-bottom:3px;">🧊 STREAK FREEZE</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Protect your daily streak for 24 hours even if you miss a day. One-time use.</div>
+    <button onclick="buyStreakFreeze()" style="background:rgba(0,180,255,.15);border:1px solid rgba(0,180,255,.35);border-radius:8px;padding:7px 18px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c2);cursor:pointer;letter-spacing:2px;">🧊 FREEZE (30🪙)</button>
   </div>
 
-  <!-- ── TAB: COINS ── -->
-  <div class="store-tab-panel" id="stab-coins">
-    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;align-self:flex-start;">💳 BUY COIN PACKS</div>
-    <div class="store-grid">
-      <div class="store-item" onclick="buyCoins(100,0.99,'starter')">
-        <div class="dbl-tag" id="dt_starter">2× TODAY!</div>
-        <span class="store-pack-icon">🟡</span>
-        <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">STARTER</div>
-        <div class="store-coins" id="sc_starter">100 🪙</div>
-        <div class="store-price">£0.99</div>
-      </div>
-      <div class="store-item featured" onclick="buyCoins(600,4.99,'popular')">
-        <div class="dbl-tag" id="dt_popular">2× TODAY!</div>
-        <div class="store-badge">⭐ BEST VALUE</div>
-        <span class="store-pack-icon">🟠</span>
-        <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">POPULAR</div>
-        <div class="store-coins" id="sc_popular">600 🪙</div>
-        <div class="store-price">£4.99</div>
-        <div class="store-note">+20% BONUS</div>
-      </div>
-      <div class="store-item" onclick="buyCoins(1400,9.99,'gamer')">
-        <div class="dbl-tag" id="dt_gamer">2× TODAY!</div>
-        <span class="store-pack-icon">🔶</span>
-        <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">GAMER</div>
-        <div class="store-coins" id="sc_gamer">1400 🪙</div>
-        <div class="store-price">£9.99</div>
-        <div class="store-note">+40% BONUS</div>
-      </div>
-      <div class="store-item" onclick="buyCoins(3500,19.99,'whale')">
-        <div class="dbl-tag" id="dt_whale">2× TODAY!</div>
-        <span class="store-pack-icon">💎</span>
-        <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">WHALE</div>
-        <div class="store-coins" id="sc_whale">3500 🪙</div>
-        <div class="store-price">£19.99</div>
-        <div class="store-note">+75% BONUS</div>
-      </div>
+  <!-- Coin Chest -->
+  <div class="chest-wrap">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:2px;margin-bottom:3px;">🎁 COIN CHEST — 30🪙</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:8px;">Spend 30 coins, always get more back. Never a loss!</div>
+    <span class="chest-icon" id="chestIcon" onclick="openChest()">🎁</span>
+    <div style="font-size:9px;color:var(--muted);margin-top:5px;" id="chestResult"></div>
+  </div>
+
+  <!-- ═══ POWER-UP STOCKPILE ═══ -->
+  <div style="width:100%;max-width:340px;margin-bottom:6px;flex-shrink:0;">
+    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">⚡ POWER-UP STOCKPILE</div>
+  </div>
+  <div style="width:100%;max-width:340px;display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;flex-shrink:0;">
+
+    <!-- Coin Doubler -->
+    <div class="store-item" onclick="buyDoubler()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">🔥</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c5);letter-spacing:1px;">COIN DOUBLER</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">2× coins for 10 min</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);">80🪙</div>
     </div>
-    <div style="font-size:8px;color:var(--muted);text-align:center;max-width:280px;line-height:1.7;padding:0 4px;">
-      Coins = in-game power-ups only. No gambling. No random prizes. UK compliant. 18+.
+
+    <!-- Score Boost -->
+    <div class="store-item" onclick="buyScoreBoost()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">🎯</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c4);letter-spacing:1px;">SCORE BOOST</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">2× score next game</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);" id="scoreBoostBtn">60🪙</div>
+    </div>
+
+    <!-- Time Freeze (storable) -->
+    <div class="store-item" onclick="buyTimeFreezeItem()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">❄️</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c2);letter-spacing:1px;">TIME FREEZE</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">Freeze timer 5s · <span id="tfStoredCount">0</span> stored</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);">45🪙</div>
+    </div>
+
+    <!-- Revive Pack -->
+    <div class="store-item" onclick="buyRevivePack()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">💊</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c1);letter-spacing:1px;">REVIVE PACK</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">3 revives · <span id="revivePackCount">0</span> stored</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);">120🪙</div>
+    </div>
+
+    <!-- XP Boost -->
+    <div class="store-item" onclick="buyXPBoost()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">⭐</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c3);letter-spacing:1px;">XP BOOST</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">3× XP next game</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);" id="xpBoostBtn">70🪙</div>
+    </div>
+
+    <!-- Tile Magnet -->
+    <div class="store-item" onclick="buyMagnet()" style="text-align:center;padding:12px 8px;">
+      <div style="font-size:22px;margin-bottom:4px;">🧲</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c6);letter-spacing:1px;">TILE MAGNET</div>
+      <div style="font-size:8px;color:var(--muted);margin:3px 0 6px;">Auto-chain biggest group</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);">50🪙</div>
+    </div>
+
+  </div>
+
+  <!-- Active boosts status bar -->
+  <div id="activeBoostsBar" style="display:none;width:100%;max-width:340px;background:rgba(255,230,0,.06);border:1px solid rgba(255,230,0,.2);border-radius:10px;padding:8px 12px;margin-bottom:10px;flex-shrink:0;font-size:9px;color:var(--gold);letter-spacing:1px;text-align:center;"></div>
+
+  <!-- Free coins -->
+  <div class="free-section">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c4);letter-spacing:2px;margin-bottom:3px;">🎬 EARN FREE COINS</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:9px;">Watch short ads or claim daily bonus</div>
+    <div class="fcol">
+      <div class="fc-btn" id="watchAd1Btn" onclick="watchAdForCoins(1)">
+        <div class="fc-ico">📺</div><div class="fc-coins">+8🪙</div><div class="fc-lbl">WATCH AD</div><div class="fc-cd" id="watchAd1Cd"></div>
+      </div>
+      <div class="fc-btn" id="watchAd2Btn" onclick="watchAdForCoins(2)">
+        <div class="fc-ico">🎬</div><div class="fc-coins">+18🪙</div><div class="fc-lbl">3 ADS</div><div class="fc-cd" id="watchAd2Cd"></div>
+      </div>
+      <div class="fc-btn" id="dailyBonusBtn" onclick="claimDailyBonus()">
+        <div class="fc-ico">🎁</div><div class="fc-coins">+15🪙</div><div class="fc-lbl">DAILY</div><div class="fc-cd" id="dailyBonusCd"></div>
+      </div>
     </div>
   </div>
 
-  <!-- ── TAB: FREE ── -->
-  <div class="store-tab-panel" id="stab-free">
-    <div class="free-section">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c4);letter-spacing:2px;margin-bottom:3px;">🎬 EARN FREE COINS</div>
-      <div style="font-size:9px;color:var(--muted);margin-bottom:9px;">Watch short ads or claim daily bonus</div>
-      <div class="fcol">
-        <div class="fc-btn" id="watchAd1Btn" onclick="watchAdForCoins(1)">
-          <div class="fc-ico">📺</div><div class="fc-coins">+8🪙</div><div class="fc-lbl">WATCH AD</div><div class="fc-cd" id="watchAd1Cd"></div>
-        </div>
-        <div class="fc-btn" id="watchAd2Btn" onclick="watchAdForCoins(2)">
-          <div class="fc-ico">🎬</div><div class="fc-coins">+18🪙</div><div class="fc-lbl">3 ADS</div><div class="fc-cd" id="watchAd2Cd"></div>
-        </div>
-        <div class="fc-btn" id="dailyBonusBtn" onclick="claimDailyBonus()">
-          <div class="fc-ico">🎁</div><div class="fc-coins">+15🪙</div><div class="fc-lbl">DAILY</div><div class="fc-cd" id="dailyBonusCd"></div>
-        </div>
-      </div>
-    </div>
+  <!-- Themes -->
+  <div style="width:100%;max-width:340px;margin-bottom:5px;flex-shrink:0;">
+    <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;">🎨 TILE THEMES</div>
+  </div>
+  <div class="theme-row" id="themeRow"></div>
 
-    <!-- Referral -->
-    <div style="width:100%;background:rgba(40,224,0,.04);border:1px solid rgba(40,224,0,.2);border-radius:14px;padding:14px;text-align:center;">
-      <div style="font-size:28px;margin-bottom:6px;">🔗</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--c4);letter-spacing:2px;margin-bottom:4px;">REFER A FRIEND</div>
-      <div style="font-size:9px;color:var(--muted);margin-bottom:10px;">Share your code. You both get 25🪙 when they play their first game.</div>
-      <button onclick="showReferral()" style="background:rgba(40,224,0,.12);border:1px solid rgba(40,224,0,.3);border-radius:9px;padding:8px 22px;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--c4);cursor:pointer;letter-spacing:2px;">GET REFERRAL CODE</button>
+  <!-- Paid packs -->
+  <div class="store-grid">
+    <div class="store-item" onclick="buyCoins(100,0.99,'starter')">
+      <div class="dbl-tag" id="dt_starter">2× TODAY!</div>
+      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:2px;">STARTER PACK</div>
+      <div class="store-coins" id="sc_starter">100 🪙</div><div class="store-price">£0.99</div>
+    </div>
+    <div class="store-item featured" onclick="buyCoins(600,4.99,'popular')">
+      <div class="dbl-tag" id="dt_popular">2× TODAY!</div>
+      <div class="store-badge">⭐ BEST VALUE</div>
+      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:2px;">POPULAR PACK</div>
+      <div class="store-coins" id="sc_popular">600 🪙</div><div class="store-price">£4.99</div>
+      <div class="store-note">+20% BONUS</div>
+    </div>
+    <div class="store-item" onclick="buyCoins(1400,9.99,'gamer')">
+      <div class="dbl-tag" id="dt_gamer">2× TODAY!</div>
+      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:2px;">GAMER PACK</div>
+      <div class="store-coins" id="sc_gamer">1400 🪙</div><div class="store-price">£9.99</div>
+      <div class="store-note">+40% BONUS</div>
+    </div>
+    <div class="store-item" onclick="buyCoins(3500,19.99,'whale')">
+      <div class="dbl-tag" id="dt_whale">2× TODAY!</div>
+      <div style="font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:2px;">WHALE PACK</div>
+      <div class="store-coins" id="sc_whale">3500 🪙</div><div class="store-price">£19.99</div>
+      <div class="store-note">+75% BONUS</div>
     </div>
   </div>
-
-  <button class="ghost-btn" onclick="_returnFromMidGameScreen()" style="margin-top:4px;">← BACK</button>
+  <div style="width:100%;max-width:340px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px;flex-shrink:0;">
+    <div style="font-size:8px;color:var(--muted);margin-bottom:5px;letter-spacing:1px;">SPEND COINS ON:</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;">
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💡 Hint 30🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🔀 Shuffle 50🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💣 Bomb 75🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">⏱️ +Time 60🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">💚 Revive 60🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🔥 Doubler 80🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🎯 Boost 60🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🧲 Magnet 50🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🎨 Themes 250–2500🪙</span>
+    </div>
+  </div>
+  <button class="ghost-btn" onclick="_returnFromMidGameScreen()">← BACK</button>
+  <div style="font-size:8px;color:var(--muted);margin-top:5px;text-align:center;max-width:280px;line-height:1.7;flex-shrink:0;">
+    Coins = in-game power-ups only. No gambling. No random prizes. UK compliant. 18+.
+  </div>
 </div>
+
 <!-- ═══════════ STREAK PROTECT ═══════════ -->
 <div class="streak-protect hidden" id="streakProtect">
   <div>
@@ -1909,14 +1869,14 @@ function shareProfile(){
   else navigator.clipboard?.writeText(text).then(()=>showToast('Profile copied! 📋'));
 }
 const THEMES = {
-  neon:   {name:'NEON',   price:0,   swatch:'linear-gradient(135deg,#ff2d55,#00e5ff)', vars:{}},
-  pastel: {name:'PASTEL', price:30,  swatch:'linear-gradient(135deg,#ffb3c1,#b3e0ff)',
+  neon:   {name:'NEON',   price:0,    swatch:'linear-gradient(135deg,#ff2d55,#00e5ff)', vars:{}},
+  pastel: {name:'PASTEL', price:250,  swatch:'linear-gradient(135deg,#ffb3c1,#b3e0ff)',
     vars:{c1:'#ff9eb5',c2:'#a0d8ef',c3:'#fff0a0',c4:'#b5ead7',c5:'#ffcba4',c6:'#d8b4fe'}},
-  mono:   {name:'MONO',   price:40,  swatch:'linear-gradient(135deg,#888,#eee)',
+  mono:   {name:'MONO',   price:500,  swatch:'linear-gradient(135deg,#888,#eee)',
     vars:{c1:'#cccccc',c2:'#aaaaaa',c3:'#eeeeee',c4:'#ffffff',c5:'#999999',c6:'#bbbbbb'}},
-  fire:   {name:'FIRE',   price:60,  swatch:'linear-gradient(135deg,#ff4500,#ffe600)',
+  fire:   {name:'FIRE',   price:1000, swatch:'linear-gradient(135deg,#ff4500,#ffe600)',
     vars:{c1:'#ff4500',c2:'#ff8c00',c3:'#ffd700',c4:'#ff6347',c5:'#dc143c',c6:'#ff1493'}},
-  gold:   {name:'GOLD',   price:100, swatch:'linear-gradient(135deg,#ffd700,#b8860b)',
+  gold:   {name:'GOLD',   price:2500, swatch:'linear-gradient(135deg,#ffd700,#b8860b)',
     vars:{c1:'#ffd700',c2:'#daa520',c3:'#f0e68c',c4:'#ffec8b',c5:'#b8860b',c6:'#eec900'}},
 };
 
@@ -2773,10 +2733,9 @@ function updateActiveBoostsBar(){
     const m=Math.ceil(doublerRem/60000);
     active.push(`🔥 Coin Doubler (${m}m left)`);
   }
-  const pills=document.getElementById('activeBoostsPills');
   if(active.length){
     bar.style.display='block';
-    if(pills) pills.innerHTML=active.map(a=>`<span class="boost-pill">${a}</span>`).join('');
+    bar.textContent='ACTIVE: '+active.join(' · ');
   } else {
     bar.style.display='none';
   }
@@ -3650,7 +3609,7 @@ function tileColor(idx){
   return S.grid[idx];
 }
 function isCompatible(idx, chainColor){
-  // Frozen tiles CAN be added mid-chain (just can't start one) — check colour only
+  if(S.frozenTiles.has(idx)) return false; // frozen cannot be added
   const tc=tileColor(idx);
   return tc==='__wild__' || tc===chainColor;
 }
@@ -3658,8 +3617,8 @@ function isCompatible(idx, chainColor){
 function onTileDown(idx){
   if(!S.running||S.animating||!S.grid[idx])return;
   if((S.blockedTiles||new Set()).has(idx)){showToast('🔒 Blocked! Clear surrounding tiles first');return;}
-  // Frozen tiles can be added mid-chain but cannot START a chain
-  if(S.frozenTiles.has(idx)&&S.selected.length===0){showToast('❄️ Frozen! Start your chain from a normal tile');return;}
+  // Frozen tiles are fully blocked — cannot start or join any chain
+  if(S.frozenTiles.has(idx)){showToast('❄️ Frozen! Clear adjacent tiles to unfreeze.');return;}
   const pos=S.selected.indexOf(idx);
   if(S.selected.length===0){S.selected.push(idx);refreshVisuals();updateComboUI();return;}
   if(pos>=0){S.selected.splice(pos+1);refreshVisuals();updateComboUI();return;}
@@ -3669,16 +3628,14 @@ function onTileDown(idx){
     S.selected.push(idx);refreshVisuals();updateComboUI();playTick();
   } else {
     clearSelection();
-    // If it's frozen, don't restart the selection with it
-    if(!S.frozenTiles.has(idx)){S.selected.push(idx);refreshVisuals();updateComboUI();}
+    S.selected.push(idx);refreshVisuals();updateComboUI();
   }
 }
 function onTileDrag(idx){
   if(!S.running||S.animating||!S.grid[idx])return;
   if((S.blockedTiles||new Set()).has(idx))return;
   if(S.selected.length===0){
-    // Can't start drag from a frozen tile
-    if(!S.frozenTiles.has(idx)) onTileDown(idx);
+    onTileDown(idx);
     return;
   }
   const pos=S.selected.indexOf(idx);
@@ -3831,7 +3788,6 @@ function refillGrid(){
 // ═══════════════════════════════════════════════
 function startTimer(){
   S.timeLeft=S.roundTime; clearInterval(S.timerInterval);
-  updateTimerBar(); // immediately paint bar at 100% before first tick
   S.timerInterval=setInterval(()=>{
     if(!S.running)return;
     S.timeLeft=Math.max(0,S.timeLeft-0.1); updateTimerBar();
@@ -4329,7 +4285,7 @@ function showScreen(id){
   const el=document.getElementById(id); if(!el)return;
   hideAllScreens();
   el.classList.remove('hidden');
-  if(id==='storeScreen'){updateFreeUI();renderThemes();updateDoublerUI();switchStoreTab('vip',document.querySelector('.store-tab'));}
+  if(id==='storeScreen'){updateFreeUI();renderThemes();updateDoublerUI();}
   if(id==='achScreen')renderAchievements();
   if(id==='statsScreen')renderStatsScreen();
   if(id==='missionsScreen')updateMissionsUI();
@@ -4340,13 +4296,6 @@ function showScreen(id){
 }
 function hideScreen(id){const el=document.getElementById(id);if(el)el.classList.add('hidden');}
 function hideAllScreens(){SCREENS.forEach(hideScreen);}
-function switchStoreTab(tab, btn){
-  document.querySelectorAll('.store-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.store-tab-panel').forEach(p=>p.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-  const panel=document.getElementById('stab-'+tab);
-  if(panel) panel.classList.add('active');
-}
 function returnToHome(){
   hideAllScreens();
   const bbBadge=document.getElementById('bbBadge');
