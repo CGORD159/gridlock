@@ -60,7 +60,7 @@ html[data-mode="light"] {
 html,body{height:100%;}
 body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;
   min-height:100vh;display:flex;flex-direction:column;align-items:center;
-  overflow-x:hidden;overscroll-behavior:none;transition:background .3s,color .3s;}
+  overflow:hidden;overscroll-behavior:none;transition:background .3s,color .3s;}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);}
 
@@ -716,6 +716,29 @@ header,
   margin-left:auto;
   margin-right:auto;
 }
+
+/* ── Hide game HUD when not in a game — prevents scrolling behind home screen ── */
+header,.stats,.timer-wrap,.hud-row,.combo-meter-wrap,.next-hint,
+.mission-ticker,.combo-bar,.grid-wrap,.powerups,.top-score-strip,.ad-slot{
+  display:none !important;
+}
+/* Fever wrap stays hidden unless .show; settings tray respects .hidden */
+.fever-wrap{ display:none !important; }
+/* Reveal everything once body.in-game is set */
+body.in-game header{ display:flex !important; }
+body.in-game .stats{ display:flex !important; }
+body.in-game .hud-row{ display:flex !important; }
+body.in-game .combo-bar{ display:flex !important; }
+body.in-game .powerups{ display:flex !important; }
+body.in-game .combo-meter-wrap{ display:flex !important; }
+body.in-game .next-hint{ display:flex !important; }
+body.in-game .timer-wrap{ display:block !important; }
+body.in-game .mission-ticker{ display:block !important; }
+body.in-game .grid-wrap{ display:flex !important; }
+body.in-game .top-score-strip{ display:block !important; }
+body.in-game .ad-slot{ display:block !important; }
+body.in-game .fever-wrap.show{ display:block !important; }
+body.in-game .settings-tray:not(.hidden){ display:flex !important; }
 .bb-badge{
   display:none;
   background:linear-gradient(135deg,rgba(191,90,242,.15),rgba(255,45,85,.1));
@@ -977,7 +1000,7 @@ header,
   </div>
   <div class="instr-sec">
     <div class="instr-title" style="color:var(--c4);">🆕 SPECIAL TILES</div>
-    <div class="instr-row"><div class="instr-ico">❄️</div><div class="instr-text"><strong>Frozen tiles</strong> — appear at higher levels. Cannot be included in any chain — they block that tile until the round ends.</div></div>
+    <div class="instr-row"><div class="instr-ico">❄️</div><div class="instr-text"><strong>Frozen tiles</strong> — appear at higher levels. Must be included in a chain to unfreeze. They do not score until unfrozen.</div></div>
     <div class="instr-row"><div class="instr-ico">✨</div><div class="instr-text"><strong>Wild tiles</strong> — match any colour. Including one in a chain activates +1 bonus multiplier on top of chain length.</div></div>
     <div class="instr-row"><div class="instr-ico">💣</div><div class="instr-text"><strong>Bomb tiles</strong> — appear at level 6+. Committing a chain with a Bomb tile blasts all surrounding tiles as a bonus.</div></div>
   </div>
@@ -998,7 +1021,7 @@ header,
     <div class="instr-row"><div class="instr-ico">⏰</div><div class="instr-text">Timer runs out = lose a life. Lose 3 lives = game over.</div></div>
     <div class="instr-row"><div class="instr-ico">🪙</div><div class="instr-text">You earn a small number of coins by levelling up. Bigger rewards come from Daily Missions, achievements, and watching ads. Coins are <strong>scarce by design</strong> — they mean something!</div></div>
   </div>
-  <button class="big-btn" onclick="hideScreen('instrScreen')">← BACK</button>
+  <button class="big-btn" onclick="returnToHome()">← BACK</button>
 </div>
 
 <!-- ═══════════ MISSIONS ═══════════ -->
@@ -1012,7 +1035,7 @@ header,
     <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--c4);letter-spacing:2px;">ALL MISSIONS COMPLETE!</div>
     <div style="font-size:9px;color:var(--muted);margin-top:3px;">New missions tomorrow</div>
   </div>
-  <button class="big-btn" onclick="hideScreen('missionsScreen')">← BACK</button>
+  <button class="big-btn" onclick="returnToHome()">← BACK</button>
 </div>
 
 <!-- ═══════════ LEADERBOARD ═══════════ -->
@@ -1055,7 +1078,7 @@ header,
   <div class="scr-title" style="color:var(--gold);font-size:40px;">ACHIEVEMENTS</div>
   <div id="achProgress" class="scr-sub"></div>
   <div class="ach-grid" id="achGrid"></div>
-  <button class="big-btn" onclick="hideScreen('achScreen')">← BACK</button>
+  <button class="big-btn" onclick="returnToHome()">← BACK</button>
 </div>
 
 <!-- ═══════════ STATS ═══════════ -->
@@ -1068,7 +1091,7 @@ header,
     <canvas id="scoreChart" height="80" style="width:100%;"></canvas>
   </div>
   <button class="ghost-btn" onclick="shareStats()">📤 SHARE STATS</button>
-  <button class="big-btn" onclick="hideScreen('statsScreen')">← BACK</button>
+  <button class="big-btn" onclick="returnToHome()">← BACK</button>
 </div>
 
 <!-- ═══════════ GAME OVER ═══════════ -->
@@ -1178,7 +1201,7 @@ header,
     <button onclick="shareProfile()" style="background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.25);border-radius:8px;padding:6px 16px;font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--c2);cursor:pointer;letter-spacing:1px;">SHARE PROFILE</button>
   </div>
 
-  <button class="big-btn" onclick="hideScreen('profileScreen')">← BACK</button>
+  <button class="big-btn" onclick="returnToHome()">← BACK</button>
 </div>
 
 <!-- ═══════════ PUZZLE SCREEN ═══════════ -->
@@ -1390,7 +1413,7 @@ header,
       <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🔥 Doubler 80🪙</span>
       <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🎯 Boost 60🪙</span>
       <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🧲 Magnet 50🪙</span>
-      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🎨 Themes 250–2500🪙</span>
+      <span style="font-size:9px;background:var(--bg2);padding:3px 8px;border-radius:20px;">🎨 Themes 30–100🪙</span>
     </div>
   </div>
   <button class="ghost-btn" onclick="_returnFromMidGameScreen()">← BACK</button>
@@ -1878,6 +1901,14 @@ const THEMES = {
     vars:{c1:'#ff4500',c2:'#ff8c00',c3:'#ffd700',c4:'#ff6347',c5:'#dc143c',c6:'#ff1493'}},
   gold:   {name:'GOLD',   price:2500, swatch:'linear-gradient(135deg,#ffd700,#b8860b)',
     vars:{c1:'#ffd700',c2:'#daa520',c3:'#f0e68c',c4:'#ffec8b',c5:'#b8860b',c6:'#eec900'}},
+  ocean:  {name:'OCEAN',  price:750,  swatch:'linear-gradient(135deg,#006994,#00d4ff)',
+    vars:{c1:'#0099cc',c2:'#00d4ff',c3:'#7fffd4',c4:'#006994',c5:'#0047ab',c6:'#40e0d0'}},
+  candy:  {name:'CANDY',  price:500,  swatch:'linear-gradient(135deg,#ff69b4,#ffe4e1)',
+    vars:{c1:'#ff69b4',c2:'#ff1493',c3:'#ffb6c1',c4:'#db7093',c5:'#ff6eb4',c6:'#c71585'}},
+  matrix: {name:'MATRIX', price:1500, swatch:'linear-gradient(135deg,#003300,#00ff41)',
+    vars:{c1:'#00ff41',c2:'#39ff14',c3:'#00dd35',c4:'#7fff00',c5:'#32cd32',c6:'#adff2f'}},
+  void:   {name:'VOID',   price:3500, swatch:'linear-gradient(135deg,#1a0033,#6600cc)',
+    vars:{c1:'#9d00ff',c2:'#cc00ff',c3:'#7b00d4',c4:'#e040fb',c5:'#aa00ff',c6:'#d500f9'}},
 };
 
 // ═══════════════════════════════════════════════
@@ -2820,6 +2851,7 @@ function _returnFromMidGameScreen(){
   if(_pausedMidGame && S.running){
     _pausedMidGame=false;
     hideAllScreens();
+    document.body.classList.add('in-game');
     _paused=true;
     const overlay=document.getElementById('pauseOverlay');
     if(overlay){overlay.style.display='';overlay.classList.remove('hidden');}
@@ -2834,6 +2866,7 @@ function pauseQuit(){
   document.getElementById('pauseOverlay').classList.add('hidden');
   clearInterval(S.timerInterval);
   S.running=false;
+  document.body.classList.remove('in-game');
   endGame();
 }
 // ═══════════════════════════════════════════════
@@ -3617,8 +3650,8 @@ function isCompatible(idx, chainColor){
 function onTileDown(idx){
   if(!S.running||S.animating||!S.grid[idx])return;
   if((S.blockedTiles||new Set()).has(idx)){showToast('🔒 Blocked! Clear surrounding tiles first');return;}
-  // Frozen tiles are fully blocked — cannot start or join any chain
-  if(S.frozenTiles.has(idx)){showToast('❄️ Frozen! Clear adjacent tiles to unfreeze.');return;}
+  // Frozen tiles can be added mid-chain but cannot START a chain
+  if(S.frozenTiles.has(idx)&&S.selected.length===0){showToast('❄️ Frozen! Start your chain from a normal tile');return;}
   const pos=S.selected.indexOf(idx);
   if(S.selected.length===0){S.selected.push(idx);refreshVisuals();updateComboUI();return;}
   if(pos>=0){S.selected.splice(pos+1);refreshVisuals();updateComboUI();return;}
@@ -3628,14 +3661,16 @@ function onTileDown(idx){
     S.selected.push(idx);refreshVisuals();updateComboUI();playTick();
   } else {
     clearSelection();
-    S.selected.push(idx);refreshVisuals();updateComboUI();
+    // If it's frozen, don't restart the selection with it
+    if(!S.frozenTiles.has(idx)){S.selected.push(idx);refreshVisuals();updateComboUI();}
   }
 }
 function onTileDrag(idx){
   if(!S.running||S.animating||!S.grid[idx])return;
   if((S.blockedTiles||new Set()).has(idx))return;
   if(S.selected.length===0){
-    onTileDown(idx);
+    // Can't start drag from a frozen tile
+    if(!S.frozenTiles.has(idx)) onTileDown(idx);
     return;
   }
   const pos=S.selected.indexOf(idx);
@@ -3966,8 +4001,10 @@ function startGame(isDaily){
   updateLivesUI(); updateUI(); updateStreakUI();
   const rng=isDaily?seededRNG(todaySeed()):null;
   generateGrid(rng); startTimer(); updateMissionsUI();
+  document.body.classList.add('in-game');
 }
 function endGame(){
+  document.body.classList.remove('in-game');
   S.running=false; clearInterval(S.timerInterval);
   clearHotTiles();
   clearTimeout(S.feverTimeout);
@@ -4297,6 +4334,7 @@ function showScreen(id){
 function hideScreen(id){const el=document.getElementById(id);if(el)el.classList.add('hidden');}
 function hideAllScreens(){SCREENS.forEach(hideScreen);}
 function returnToHome(){
+  document.body.classList.remove('in-game');
   hideAllScreens();
   const bbBadge=document.getElementById('bbBadge');
   if(bbBadge) bbBadge.classList.remove('show');
