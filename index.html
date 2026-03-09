@@ -716,15 +716,12 @@ header,
   margin-left:auto;
   margin-right:auto;
 }
-
-/* ── Hide game HUD when not in a game — prevents scrolling behind home screen ── */
+/* ── Hide game HUD when not in a game ── */
 header,.stats,.timer-wrap,.hud-row,.combo-meter-wrap,.next-hint,
 .mission-ticker,.combo-bar,.grid-wrap,.powerups,.top-score-strip,.ad-slot{
   display:none !important;
 }
-/* Fever wrap stays hidden unless .show; settings tray respects .hidden */
 .fever-wrap{ display:none !important; }
-/* Reveal everything once body.in-game is set */
 body.in-game header{ display:flex !important; }
 body.in-game .stats{ display:flex !important; }
 body.in-game .hud-row{ display:flex !important; }
@@ -788,6 +785,26 @@ body.in-game .settings-tray:not(.hidden){ display:flex !important; }
 /* ═══════════════════════════════════════════════
    REFERRAL SYSTEM
    ═══════════════════════════════════════════════ */
+.recent-games-card{width:100%;max-width:440px;background:var(--panel);border:1px solid var(--border);
+  border-radius:16px;padding:14px;margin-bottom:8px;position:relative;overflow:hidden;}
+.recent-games-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));opacity:.7;}
+.rg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.rg-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;color:var(--c2);}
+.rg-count{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;}
+.rg-list{display:flex;flex-direction:column;gap:5px;}
+.rg-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;
+  background:var(--bg2);border:1px solid var(--border2);}
+.rg-row.rg-best{border-color:rgba(255,230,0,.35);background:rgba(255,230,0,.05);}
+.rg-num{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--muted);width:16px;text-align:center;}
+.rg-score{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--text);flex:1;}
+.rg-row.rg-best .rg-score{color:var(--c3);}
+.rg-meta{display:flex;gap:6px;align-items:center;}
+.rg-tag{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);
+  background:var(--bg);border:1px solid var(--border2);border-radius:4px;padding:2px 5px;white-space:nowrap;}
+.rg-crown{font-size:11px;}
+.rg-empty{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);
+  text-align:center;padding:12px 0;letter-spacing:1px;}
 .referral-card{width:100%;max-width:440px;background:linear-gradient(135deg,rgba(0,229,255,.05),rgba(191,90,242,.04));
   border:1px solid rgba(0,229,255,.2);border-radius:14px;padding:13px 14px;margin-bottom:8px;}
 .ref-code-box{display:flex;align-items:center;gap:8px;margin:8px 0;}
@@ -945,6 +962,19 @@ body.in-game .settings-tray:not(.hidden){ display:flex !important; }
     <div class="tip-pill">💣 <span>Bomb blasts neighbours</span></div>
   </div>
 
+  <!-- Recent Games -->
+  <div style="padding:0 16px;width:100%;box-sizing:border-box;margin-bottom:0;" id="recentGamesWrap">
+    <div class="recent-games-card">
+      <div class="rg-header">
+        <div class="rg-title">📊 RECENT GAMES</div>
+        <div class="rg-count" id="rgCount"></div>
+      </div>
+      <div class="rg-list" id="rgList">
+        <div class="rg-empty">Play your first game to see results here</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Referral card -->
   <div style="padding:0 16px;width:100%;box-sizing:border-box;">
     <div class="referral-card">
@@ -1035,7 +1065,7 @@ body.in-game .settings-tray:not(.hidden){ display:flex !important; }
     <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--c4);letter-spacing:2px;">ALL MISSIONS COMPLETE!</div>
     <div style="font-size:9px;color:var(--muted);margin-top:3px;">New missions tomorrow</div>
   </div>
-  <button class="big-btn" onclick="returnToHome()">← BACK</button>
+  <button class="big-btn" onclick="_returnFromMidGameScreen()">← BACK</button>
 </div>
 
 <!-- ═══════════ LEADERBOARD ═══════════ -->
@@ -1453,7 +1483,7 @@ body.in-game .settings-tray:not(.hidden){ display:flex !important; }
       <span class="coin-amt" id="coinDisplay">50</span>
       <span style="font-size:11px;color:var(--muted);">+</span>
     </div>
-    <button class="ico-btn" onclick="showScreen('missionsScreen')" title="Missions">🎯</button>
+    <button class="ico-btn" onclick="openMidGame('missionsScreen')" title="Missions">🎯</button>
     <button class="ico-btn" id="settingsToggleBtn" onclick="toggleSettingsTray()" title="Settings">⚙️</button>
     <button class="ico-btn" id="pauseBtn" onclick="togglePause()" title="Pause">⏸️</button>
   </div>
@@ -1502,7 +1532,7 @@ body.in-game .settings-tray:not(.hidden){ display:flex !important; }
 <!-- Next colour distribution hint -->
 <div class="next-hint" id="nextHint"></div>
 
-<div class="mission-ticker" id="missionTicker" onclick="showScreen('missionsScreen')" style="display:none;">
+<div class="mission-ticker" id="missionTicker" onclick="openMidGame('missionsScreen')" style="display:none;">
   <div class="mtick">
     <span style="font-size:11px;">🎯</span>
     <span class="mlabel" id="tickerLabel">Mission…</span>
@@ -2365,7 +2395,16 @@ function saveStats(){
   S.stats.gamesPlayed=(S.stats.gamesPlayed||0)+1;
   S.stats.maxStreak=Math.max(S.stats.maxStreak||0,S.streak);
   const h=S.stats.scoreHistory||[];
-  h.push(S.score); if(h.length>7)h.shift();
+  const gameRecord={
+    score:S.score,
+    level:S.level,
+    chains:S.totalChains,
+    tiles:S.tilesCleared,
+    best:S.bestChain,
+    daily:!!S.isDailyChallenge,
+    ts:Date.now()
+  };
+  h.push(gameRecord); if(h.length>10)h.shift();
   S.stats.scoreHistory=h;
   localStorage.setItem('gl_stats',JSON.stringify(S.stats));
 }
@@ -2847,19 +2886,20 @@ function pauseOpenStore(){
   clearInterval(S.timerInterval);
   showScreen('storeScreen');
 }
+function openMidGame(screenId){
+  if(S.running && !_paused){ _pausedMidGame=true; clearInterval(S.timerInterval); }
+  showScreen(screenId);
+}
 function _returnFromMidGameScreen(){
   if(_pausedMidGame && S.running){
-    _pausedMidGame=false;
-    hideAllScreens();
-    document.body.classList.add('in-game');
-    _paused=true;
+    _pausedMidGame=false; _paused=false;
+    hideAllScreens(); document.body.classList.add('in-game');
     const overlay=document.getElementById('pauseOverlay');
-    if(overlay){overlay.style.display='';overlay.classList.remove('hidden');}
+    if(overlay){overlay.classList.add('hidden');overlay.style.display='';}
     const pb=document.getElementById('pauseBtn');
-    if(pb) pb.textContent='▶️';
-  } else {
-    returnToHome();
-  }
+    if(pb) pb.textContent='⏸️';
+    resumeTimer();
+  } else { returnToHome(); }
 }
 function pauseQuit(){
   _paused=false;
@@ -3384,6 +3424,41 @@ function applyBrainBurst(){
   S.roundTime=Math.max(6,S.roundTime*0.8);
 }
 
+function renderRecentGames(){
+  const list = document.getElementById('rgList');
+  const count = document.getElementById('rgCount');
+  if(!list) return;
+  const history = (S.stats.scoreHistory||[]).slice().reverse(); // newest first
+  if(!history.length){
+    list.innerHTML='<div class="rg-empty">Play your first game to see results here</div>';
+    if(count) count.textContent='';
+    return;
+  }
+  const bestScore = Math.max(...history.map(g=>typeof g==='object'?g.score:g));
+  if(count) count.textContent = history.length + ' game' + (history.length!==1?'s':'');
+  list.innerHTML = history.map((g,i)=>{
+    // Handle legacy entries (plain numbers)
+    const score  = typeof g==='object' ? g.score  : g;
+    const level  = typeof g==='object' ? g.level  : null;
+    const chains = typeof g==='object' ? g.chains : null;
+    const best   = typeof g==='object' ? g.best   : null;
+    const daily  = typeof g==='object' ? g.daily  : false;
+    const isBest = score === bestScore && i === history.findIndex(x=>(typeof x==='object'?x.score:x)===bestScore);
+    const tags = [];
+    if(daily) tags.push('📅 DAILY');
+    if(level!=null) tags.push('LVL '+level);
+    if(chains!=null) tags.push(chains+'⛓️');
+    if(best!=null&&best>=5) tags.push('BEST '+best);
+    return `<div class="rg-row${isBest?' rg-best':''}">
+      <div class="rg-num">${i+1}</div>
+      <div class="rg-score">${score.toLocaleString()}</div>
+      <div class="rg-meta">
+        ${tags.map(t=>`<div class="rg-tag">${t}</div>`).join('')}
+        ${isBest?'<div class="rg-crown">👑</div>':''}
+      </div>
+    </div>`;
+  }).join('');
+}
 function updateHomeScreen(){
   const hi = document.getElementById('homeHiScore');
   const streak = document.getElementById('homeStreak');
@@ -3420,6 +3495,7 @@ function updateHomeScreen(){
     const name=localStorage.getItem('gl_player_name');
     profileSub.textContent = name ? name.toUpperCase() : 'Set your name';
   }
+  renderRecentGames();
   // Hero sub text
   const hiBar = document.getElementById('startHiScore');
   if(hiBar){
@@ -3821,6 +3897,14 @@ function refillGrid(){
 // ═══════════════════════════════════════════════
 // TIMER
 // ═══════════════════════════════════════════════
+function resumeTimer(){
+  clearInterval(S.timerInterval); updateTimerBar();
+  S.timerInterval=setInterval(()=>{
+    if(!S.running)return;
+    S.timeLeft=Math.max(0,S.timeLeft-0.1); updateTimerBar();
+    if(S.timeLeft<=0){clearInterval(S.timerInterval);onTimerEnd();}
+  },100);
+}
 function startTimer(){
   S.timeLeft=S.roundTime; clearInterval(S.timerInterval);
   S.timerInterval=setInterval(()=>{
