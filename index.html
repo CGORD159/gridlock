@@ -716,11 +716,8 @@ header,
   margin-left:auto;
   margin-right:auto;
 }
-/* ── Hide game HUD when not in a game ── */
 header,.stats,.timer-wrap,.hud-row,.combo-meter-wrap,.next-hint,
-.mission-ticker,.combo-bar,.grid-wrap,.powerups,.top-score-strip,.ad-slot{
-  display:none !important;
-}
+.mission-ticker,.combo-bar,.grid-wrap,.powerups,.top-score-strip,.ad-slot{ display:none !important; }
 .fever-wrap{ display:none !important; }
 body.in-game header{ display:flex !important; }
 body.in-game .stats{ display:flex !important; }
@@ -785,26 +782,6 @@ body.in-game .settings-tray:not(.hidden){ display:flex !important; }
 /* ═══════════════════════════════════════════════
    REFERRAL SYSTEM
    ═══════════════════════════════════════════════ */
-.recent-games-card{width:100%;max-width:440px;background:var(--panel);border:1px solid var(--border);
-  border-radius:16px;padding:14px;margin-bottom:8px;position:relative;overflow:hidden;}
-.recent-games-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));opacity:.7;}
-.rg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.rg-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;color:var(--c2);}
-.rg-count{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;}
-.rg-list{display:flex;flex-direction:column;gap:5px;}
-.rg-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;
-  background:var(--bg2);border:1px solid var(--border2);}
-.rg-row.rg-best{border-color:rgba(255,230,0,.35);background:rgba(255,230,0,.05);}
-.rg-num{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--muted);width:16px;text-align:center;}
-.rg-score{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--text);flex:1;}
-.rg-row.rg-best .rg-score{color:var(--c3);}
-.rg-meta{display:flex;gap:6px;align-items:center;}
-.rg-tag{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);
-  background:var(--bg);border:1px solid var(--border2);border-radius:4px;padding:2px 5px;white-space:nowrap;}
-.rg-crown{font-size:11px;}
-.rg-empty{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);
-  text-align:center;padding:12px 0;letter-spacing:1px;}
 .referral-card{width:100%;max-width:440px;background:linear-gradient(135deg,rgba(0,229,255,.05),rgba(191,90,242,.04));
   border:1px solid rgba(0,229,255,.2);border-radius:14px;padding:13px 14px;margin-bottom:8px;}
 .ref-code-box{display:flex;align-items:center;gap:8px;margin:8px 0;}
@@ -962,19 +939,6 @@ body.in-game .settings-tray:not(.hidden){ display:flex !important; }
     <div class="tip-pill">💣 <span>Bomb blasts neighbours</span></div>
   </div>
 
-  <!-- Recent Games -->
-  <div style="padding:0 16px;width:100%;box-sizing:border-box;margin-bottom:0;" id="recentGamesWrap">
-    <div class="recent-games-card">
-      <div class="rg-header">
-        <div class="rg-title">📊 RECENT GAMES</div>
-        <div class="rg-count" id="rgCount"></div>
-      </div>
-      <div class="rg-list" id="rgList">
-        <div class="rg-empty">Play your first game to see results here</div>
-      </div>
-    </div>
-  </div>
-
   <!-- Referral card -->
   <div style="padding:0 16px;width:100%;box-sizing:border-box;">
     <div class="referral-card">
@@ -993,6 +957,7 @@ body.in-game .settings-tray:not(.hidden){ display:flex !important; }
     <button onclick="toggleMode()" id="modeFooterBtn">🌙 Theme</button>
     <button onclick="toggleColourBlind()">👁️ Accessibility</button>
     <a href="https://policies.google.com/privacy" target="_blank">Privacy</a>
+    <a href="mailto:playgridlock@gmail.com">📧 Contact</a>
     <button onclick="showToast('GRIDLOCK v9.0 — playgridlock.site')">v9.0</button>
   </div>
 
@@ -1559,7 +1524,7 @@ body.in-game .settings-tray:not(.hidden){ display:flex !important; }
   <button class="pu-btn" style="--pc:var(--c3)" onclick="useTime()"><span class="pu-ico">⏱️</span><span class="pu-nm">+TIME</span><span class="pu-cost">60🪙</span></button>
   <button class="pu-btn" style="--pc:var(--c2)" onclick="useTimeFreezeStored()" id="tfBtn"><span class="pu-ico">❄️</span><span class="pu-nm">FREEZE</span><span class="pu-cost" id="tfBtnCost">0</span></button>
   <button class="pu-btn" style="--pc:var(--c6)" onclick="useMagnet()"><span class="pu-ico">🧲</span><span class="pu-nm">MAGNET</span><span class="pu-cost">50🪙</span></button>
-  <button class="pu-btn" style="--pc:#ff2d55" id="buyHeartBtn" onclick="buyHeart()"><span class="pu-ico">❤️</span><span class="pu-nm">HEART</span><span class="pu-cost" id="heartCostDisp">40🪙</span></button>
+  <button class="pu-btn" style="--pc:#ff2d55" id="buyHeartBtn" onclick="buyHeart()"><span class="pu-ico">❤️</span><span class="pu-nm">HEART</span><span class="pu-cost" id="heartCostDisp">100🪙</span></button>
 </div>
 
 <!-- ═══════════ PAUSE OVERLAY ═══════════ -->
@@ -1606,35 +1571,33 @@ const BASE_COINS = {starter:100,popular:600,gamer:1400,whale:3500};
 // Average player earns ~15-25 coins/session (down from ~40+).
 // ═══════════════════════════════════════════════
 const ECONOMY = {
-  startCoins:      10,   // v8: down from 20 — minimal starting purse
-  levelUpLow:       1,   // levels 1-4: just 1 coin (was 3)
-  levelUpMid:       2,   // levels 5-9: 2 coins (was 5)
-  levelUpHigh:      4,   // levels 10+: 4 coins (was 8)
-  streakBonus5:     2,   // 5-streak reward (was 4)
-  missionReward:   [5, 8, 12],  // per mission slot (was 8,12,16)
-  dailyBonus:      15,   // daily claim (was 20)
-  watchAd1:         8,   // ad 1 (was 10)
-  watchAd2:        18,   // ad series (was 25)
-  dailyAllMissions: 8,   // all-3 bonus (was 10)
-  chestCost:       30,   // now costs more to open (was 25)
-  chestRewards:    [8,8,10,10,12,15,18,22,28,40,60,80], // slightly lower ceiling
-  reviveCost:      60,   // revive more expensive (was 50)
-  streakProtectCost:20,  // streak protect (was 15)
-  hintCost:        30,   // hint (was 25)
-  shuffleCost:     50,   // shuffle (was 40)
-  bombCost:        75,   // bomb (was 60)
-  timeCost:        60,   // time (was 50)
-  // Puzzle system
+  startCoins:      10,
+  levelUpLow:       1,
+  levelUpMid:       2,
+  levelUpHigh:      4,
+  streakBonus5:     2,
+  missionReward:   [5, 8, 12],
+  dailyBonus:      15,
+  watchAd1:         8,
+  watchAd2:        18,
+  dailyAllMissions: 8,
+  chestCost:       30,
+  chestRewards:    [8,8,10,10,12,15,18,22,28,40,60,80],
+  reviveCost:      60,
+  streakProtectCost:20,
+  hintCost:        75,
+  shuffleCost:    120,
+  bombCost:       175,
+  timeCost:       150,
   puzzlePieceInterval: 2,
-  heartCost: 40,
+  heartCost:      100,
   maxHearts:  5,
-  // New store items v2
-  magnetCost:      50,  // tile magnet — highlights dominant colour group
-  timeFreezeStoreCost: 45, // buy a time freeze powerup to use mid-game
-  scoreBoostCost:  60,  // 2× score multiplier for next round
-  revivePackCost: 120,  // stockpile 3 revives at a discount
-  doublerCost:     80,  // buy coin doubler (10 min)
-  xpBoostCost:     70,  // 3× XP for next game
+  magnetCost:     125,
+  timeFreezeStoreCost: 110,
+  scoreBoostCost: 150,
+  revivePackCost: 300,
+  doublerCost:    200,
+  xpBoostCost:    175,
 };
 
 // ═══════════════════════════════════════════════
@@ -1922,23 +1885,33 @@ function shareProfile(){
   else navigator.clipboard?.writeText(text).then(()=>showToast('Profile copied! 📋'));
 }
 const THEMES = {
-  neon:   {name:'NEON',   price:0,    swatch:'linear-gradient(135deg,#ff2d55,#00e5ff)', vars:{}},
-  pastel: {name:'PASTEL', price:250,  swatch:'linear-gradient(135deg,#ffb3c1,#b3e0ff)',
+  neon:    {name:'NEON',     price:0,    swatch:'linear-gradient(135deg,#ff2d55,#00e5ff)', vars:{}},
+  pastel:  {name:'PASTEL',   price:250,  swatch:'linear-gradient(135deg,#ffb3c1,#b3e0ff)',
     vars:{c1:'#ff9eb5',c2:'#a0d8ef',c3:'#fff0a0',c4:'#b5ead7',c5:'#ffcba4',c6:'#d8b4fe'}},
-  mono:   {name:'MONO',   price:500,  swatch:'linear-gradient(135deg,#888,#eee)',
+  mono:    {name:'MONO',     price:500,  swatch:'linear-gradient(135deg,#888,#eee)',
     vars:{c1:'#cccccc',c2:'#aaaaaa',c3:'#eeeeee',c4:'#ffffff',c5:'#999999',c6:'#bbbbbb'}},
-  fire:   {name:'FIRE',   price:1000, swatch:'linear-gradient(135deg,#ff4500,#ffe600)',
-    vars:{c1:'#ff4500',c2:'#ff8c00',c3:'#ffd700',c4:'#ff6347',c5:'#dc143c',c6:'#ff1493'}},
-  gold:   {name:'GOLD',   price:2500, swatch:'linear-gradient(135deg,#ffd700,#b8860b)',
-    vars:{c1:'#ffd700',c2:'#daa520',c3:'#f0e68c',c4:'#ffec8b',c5:'#b8860b',c6:'#eec900'}},
-  ocean:  {name:'OCEAN',  price:750,  swatch:'linear-gradient(135deg,#006994,#00d4ff)',
-    vars:{c1:'#0099cc',c2:'#00d4ff',c3:'#7fffd4',c4:'#006994',c5:'#0047ab',c6:'#40e0d0'}},
-  candy:  {name:'CANDY',  price:500,  swatch:'linear-gradient(135deg,#ff69b4,#ffe4e1)',
+  candy:   {name:'CANDY',    price:500,  swatch:'linear-gradient(135deg,#ff69b4,#ffe4e1)',
     vars:{c1:'#ff69b4',c2:'#ff1493',c3:'#ffb6c1',c4:'#db7093',c5:'#ff6eb4',c6:'#c71585'}},
-  matrix: {name:'MATRIX', price:1500, swatch:'linear-gradient(135deg,#003300,#00ff41)',
+  ocean:   {name:'OCEAN',    price:750,  swatch:'linear-gradient(135deg,#006994,#00d4ff)',
+    vars:{c1:'#0099cc',c2:'#00d4ff',c3:'#7fffd4',c4:'#006994',c5:'#0047ab',c6:'#40e0d0'}},
+  forest:  {name:'FOREST',   price:750,  swatch:'linear-gradient(135deg,#1a4d1a,#7ec850)',
+    vars:{c1:'#2d8c2d',c2:'#7ec850',c3:'#c8e6a0',c4:'#a0522d',c5:'#f4a460',c6:'#228b22'}},
+  fire:    {name:'FIRE',     price:1000, swatch:'linear-gradient(135deg,#ff4500,#ffe600)',
+    vars:{c1:'#ff4500',c2:'#ff8c00',c3:'#ffd700',c4:'#ff6347',c5:'#dc143c',c6:'#ff1493'}},
+  ice:     {name:'ICE',      price:1000, swatch:'linear-gradient(135deg,#a8d8ea,#ffffff)',
+    vars:{c1:'#a8d8ea',c2:'#dff3ff',c3:'#ffffff',c4:'#7ec8e3',c5:'#b8e4f9',c6:'#e0f7ff'}},
+  matrix:  {name:'MATRIX',   price:1500, swatch:'linear-gradient(135deg,#003300,#00ff41)',
     vars:{c1:'#00ff41',c2:'#39ff14',c3:'#00dd35',c4:'#7fff00',c5:'#32cd32',c6:'#adff2f'}},
-  void:   {name:'VOID',   price:3500, swatch:'linear-gradient(135deg,#1a0033,#6600cc)',
+  sunset:  {name:'SUNSET',   price:1500, swatch:'linear-gradient(135deg,#ff512f,#f09819)',
+    vars:{c1:'#ff512f',c2:'#f09819',c3:'#ffcc70',c4:'#c33764',c5:'#ff6b6b',c6:'#ffd700'}},
+  gold:    {name:'GOLD',     price:2500, swatch:'linear-gradient(135deg,#ffd700,#b8860b)',
+    vars:{c1:'#ffd700',c2:'#daa520',c3:'#f0e68c',c4:'#ffec8b',c5:'#b8860b',c6:'#eec900'}},
+  galaxy:  {name:'GALAXY',   price:2500, swatch:'linear-gradient(135deg,#0d0221,#7b2ff7)',
+    vars:{c1:'#7b2ff7',c2:'#f72585',c3:'#4cc9f0',c4:'#4361ee',c5:'#3a0ca3',c6:'#7209b7'}},
+  void:    {name:'VOID',     price:3500, swatch:'linear-gradient(135deg,#1a0033,#6600cc)',
     vars:{c1:'#9d00ff',c2:'#cc00ff',c3:'#7b00d4',c4:'#e040fb',c5:'#aa00ff',c6:'#d500f9'}},
+  diamond: {name:'DIAMOND',  price:5000, swatch:'linear-gradient(135deg,#b9f2ff,#ffffff)',
+    vars:{c1:'#b9f2ff',c2:'#e0fbff',c3:'#ffffff',c4:'#7dd8f0',c5:'#a0e9ff',c6:'#cdf5ff'}},
 };
 
 // ═══════════════════════════════════════════════
@@ -2395,16 +2368,7 @@ function saveStats(){
   S.stats.gamesPlayed=(S.stats.gamesPlayed||0)+1;
   S.stats.maxStreak=Math.max(S.stats.maxStreak||0,S.streak);
   const h=S.stats.scoreHistory||[];
-  const gameRecord={
-    score:S.score,
-    level:S.level,
-    chains:S.totalChains,
-    tiles:S.tilesCleared,
-    best:S.bestChain,
-    daily:!!S.isDailyChallenge,
-    ts:Date.now()
-  };
-  h.push(gameRecord); if(h.length>10)h.shift();
+  h.push(S.score); if(h.length>7)h.shift();
   S.stats.scoreHistory=h;
   localStorage.setItem('gl_stats',JSON.stringify(S.stats));
 }
@@ -2896,18 +2860,15 @@ function _returnFromMidGameScreen(){
     hideAllScreens(); document.body.classList.add('in-game');
     const overlay=document.getElementById('pauseOverlay');
     if(overlay){overlay.classList.add('hidden');overlay.style.display='';}
-    const pb=document.getElementById('pauseBtn');
-    if(pb) pb.textContent='⏸️';
+    const pb=document.getElementById('pauseBtn'); if(pb) pb.textContent='⏸️';
     resumeTimer();
   } else { returnToHome(); }
 }
 function pauseQuit(){
   _paused=false;
   document.getElementById('pauseOverlay').classList.add('hidden');
-  clearInterval(S.timerInterval);
-  S.running=false;
-  document.body.classList.remove('in-game');
-  endGame();
+  clearInterval(S.timerInterval); S.running=false;
+  document.body.classList.remove('in-game'); endGame();
 }
 // ═══════════════════════════════════════════════
 // COMBO METER — shows progress toward next multiplier tier
@@ -3424,41 +3385,6 @@ function applyBrainBurst(){
   S.roundTime=Math.max(6,S.roundTime*0.8);
 }
 
-function renderRecentGames(){
-  const list = document.getElementById('rgList');
-  const count = document.getElementById('rgCount');
-  if(!list) return;
-  const history = (S.stats.scoreHistory||[]).slice().reverse(); // newest first
-  if(!history.length){
-    list.innerHTML='<div class="rg-empty">Play your first game to see results here</div>';
-    if(count) count.textContent='';
-    return;
-  }
-  const bestScore = Math.max(...history.map(g=>typeof g==='object'?g.score:g));
-  if(count) count.textContent = history.length + ' game' + (history.length!==1?'s':'');
-  list.innerHTML = history.map((g,i)=>{
-    // Handle legacy entries (plain numbers)
-    const score  = typeof g==='object' ? g.score  : g;
-    const level  = typeof g==='object' ? g.level  : null;
-    const chains = typeof g==='object' ? g.chains : null;
-    const best   = typeof g==='object' ? g.best   : null;
-    const daily  = typeof g==='object' ? g.daily  : false;
-    const isBest = score === bestScore && i === history.findIndex(x=>(typeof x==='object'?x.score:x)===bestScore);
-    const tags = [];
-    if(daily) tags.push('📅 DAILY');
-    if(level!=null) tags.push('LVL '+level);
-    if(chains!=null) tags.push(chains+'⛓️');
-    if(best!=null&&best>=5) tags.push('BEST '+best);
-    return `<div class="rg-row${isBest?' rg-best':''}">
-      <div class="rg-num">${i+1}</div>
-      <div class="rg-score">${score.toLocaleString()}</div>
-      <div class="rg-meta">
-        ${tags.map(t=>`<div class="rg-tag">${t}</div>`).join('')}
-        ${isBest?'<div class="rg-crown">👑</div>':''}
-      </div>
-    </div>`;
-  }).join('');
-}
 function updateHomeScreen(){
   const hi = document.getElementById('homeHiScore');
   const streak = document.getElementById('homeStreak');
@@ -3495,7 +3421,6 @@ function updateHomeScreen(){
     const name=localStorage.getItem('gl_player_name');
     profileSub.textContent = name ? name.toUpperCase() : 'Set your name';
   }
-  renderRecentGames();
   // Hero sub text
   const hiBar = document.getElementById('startHiScore');
   if(hiBar){
