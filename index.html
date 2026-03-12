@@ -2,7 +2,7 @@
 <html lang="en" id="html">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f" id="themeColorMeta">
 <meta name="description" content="GRIDLOCK — Free arcade game. Chain tiles, clear the board, beat your friends.">
 <title>GRIDLOCK — Chain · Clear · Conquer</title>
@@ -60,7 +60,9 @@ html[data-mode="light"] {
 html,body{height:100%;}
 body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;
   min-height:100vh;display:flex;flex-direction:column;align-items:center;
-  overflow:hidden;overscroll-behavior:none;transition:background .3s,color .3s;}
+  overflow:hidden;overscroll-behavior:none;transition:background .3s,color .3s;
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,var(--scan) 2px,var(--scan) 4px);}
 
@@ -1571,27 +1573,29 @@ const BASE_COINS = {starter:100,popular:600,gamer:1400,whale:3500};
 // Average player earns ~15-25 coins/session (down from ~40+).
 // ═══════════════════════════════════════════════
 const ECONOMY = {
-  startCoins:      10,
-  levelUpLow:       1,
-  levelUpMid:       2,
-  levelUpHigh:      4,
-  streakBonus5:     2,
-  missionReward:   [5, 8, 12],
-  dailyBonus:      15,
-  watchAd1:         8,
-  watchAd2:        18,
-  dailyAllMissions: 8,
-  chestCost:       30,
-  chestRewards:    [8,8,10,10,12,15,18,22,28,40,60,80],
-  reviveCost:      60,
-  streakProtectCost:20,
+  startCoins:      10,   // v8: down from 20 — minimal starting purse
+  levelUpLow:       1,   // levels 1-4: just 1 coin (was 3)
+  levelUpMid:       2,   // levels 5-9: 2 coins (was 5)
+  levelUpHigh:      4,   // levels 10+: 4 coins (was 8)
+  streakBonus5:     2,   // 5-streak reward (was 4)
+  missionReward:   [5, 8, 12],  // per mission slot (was 8,12,16)
+  dailyBonus:      15,   // daily claim (was 20)
+  watchAd1:         8,   // ad 1 (was 10)
+  watchAd2:        18,   // ad series (was 25)
+  dailyAllMissions: 8,   // all-3 bonus (was 10)
+  chestCost:       30,   // now costs more to open (was 25)
+  chestRewards:    [8,8,10,10,12,15,18,22,28,40,60,80], // slightly lower ceiling
+  reviveCost:      60,   // revive more expensive (was 50)
+  streakProtectCost:20,  // streak protect (was 15)
   hintCost:        75,
   shuffleCost:    120,
   bombCost:       175,
   timeCost:       150,
+  // Puzzle system
   puzzlePieceInterval: 2,
   heartCost:      100,
   maxHearts:  5,
+  // New store items v2
   magnetCost:     125,
   timeFreezeStoreCost: 110,
   scoreBoostCost: 150,
